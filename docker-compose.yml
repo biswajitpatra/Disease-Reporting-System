@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  'web-debug':
+    container_name: disease_debug
+    image: disease_d
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    depends_on: 
+      - db
+    volumes: 
+      - .:/app
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"   
+  db:
+    image: postgis/postgis:9.6-2.5-alpine
+    environment: 
+      'POSTGRES_USER': 'postgresql'
+      'POSTGRES_PASSWORD': 'postgres'
+      'POSTGRES_DB': 'disease'
+    ports: 
+      - 5432:5432

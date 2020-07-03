@@ -1,3 +1,6 @@
+from django.contrib.gis.admin import OSMGeoAdmin, StackedInline
+from django.contrib.gis.forms.widgets import OSMWidget 
+from django.contrib.gis.db.models import PointField
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
@@ -8,7 +11,7 @@ from .models import Disease, Report, Person, Hospital
 
 admin.site.register(Disease)
 
-class ReportAdmin(admin.ModelAdmin):
+class ReportAdmin(OSMGeoAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "source" and not request.user.is_superuser:
             kwargs["queryset"] = User.objects.filter(id=request.user.id)
@@ -16,10 +19,13 @@ class ReportAdmin(admin.ModelAdmin):
 
 admin.site.register(Report, ReportAdmin)
 
-class HospitalInline(admin.StackedInline):
+class HospitalInline(StackedInline):
     model = Hospital
     can_delete = False
     verbose_name_plural = 'hospital'
+    formfield_overrides = {
+        PointField: {"widget": OSMWidget},
+    }
 
 class UserAdmin(BaseUserAdmin):
     inlines = (HospitalInline,)
@@ -27,7 +33,9 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
-admin.site.register(Person)
+class PersonAdmin(OSMGeoAdmin):
+    pass
+admin.site.register(Person, PersonAdmin)
 
 admin.site.site_header = "Outbreak Report Interface"
 admin.site.site_title = "Outbreak Reporting Web Interface"

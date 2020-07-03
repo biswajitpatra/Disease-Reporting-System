@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -28,6 +28,7 @@ class Report(models.Model):
     source = models.ForeignKey(User, on_delete=models.CASCADE)
     disease = models.ForeignKey(Disease, on_delete=models.CASCADE)
     reported_on = models.DateTimeField(default=timezone.now)
+    reported_at = models.PointField()
     mortality = models.FloatField()
     morbidity = models.FloatField()
     infections = models.IntegerField()
@@ -49,6 +50,7 @@ class Person(models.Model):
     gender = models.CharField(max_length=6)
     phone_number = models.CharField(max_length=20)
     city = models.CharField(max_length=32)
+    located_at = models.PointField()
     def __str__(self):
         return "{} from {}".format(self.full_name, self.city)
     def notify(self):
@@ -60,3 +62,4 @@ class Person(models.Model):
 class Hospital(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     city = models.CharField(max_length=32)
+    located_at = models.PointField()
