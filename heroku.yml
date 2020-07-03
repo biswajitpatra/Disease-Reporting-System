@@ -3,4 +3,5 @@ build:
       web: Dockerfile
 release:
     image: web
-    command: bash -c "python /app/manage.py migrate"
+    command: 
+        - bash -c "python /app/manage.py migrate"
