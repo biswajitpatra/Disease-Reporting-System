@@ -25,6 +25,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('area/', views.areaReport, name='areaReport'),
     path('admin/', admin.site.urls),
+    path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
