@@ -21,10 +21,12 @@
 
   //jQuery to collapse the navbar on scroll
   $(window).scroll(function() {
-    if ($(".navbar-default").offset().top > 50) {
+    if ($(".navbar").offset().top > 500) {
       $(".navbar-fixed-top").addClass("top-nav-collapse");
+      $('.navbar').css('background-color','rgba(28,74,90, .96)');
     } else {
       $(".navbar-fixed-top").removeClass("top-nav-collapse");
+      $('.navbar').css('background-color','transparent');
     }
   });
 

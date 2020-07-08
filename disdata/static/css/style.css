@@ -67,13 +67,11 @@ banner
 .navbar {
     border-radius: 0px;
 }
-.navbar-default {
-    background-color: #fff;
-    padding: 20px 0;
-    transition: all 0.3s;
-}
-.navbar-default {
+.navbar {
+    /* background: #fff; */
+    transition: all 0.3s ease-in-out;
     background-color: transparent;
+    color: #fff !important;
     border: 0px;
 }
 .navbar {
@@ -86,14 +84,6 @@ banner
 	font-size: 32px;
 }
 
-.navbar-brand img {
-    padding-top: 2px;
-    width: 120px !important;
-}
-
-.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-    color: #EA6045;
-}
 
 @media (max-width: 768px) {
 	.navbar-collapse {
@@ -106,33 +96,13 @@ banner
     background: rgba(28,74,90, 0.9);
 }
 
-.white, .white:hover, .white:focus
-{
-	color: #fff;
-	width: 100% !important;
-}
+
 .block
 {
 	display: block;
 }
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
-    color: #fff;
-    text-transform: uppercase;
-    background-color: rgba(12, 184, 182, 0.21);
-}
-.navbar-default .navbar-nav > li > a
-{
-	color: #fff;
-	text-transform: uppercase;
-	font-size: 14px;
-	font-weight: 300;
-}
-.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus
-{
-	color: #fff;
-    text-transform: uppercase;
-    background-color: rgba(12, 184, 182, 0.21);
-}
+
+
 .affix {
     background-color: #ffffff !important;
 }
@@ -182,6 +152,7 @@ banner
     text-align: center;
     position: absolute;
     bottom: 25px;
+    left: 50%;
     font-size: 38px;
     color: #fff;
     margin: 0 auto;
