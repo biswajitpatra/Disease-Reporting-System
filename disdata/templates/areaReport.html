@@ -3,9 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Disease Insights</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 </head>
-<body>
-    <h1>HEllo World</h1>
+<body id="myPage">
+    <main class="d-block">
+        <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(28,74,90, 0.9) ;">
+            <a class="navbar-brand text-light" href="#">Disease REPORTING</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item active">
+                    <a class="nav-link text-light" href="#banner">Home <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-light" href="#service">Services</a>
+                  </li>
+                </ul>
+            </div>
+          </nav>
+          <section class="report-area">
+            <div class="container">
+                <h2 class="ser-title">Insights about Bhubaneswar </h2> <!--? Loaction to be dynamic-->
+                <hr class="botm-line">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputGroupSelect01">Bhubaneswar</label>  <!--? Location to be added dynamically from the homepage-->
+                    </div>
+                    <select class="custom-select" id="inputGroupSelect01">
+                      <option selected>Choose a locality</option>
+                      <option value="1">Unit-4</option>
+                      <option value="2">Nayapalli</option>
+                      <option value="3">Saheed Nagar</option>
+                    </select>
+                  </div>
+            </div>
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Well done!</h4>
+                <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+                <hr>
+                <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+              </div>
+            <!--?Details reagarding -->
+        </section>
+          <section id="disease-graph">
+           <canvas id="myChart" width="600" height="600"></canvas>
+          </section>
+          <section class='mb-5'>
+            <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Disease1</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Type of Disease</h6>
+                  <p class="card-text">Details regarding this disease and other diagnostic information</p>
+                  <h6 class='text-danger'>Precautions:</h6>
+                  <ul>
+                      <li>1</li>
+                      <li>2</li>
+                  </ul>
+                  <a href="#" class="card-link">WHO link for this disease</a>
+                  <hr>
+                  <h5 class="card-title">Disease2</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Type of Disease</h6>
+                  <p class="card-text">Details regarding this disease and other diagnostic information</p>
+                  <h6 class='text-danger'>Precautions:</h6>
+                  <ul>
+                      <li>1</li>
+                      <li>2</li>
+                  </ul>
+                  <a href="#" class="card-link">WHO link for this disease</a>
+                </div>
+              </div>
+          </section>
+
+</main>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/jquery.easing.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/chart.js' %}"></script>
 </body>
 </html>

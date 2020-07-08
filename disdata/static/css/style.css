@@ -10,7 +10,10 @@ body {
 	line-height: 20px;
 	color: #999999;
 	font-size: 300;
-	font-size: 16px;
+    font-size: 16px;
+    overflow: visible;
+    height: 1920px;
+    position: relative;
 }
 ol, ul {
 	list-style: none;
@@ -83,8 +86,29 @@ banner
 	font-family: 'Chewy', cursive;
 	font-size: 32px;
 }
-
-
+.report-area{
+    position: absolute;
+    top: 5%;
+    left: 10%;
+}
+#disease-graph{
+    position: absolute;
+    top: 20%;
+    left: 30%;
+}
+section .card{
+    position: absolute;
+    top: 55%;
+    left: 20%;
+    width:55%;
+    height: auto;
+    border-radius: 25px;
+    box-shadow: 3px 3px #7FD9BA, -.4em 0 .4em #325b6a9d;
+}
+.alert{
+    left: 20%;
+    width:55%;
+}
 @media (max-width: 768px) {
 	.navbar-collapse {
 		background: rgba(28,74,90, 0.9);
@@ -112,7 +136,8 @@ banner
 }
 #banner{
 	background: url('../img/bg-banner.jpg') no-repeat fixed;
-	background-size: cover;
+    background-size: cover;
+    height: 100vh;
 	min-height: 650px;
 	position: relative;
 }
@@ -122,8 +147,8 @@ banner
   }
 }
 .bg-color{
-	background-color: RGBA(13, 70, 83, 0.78);
-	min-height: 650px;
+    background-color: RGBA(13, 70, 83, 0.78);
+	min-height: 100vh;
 }
 .banner-info{
 	padding-top: 190px;

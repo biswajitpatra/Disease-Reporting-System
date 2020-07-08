@@ -1,6 +1,6 @@
 (function($) {
 
-  // Add smooth scrolling to all links in navbar
+  //* Add smooth scrolling to all links in navbar
   $(".navbar a,a.btn-appoint, .quick-info li a, .overlay-detail a").on('click', function(event) {
 
     var hash = this.hash;
@@ -18,8 +18,9 @@
   $(".navbar-collapse a").on('click', function() {
     $(".navbar-collapse.collapse").removeClass('in');
   });
+  
 
-  //jQuery to collapse the navbar on scroll
+  //*jQuery to collapse the navbar on scroll
   $(window).scroll(function() {
     if ($(".navbar").offset().top > 500) {
       $(".navbar-fixed-top").addClass("top-nav-collapse");
@@ -31,3 +32,5 @@
   });
 
 })(jQuery);
+
+ 
