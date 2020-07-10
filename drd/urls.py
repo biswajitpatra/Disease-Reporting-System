@@ -20,12 +20,15 @@ from disdata import views
 # Use static() to add url mapping to serve static files during development (only)
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('area/', views.areaReport, name='areaReport'),
     path('admin/', admin.site.urls),
     path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),
+    path('favicon.ico',RedirectView.as_view(url=staticfiles_storage.url('img/favicon.ico')))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
