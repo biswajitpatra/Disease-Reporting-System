@@ -96,6 +96,12 @@ banner
     top: 20%;
     left: 30%;
 }
+.banner-insights{
+    position: relative;
+    transform: scale(1.5);
+    left: 30%;
+    top: 120%;
+}
 section .card{
     position: absolute;
     top: 55%;
@@ -112,7 +118,11 @@ section .card{
 @media (max-width: 768px) {
 	.navbar-collapse {
 		background: rgba(28,74,90, 0.9);
-	}
+    }
+    .banner-insights{
+        left: 0;
+        transform: scale(.96);
+    }
 }
 
 .top-nav-collapse {
