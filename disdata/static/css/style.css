@@ -118,6 +118,135 @@ banner
     color: #aaa;
     transform: scale(1.4)
 }
+/*? Disease reporting form */
+:focus {
+    outline: none;
+  }
+  .form-col{
+    float: left;
+    width: inherit;
+    margin: 40px 3%;
+    position: relative;
+  } /* necessary to give position: relative to parent. */
+  input[type="text"] {
+    font: 15px/24px "Lato", Arial, sans-serif;
+    color: #333;
+    width: 100%;
+    box-sizing: border-box;
+    letter-spacing: 1px;
+  }
+  
+.form-effect {
+    border: 1px solid #ccc;
+     padding: 7px 14px; 
+     transition: 0.4s; 
+     background: transparent;
+}
+.form-effect ~ .focus-border:before,
+.form-effect ~ .focus-border:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #3399ff;
+  transition: 0.3s;
+}
+.form-effect ~ .focus-border:after {
+  top: auto;
+  bottom: 0;
+  left: auto;
+  right: 0;
+}
+.form-effect ~ .focus-border i:before,
+.form-effect ~ .focus-border i:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 0;
+  background-color: #3399ff;
+  transition: 0.4s;
+}
+.form-effect ~ .focus-border i:after {
+  left: auto;
+  right: 0;
+  top: auto;
+  bottom: 0;
+}
+.form-effect:focus ~ .focus-border:before,
+.form-effect:focus ~ .focus-border:after,
+.has-content.form-effect ~ .focus-border:before,
+.has-content.form-effect ~ .focus-border:after {
+  width: 100%;
+  transition: 0.3s;
+}
+.form-effect:focus ~ .focus-border i:before,
+.form-effect:focus ~ .focus-border i:after,
+.has-content.form-effect ~ .focus-border i:before,
+.has-content.form-effect ~ .focus-border i:after {
+  height: 100%;
+  transition: 0.4s;
+}
+.form-effect ~ label {
+  position: absolute;
+  left: 14px;
+  width: 100%;
+  top: 10px;
+  color: #aaa;
+  transition: 0.3s;
+  z-index: -1;
+  letter-spacing: 0.5px;
+}
+.form-effect:focus ~ label,
+.has-content.form-effect ~ label {
+  top: -18px;
+  left: 0;
+  font-size: 12px;
+  color: #3399ff;
+  transition: 0.3s;
+}
+.msg-area {
+    background-color: #fff;
+    padding: 3rem;
+    border-radius: 4px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .ui-form-input-container {
+    position: relative;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    display: block;
+  }
+  .ui-form-input {
+    padding: 13px 15px;
+    border-radius: 8px;
+    border: 2px solid #1a73e8;
+    outline: 0;
+    width: 100%;
+  }
+  
+  .form-input-label {
+    position: absolute;
+    top: -7px;
+    left: 10px;
+    color: #1a73e8;
+    font-size: 0.85rem;
+    padding-right: 0.33rem;
+    padding-left: 0.33rem;
+    background: #fff;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: sans-serif;
+    text-transform: capitalize;
+  }
+  textarea {
+    min-height: 6em;
+    max-height: 50vh;
+    width: 100%;
+  }
 section .card{
     position: absolute;
     top: 55%;

@@ -54,7 +54,7 @@
               </div>
               <div class="btn-grp d-flex justify-content-center mb-3">
                 <button class="btn btn-sm btn-outline-success mr-3 px-3 rounded-pill">Search</button>
-                <button class="btn btn-sm btn-outline-warning px-3 rounded-pill">Know my Location</button>
+                <button class="btn btn-sm btn-outline-warning px-3 rounded-pill" onclick="knowMyLocation()">Know my Location</button>
               </div>
                 <p class="text-center" id="user-location"></p>
             </div>
@@ -123,47 +123,50 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <h2 class="ser-title">Contact us</h2>
+          <h2 class="ser-title">Want to contribute? Contribute and save life ...</h2>
           <hr class="botm-line">
         </div>
-        <div class="col-md-4 col-sm-4">
-          <h3>Contact Info</h3>
-          <div class="space"></div>
-          <p><i class="fa fa-map-marker fa-fw pull-left fa-2x"></i>CET BHUBANESWAR<br></p>
-          <div class="space"></div>
-          <p><i class="fa fa-envelope-o fa-fw pull-left fa-2x"></i>info@XYZ.com</p>
-          <div class="space"></div>
-          <p><i class="fa fa-phone fa-fw pull-left fa-2x"></i>934785629756</p>
-        </div>
-        <div class="col-md-8 col-sm-8 marb20">
-          <div class="contact-info">
-            <h3 class="cnt-ttl">Want to contribute?Contribute and save life...</h3>
-            <div class="space"></div>
+        <div class="col-md-12 col-sm-12 marb20">
             <div id="sendmessage">Your message has been sent. Thank you!</div>
             <div id="errormessage"></div>
-            <form action="" method="post" role="form" class="contactForm">
-              <div class="form-group">
-                <input type="text" name="name" class="form-control br-radius-zero" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                <div class="validation"></div>
-              </div>
-              <div class="form-group">
-                <input type="email" class="form-control br-radius-zero" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                <div class="validation"></div>
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control br-radius-zero" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                <div class="validation"></div>
-              </div>
-              <div class="form-group">
-                <textarea class="form-control br-radius-zero" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                <div class="validation"></div>
-              </div>
-
-              <div class="form-action">
-                <button type="submit" class="btn btn-form">Send Message</button>
-              </div>
+            <form action="" method="post" role="form">
+              <small>Please fill out the below form with authenticate information for the welfare of the soceity</small>
+             <div class="row from-group">
+                <div class="col-lg-4 ">
+                    <div class="form-col input-effect" >
+                      <input class="form-effect" type="text" placeholder="" required>
+                        <label>Full Name</label>
+                        <span class="focus-border">
+                          <i></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-col input-effect">
+                      <input class="form-effect" type="text" placeholder="" required>
+                        <label>Phone Number</label>
+                        <span class="focus-border">
+                          <i></i>
+                        </span>
+                    </div>
+                </div>
+               <div class="col-lg-4">
+                    <div class="form-col input-effect">
+                      <input class="form-effect" type="text" placeholder="" required>
+                        <label>Aadhaar Number</label>
+                        <span class="focus-border">
+                          <i></i>
+                        </span>
+                    </div>
+               </div>
+               <div class="col-md-12 msg-area">
+                <label class="ui-form-input-container">
+                  <textarea class="ui-form-input" required></textarea>
+                  <span class="form-input-label">Enter your message report</span>
+                </label>
+               </div>
+             </div>
             </form>
-          </div>
         </div>
       </div>
     </div>

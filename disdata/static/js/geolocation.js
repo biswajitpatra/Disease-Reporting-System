@@ -1,5 +1,5 @@
-$(document).ready(() => {
-    
+
+   const knowMyLocation = () => {
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(showPosition);
     }
@@ -18,8 +18,9 @@ $(document).ready(() => {
             url: locationAPI,
             success: function(data) {
                 console.log(data);
-                $('#user-location').html(`You are currently at :${data.results[7].formatted_address}`);
+                const length = data.results.length;
+                $('#user-location').html(`You are currently at :${data.results[length-3].formatted_address}`);
             }
         })
     }
-})
+   }
