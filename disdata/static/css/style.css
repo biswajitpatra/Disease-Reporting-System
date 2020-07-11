@@ -100,7 +100,23 @@ banner
     position: relative;
     transform: scale(1.5);
     left: 30%;
-    top: 120%;
+    top: 80%;
+}
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+    transform: scale(1.4)
 }
 section .card{
     position: absolute;

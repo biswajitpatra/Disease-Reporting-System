@@ -18,7 +18,7 @@ $(document).ready(() => {
             url: locationAPI,
             success: function(data) {
                 console.log(data);
-                $('#user-location').html(data.results[5].formatted_address);
+                $('#user-location').html(`You are currently at :${data.results[7].formatted_address}`);
             }
         })
     }

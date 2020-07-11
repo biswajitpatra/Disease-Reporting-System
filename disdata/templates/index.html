@@ -48,16 +48,15 @@
               <h2 class="ser-title">Get insights </h2>
               <hr class="botm-line">
               <p>Enter any location across India to get insights about any record of potential risk to your health.</p>
-                <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Enter Loaction :</span>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                  <div class="input-group-append">
-                    <button class="btn btn-outline-success" type="button" id="button-addon2">Search</button>
-                  </div>
-                </div>
-                <p id="user-location"></p>
+              <div class="form-group has-search">
+                <span class="fa fa-map-marker form-control-feedback"></span>
+                <input type="text" class="form-control rounded-pill" placeholder="Search location">
+              </div>
+              <div class="btn-grp d-flex justify-content-center mb-3">
+                <button class="btn btn-sm btn-outline-success mr-3 px-3 rounded-pill">Search</button>
+                <button class="btn btn-sm btn-outline-warning px-3 rounded-pill">Know my Location</button>
+              </div>
+                <p class="text-center" id="user-location"></p>
             </div>
             <div class="overlay-detail text-center">
              <p> <a href="#service"><i class="fa fa-angle-down"></i></a></p> 
