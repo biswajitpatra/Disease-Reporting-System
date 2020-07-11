@@ -8,10 +8,12 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 # Register your models here.
 
 from .models import Disease, Report, Person, Hospital
+from .forms import ReportAdminForm, PHAdminForm
 
 admin.site.register(Disease)
 
 class ReportAdmin(OSMGeoAdmin):
+    form = ReportAdminForm
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "source" and not request.user.is_superuser:
             kwargs["queryset"] = User.objects.filter(id=request.user.id)
@@ -23,6 +25,7 @@ class HospitalInline(StackedInline):
     model = Hospital
     can_delete = False
     verbose_name_plural = 'hospital'
+    form = PHAdminForm
     formfield_overrides = {
         PointField: {"widget": OSMWidget},
     }
@@ -34,7 +37,7 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 class PersonAdmin(OSMGeoAdmin):
-    pass
+    form = PHAdminForm
 admin.site.register(Person, PersonAdmin)
 
 admin.site.site_header = "Outbreak Report Interface"
