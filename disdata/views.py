@@ -4,8 +4,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from disdata.models import Pincode,Report,Disease
 from django.contrib.gis.db.models.functions import Distance
-from django.db.models import Count
+from django.db.models import Count   
 from datetime import datetime, timedelta
+from django.contrib.gis.geos import Point
 
 # Create your views here.
 def index(request):
@@ -20,8 +21,8 @@ def area_summary_api(req):
     thres_yellow_reports=2
     thres_time_gap= 30       # Threshold value for reports
     req = json.loads(req.body)
-    if("location" in req):
-        tmp=Pincode.objects.annotate(distance=Distance('located_at',p.located_at)).order_by('distance').last()
+    if("location" in req and "pincode" not in req):
+        tmp=Pincode.objects.annotate(distance=Distance('located_at',Point(req["location"]["long"],req["location"]["latt"]))).order_by('distance').last()
         req["pincode"]=tmp.pincode
     q = Report.objects.filter(pincode__pincode=req["pincode"]).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap))
     cnt = q.values('disease__disease_name').annotate(Count('disease'))
