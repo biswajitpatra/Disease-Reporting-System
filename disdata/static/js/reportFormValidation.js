@@ -8,5 +8,5 @@ new Cleave('.aadhaar',{
 new Cleave('.mobile',{
     numericOnly: true,
     prefix:'(+91)',
-    delimeter:[5,10]
+    blocks: [5,10]
 })
