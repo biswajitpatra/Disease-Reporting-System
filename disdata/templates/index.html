@@ -129,35 +129,26 @@
         <div class="col-md-12 col-sm-12 marb20">
             <div id="sendmessage">Your message has been sent. Thank you!</div>
             <div id="errormessage"></div>
-            <form action="" method="post" role="form">
+            <form action="../static/js/reportFormValidation.js" method="post" role="form">
               <small>Please fill out the below form with authenticate information for the welfare of the soceity</small>
              <div class="row from-group">
-                <div class="col-lg-4 ">
-                    <div class="form-col input-effect" >
-                      <input class="form-effect" type="text" placeholder="" required>
-                        <label>Full Name</label>
-                        <span class="focus-border">
-                          <i></i>
-                        </span>
-                    </div>
+                <div class="col-lg-4 msg-area">
+                  <label class="ui-form-input-container">
+                    <input class="ui-form-input" required>
+                    <span class="form-input-label">Full Name</span>
+                  </label>
                 </div>
-                <div class="col-lg-4">
-                    <div class="form-col input-effect">
-                      <input class="form-effect" type="text" placeholder="" required>
-                        <label>Phone Number</label>
-                        <span class="focus-border">
-                          <i></i>
-                        </span>
-                    </div>
+                <div class="col-lg-4 msg-area">
+                  <label class="ui-form-input-container">
+                    <input class="ui-form-input mobile" required minLength="15" maxLength="15" pattern="^\(\+91\)[1-9]{1}[0-9]{9}$">
+                    <span class="form-input-label">Phone Number</span>
+                  </label>
                 </div>
-               <div class="col-lg-4">
-                    <div class="form-col input-effect">
-                      <input class="form-effect" type="text" placeholder="" required>
-                        <label>Aadhaar Number</label>
-                        <span class="focus-border">
-                          <i></i>
-                        </span>
-                    </div>
+               <div class="col-lg-4 msg-area">
+                    <label class="ui-form-input-container">
+                      <input class="ui-form-input aadhaar" required minLength="12" pattern= "^[2-9]{1}[0-9]{3}-[0-9]{4}-[0-9]{4}$">
+                      <span class="form-input-label">Aadhaar Number</span>
+                    </label>
                </div>
                <div class="col-md-12 msg-area">
                 <label class="ui-form-input-container">
@@ -165,6 +156,7 @@
                   <span class="form-input-label">Enter your message report</span>
                 </label>
                </div>
+               <button class="btn btn-outline-primary mx-auto rounded-pill px-4" type="submit">Submit Request</button>
              </div>
             </form>
         </div>
@@ -203,10 +195,10 @@
             </div>
             <div class="info-sec">
               <ul class="social-icon">
-                <li class="bglight-blue"><i class="fa fa-facebook"></i></li>
-                <li class="bgred"><i class="fa fa-google-plus"></i></li>
-                <li class="bgdark-blue"><i class="fa fa-linkedin"></i></li>
-                <li class="bglight-blue"><i class="fa fa-twitter"></i></li>
+                <a href="#"> <li class="bglight-blue rounded-circle text-light"><i class="fa fa-facebook"></i></li></a>
+                <a href="#"><li class="bgred rounded-circle text-light"><i class="fa fa-google-plus"></i></li></a>
+                <a href="#"> <li class="bgdark-blue rounded-circle text-light"><i class="fa fa-linkedin"></i></li></a>
+                <a href="#"><li class="bglight-blue rounded-circle text-light"><i class="fa fa-twitter"></i></li></a>
               </ul>
             </div>
           </div>
@@ -228,7 +220,9 @@
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/jquery.easing.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/0.7.17/cleave.min.js"></script>
   <script src="{% static 'js/custom.js' %}"></script>
+  <script src="{% static 'js/reportFormValidation.js' %}"></script>
   <script src="{% static 'js/geolocation.js' %}"></script>
   <script src="{% static 'contactform/contactform.js' %}"></script>
 
