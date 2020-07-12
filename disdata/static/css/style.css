@@ -177,6 +177,7 @@ section .card{
     }
     .banner-insights{
         left: 0;
+        top: 0;
         transform: scale(.96);
     }
 }
@@ -203,8 +204,7 @@ section .card{
 #banner{
 	background: url('../img/bg-banner.jpg') no-repeat fixed;
     background-size: cover;
-    height: 100vh;
-	min-height: 650px;
+    min-height: 100vh;
 	position: relative;
 }
 @media (max-width: 1024px){
