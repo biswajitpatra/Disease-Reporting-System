@@ -17,8 +17,8 @@ def areaReport(request):
 
 @csrf_exempt
 def area_summary_api(req):
-    thres_red_reports= 5
-    thres_yellow_reports=2
+    thres_red_reports= 5     # Threshold for red reports
+    thres_yellow_reports=2   # THreshold for yellow reports
     thres_time_gap= 30       # Threshold value for reports
     req = json.loads(req.body)
     if("location" in req and "pincode" not in req):
