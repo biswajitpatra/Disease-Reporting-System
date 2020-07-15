@@ -34,6 +34,8 @@ class Pincode(models.Model):
     sanitation_condition=models.CharField(max_length=20)
     humidity=models.IntegerField()
     age_frequency_vector=ArrayField(models.IntegerField(), blank=True)
+    is_alerted=models.BooleanField(default=False)
+    # adjacent_places=ArrayField(models.ForeignKey('self',on_delete=models.PROTECT),blank=True,default=None)
     def __str__(self):
         return self.pincode
 
@@ -86,6 +88,8 @@ class Report(models.Model):
         super(Report, self).save(*args, **kwargs)
 
 class Person(models.Model):
+    class Meta:
+        verbose_name_plural = "Census"
     full_name = models.CharField(max_length=24)
     email = models.EmailField()
     aadhar_number=models.CharField(unique=True,primary_key=True,max_length=12,validators=[MinLengthValidator(12)])

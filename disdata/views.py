@@ -12,8 +12,27 @@ from django.contrib.gis.geos import Point
 def index(request):
     return render(request, 'index.html')
 
-def areaReport(request):
-    return render(request, 'areaReport.html')    
+def areaReport(request,pincode):
+    print(pincode)
+    thres_red_reports= 5     # Threshold for red reports
+    thres_yellow_reports=2   # THreshold for yellow reports
+    thres_time_gap= 30       # Threshold value for reports
+    q = Report.objects.filter(pincode__pincode=pincode).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap))
+    cnt = q.values('disease__disease_name').annotate(Count('disease'))
+    ret_json=[]
+    for c in cnt:
+        if(c["disease__count"]<thres_yellow_reports):
+            ret_part={"warning":"green"}
+        elif(q.count()>=thres_red_reports):
+            ret_part={"warning":"red"}
+        else:
+            ret_part={"warning":"yellow"}
+
+        ret_part["report_count"]=c["disease__count"]
+        ret_part["disease"]=Disease.objects.get(disease_name=c['disease__disease_name'])
+        ret_json.append(ret_part)
+    return render(request, 'areaReport.html',{'pincode':'pincode',"diseases":ret_json})    
+
 
 @csrf_exempt
 def area_summary_api(req):

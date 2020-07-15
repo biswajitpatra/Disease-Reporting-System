@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,re_path
 from disdata import views
 
 # Use static() to add url mapping to serve static files during development (only)
@@ -25,7 +25,7 @@ from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('area/', views.areaReport, name='areaReport'),
+    re_path(r'^area/(?P<pincode>[0-9]{6})/$', views.areaReport, name='areaReport'),
     path('admin/', admin.site.urls),
     path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),
     path('area_summary_api',views.area_summary_api,name="Area summary API"),
