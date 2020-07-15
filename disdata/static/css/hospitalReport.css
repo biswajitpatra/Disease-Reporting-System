@@ -1,0 +1,18 @@
+#reportRequest{
+    position:absolute;
+    top: 10%;
+    left: 23%;
+}
+#admin-btn{
+    position: relative;
+    left: 38%;
+}
+
+@media (max-width:768px){
+    #reportRequest{
+        left: 0;
+    }
+    #admin-btn{
+        left: 22%;
+    }
+}

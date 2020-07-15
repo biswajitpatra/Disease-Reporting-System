@@ -24,10 +24,8 @@
             url: locationAPI,
             success: function(data) {
                 console.log(data);
-                const length = data.results.length;
-                // $('#location-search').attr('placeholder',`${data.results[length-3].formatted_address}`)
+                // const pincode = data.
                 $('#location-search').attr('placeholder',`${data.plus_code.compound_code.slice(7)}`)
-                // $('#user-location').html(`You are currently at :${data.results[length-3].formatted_address}`);
             }
         })
     }

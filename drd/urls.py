@@ -26,6 +26,7 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
     path('', views.index, name='index'),
     path('area/', views.areaReport, name='areaReport'),
+    path('hospital/', views.hospitalReport, name='hospitalReport'),
     path('admin/', admin.site.urls),
     path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),
     path('area_summary_api',views.area_summary_api,name="Area summary API"),
