@@ -13,10 +13,10 @@ from django.contrib.gis.geos import Point
 def index(request):
     return render(request, 'index.html')
 
-
-
 def hospitalReport(request):
     return render(request, 'hospitalReport.html')
+
+
 def areaReport(request,pincode):
     print(pincode)
     thres_red_reports= 5     # Threshold for red reports
@@ -27,16 +27,20 @@ def areaReport(request,pincode):
     ret_json=[]
     for c in cnt:
         if(c["disease__count"]<thres_yellow_reports):
-            ret_part={"warning":"green"}
-        elif(q.count()>=thres_red_reports):
-            ret_part={"warning":"red"}
+            ret_part={"warning":"success"} #? Success == green zone
+        elif(q.count()>=thres_red_reports): 
+            ret_part={"warning":"danger"}  #? Danger == red zone
         else:
-            ret_part={"warning":"yellow"}
+            ret_part={"warning":"warning"} #? Warning == yellow zone
 
         ret_part["report_count"]=c["disease__count"]
-        ret_part["disease"]=Disease.objects.get(disease_name=c['disease__disease_name'])
+        ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
         ret_json.append(ret_part)
-    return render(request, 'areaReport.html',{'pincode':'pincode',"diseases":ret_json})    
+    print(ret_json)
+    # print(ret_json[0]['warning'])
+
+
+    return render(request, 'areaReport.html',{'pincode':pincode,"diseases_json":json.dumps({"disease_list":ret_json}),"diseases":ret_json})    
 
 
 @csrf_exempt

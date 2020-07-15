@@ -11,6 +11,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 </head>
 <body id="myPage">
+  <script>
+    pincode_final={{pincode}};
+    diseases_final={{diseases_json|safe}};
+  </script>
     <main class="d-block">
         <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(28,74,90, 0.9) ;">
             <a class="navbar-brand text-light" href="#">Disease REPORTING</a>
@@ -31,11 +35,11 @@
           <!-- TODO: {pincode:'751004'} is the parameter type for calling the area API -->
           <section class="report-area">
             <div class="container">
-                <h2 class="ser-title">Insights about Bhubaneswar </h2> <!--? Loaction to be dynamic-->
+                <h2 class="ser-title">{{ pincode }} </h2> <!--? Loaction to be dynamic-->
                 <hr class="botm-line">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">Bhubaneswar</label>  <!--? Location to be added dynamically from the homepage-->
+                      <label class="input-group-text" for="inputGroupSelect01">{{ pincode}}</label>  <!--? Location to be added dynamically from the homepage-->
                     </div>
                     <select class="custom-select" id="inputGroupSelect01">
                       <option selected>Choose a locality</option>
@@ -45,12 +49,14 @@
                     </select>
                   </div>
             </div>
-            <div class="alert alert-success" role="alert">
+           
+            <div class="alert alert-{{ diseases.0.warning}}" role="alert">
                 <h4 class="alert-heading">Well done!</h4>
                 <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
                 <hr>
                 <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
               </div>
+              
             <!--?Details reagarding -->
         </section>
           <section id="disease-graph">
