@@ -7,10 +7,15 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 # Register your models here.
 
-from .models import Disease, Report, Person, Hospital
+from .models import Disease, Report, Person, Hospital,Pincode
 from .forms import ReportAdminForm, PHAdminForm
 
 admin.site.register(Disease)
+
+class PincodeAdmin(OSMGeoAdmin):
+    model=Pincode
+
+admin.site.register(Pincode,PincodeAdmin)
 
 class ReportAdmin(OSMGeoAdmin):
     form = ReportAdminForm

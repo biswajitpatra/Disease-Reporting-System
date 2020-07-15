@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import MinLengthValidator
+from django.contrib.postgres.fields import ArrayField
 
 import requests
 import json
@@ -26,7 +27,15 @@ class Pincode(models.Model):
     province2=models.CharField(max_length=40)
     accuracy=models.IntegerField()
     located_at=models.PointField()
-
+    temprature=models.IntegerField()
+    population=models.IntegerField()
+    altitude=models.IntegerField()
+    rainfall=models.IntegerField()
+    sanitation_condition=models.CharField(max_length=20)
+    humidity=models.IntegerField()
+    age_frequency_vector=ArrayField(models.IntegerField(), blank=True)
+    is_alerted=models.BooleanField(default=False)
+    # adjacent_places=ArrayField(models.ForeignKey('self',on_delete=models.PROTECT),blank=True,default=None)
     def __str__(self):
         return self.pincode
 
@@ -42,10 +51,13 @@ class Hospital(models.Model):
 class Disease(models.Model):
     disease_name = models.CharField(max_length=1024)
     zoonotic = models.BooleanField(default=False)
+    category= models.CharField(choices = (("Water","Water borne"),("Food","Food borne"),("Vector","Vector borne"),("Air","Air borne")),max_length=6)
+    suseptible_prone_age=models.IntegerField()
     mortality = models.FloatField()
     morbidity = models.FloatField()
     vacination_available=models.BooleanField(default=False)
     info_spread=models.TextField()
+    info_precautions=models.TextField()
     info_diagnostic = models.TextField()
     info_managerial = models.TextField()
     info_url = models.URLField(max_length=200)
@@ -62,6 +74,7 @@ class Report(models.Model):
     death = models.BooleanField()
     pincode = models.ForeignKey(Pincode,on_delete=models.CASCADE)
     reported_at = models.PointField()
+    verified = models.BooleanField()
     def __str__(self):
         return "{} report from {} reported at {}".format(self.disease, self.source, self.reported_on)
     def save(self, *args, **kwargs):
@@ -75,6 +88,8 @@ class Report(models.Model):
         super(Report, self).save(*args, **kwargs)
 
 class Person(models.Model):
+    class Meta:
+        verbose_name_plural = "Census"
     full_name = models.CharField(max_length=24)
     email = models.EmailField()
     aadhar_number=models.CharField(unique=True,primary_key=True,max_length=12,validators=[MinLengthValidator(12)])
