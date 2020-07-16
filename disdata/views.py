@@ -1,8 +1,10 @@
 from django.shortcuts import render
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from disdata.models import Pincode, Report, Disease
+from django.contrib.auth.decorators import user_passes_test
+from django.http import JsonResponse,HttpResponse
+from disdata.models import Pincode, Report, Disease,Hospital
+# from django.core import serializers
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count   
 from datetime import datetime, timedelta
@@ -13,9 +15,26 @@ from django.contrib.gis.geos import Point
 def index(request):
     return render(request, 'index.html')
 
-def hospitalReport(request):
-    return render(request, 'hospitalReport.html')
+def check_hospital_staff(user):
+    if user.is_authenticated:
+        return Hospital.objects.filter(user=user).count()!=0
+    else:
+        return False
 
+# @login_required
+@user_passes_test(check_hospital_staff,login_url='/login')
+def hospitalReport(request):
+    reports=list(Report.objects.filter(source=request.user).filter(verified=False).values())
+    return render(request, 'hospitalReport.html',{'reports':reports})
+
+@csrf_exempt
+def report_api(req):
+    if req.method == 'POST':
+        req=json.loads(req.body.decode('utf-8'))
+        if "pincode" in req:
+            tmp=Pincode.objects.filter(pincode=req["pincode"])
+        return HttpResponse("done",status=200)
+    return HttpResponse("sorry",status=500)
 
 def areaReport(request,pincode):
     print(pincode)
