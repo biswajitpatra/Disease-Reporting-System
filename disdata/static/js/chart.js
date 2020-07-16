@@ -1,10 +1,10 @@
  //*Chart for area reports
  var ctx = document.getElementById('myChart').getContext('2d');
- console.log(diseases_final)
+//  console.log(diseases_final)
  
 
  let length = diseases_final.disease_list.length
- let diseaseArray = [];
+ let diseaseArray = []
  let diseaseCount = []
  let i =0
  while(length){

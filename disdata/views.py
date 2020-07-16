@@ -36,7 +36,7 @@ def areaReport(request,pincode):
         ret_part["report_count"]=c["disease__count"]
         ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
         ret_json.append(ret_part)
-    print(ret_json)
+    # print(ret_json)
     # print(ret_json[0]['warning'])
 
 

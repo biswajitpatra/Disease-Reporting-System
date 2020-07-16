@@ -59,34 +59,51 @@
               
             <!--?Details reagarding -->
         </section>
+        {% if diseases %}
           <section id="disease-graph">
            <canvas id="myChart" width="600" height="600"></canvas>
           </section>
-          <section class='mb-5'>
+          <section class='mb-5'> 
             <div class="card">
                 <div class="card-body">
-                  <h5 class="card-title">Disease1</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Type of Disease</h6>
-                  <p class="card-text">Details regarding this disease and other diagnostic information</p>
+                  {% for disease in diseases %}
+                  <h5 class="card-title">{{disease.disease.disease_name}}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Mode of transmission: {{disease.disease.category}}</h6>
+                  <p class="card-text">The susceptible age group is {{disease.disease.suseptible_prone_age}}. 
+                    Information about it's diagnosis are: {{disease.disease.info_diagnostic}}.
+                    The morbidity and mortality rate for this disease are: {{disease.disease.morbidity}} & {{disease.disease.mortality}} respectively.
+                    {% if disease.disease.vacination_available %}
+                    The vaccination is available for this disease.
+                    {% else %}
+                    The vaccination is not available for this disease.
+                    {% endif %}
+                    {% if disease.disease.zoonotic %}
+                    It's a zoonotic disease
+                    {% else %}
+                    It's not a zoonotic disease
+                    {% endif %}
+                    </p>
                   <h6 class='text-danger'>Precautions:</h6>
                   <ul>
-                      <li>1</li>
-                      <li>2</li>
+                      <li> {{disease.disease.info_precautions}}</li>
+                      <!-- <li> {{disease.disease.info_precautions}}</li> -->
                   </ul>
-                  <a href="#" class="card-link">WHO link for this disease</a>
+                  <a href="#" class="card-link">{{disease.disease.info_url}}</a>
                   <hr>
-                  <h5 class="card-title">Disease2</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Type of Disease</h6>
+                  {% endfor %}
+                  <!-- <h5 class="card-title">{{diseases.1.disease.disease_name}}</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">{{diseases.1.disease.category}}</h6>
                   <p class="card-text">Details regarding this disease and other diagnostic information</p>
                   <h6 class='text-danger'>Precautions:</h6>
                   <ul>
                       <li>1</li>
                       <li>2</li>
                   </ul>
-                  <a href="#" class="card-link">WHO link for this disease</a>
+                  <a href="#" class="card-link">{{diseases.1.disease.info_url}}</a> -->
                 </div>
               </div>
           </section>
+          {% endif %}
 
 </main>
 <script src="{% static 'js/jquery.min.js' %}"></script>
