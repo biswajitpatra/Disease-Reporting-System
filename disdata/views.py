@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import JsonResponse,HttpResponse
 from disdata.models import Pincode, Report, Disease,Hospital
 # from django.core import serializers
@@ -26,6 +26,23 @@ def check_hospital_staff(user):
 def hospitalReport(request):
     reports=list(Report.objects.filter(source=request.user).filter(verified=False).values())
     return render(request, 'hospitalReport.html',{'reports':reports})
+
+def verify_report_api(req):
+    if(req.user.is_authenticated):
+        rt=Report.objects.get(pk=req.POST.get('report_id'))
+        rt.verified=True
+        rt.save()
+    return HttpResponse("Failed",status=401)
+
+
+def delete_report_api(req):
+    if(req.user.is_authenticated==False):
+        return HttpResponse("Not authorized",status=401)
+    else:
+        if req.method=='POST':
+            Report.objects.get(pk=req.POST.get('report_id')).delete()
+    return HttpResponse("done",status=200)
+
 
 @csrf_exempt
 def report_api(req):
@@ -57,8 +74,6 @@ def areaReport(request,pincode):
         ret_json.append(ret_part)
     # print(ret_json)
     # print(ret_json[0]['warning'])
-
-
     return render(request, 'areaReport.html',{'pincode':pincode,"diseases_json":json.dumps({"disease_list":ret_json}),"diseases":ret_json})    
 
 

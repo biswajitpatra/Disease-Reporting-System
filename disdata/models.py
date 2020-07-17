@@ -74,7 +74,7 @@ class Report(models.Model):
     death = models.BooleanField()
     pincode = models.ForeignKey(Pincode,on_delete=models.CASCADE)
     reported_at = models.PointField()
-    verified = models.BooleanField()
+    verified = models.BooleanField(default=True)
     def __str__(self):
         return "{} report from {} reported at {}".format(self.disease, self.source, self.reported_on)
     def save(self, *args, **kwargs):
