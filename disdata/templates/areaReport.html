@@ -51,10 +51,22 @@
             </div>
            
             <div class="alert alert-{{ diseases.0.warning}}" role="alert">
-                <h4 class="alert-heading">Well done!</h4>
-                <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+                {% if diseases.0.warning == 'success' %}
+                <h4 class="alert-heading">Safe Location</h4>
+                <p>Your destination is completely safe for you to visit. Any future probable health hazards will be notified to you via our mobile app during your stay at {{pincode}}</p>
                 <hr>
-                <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+                <p class="mb-0">Happy and safe journey!</p>
+                {% elif diseases.0.warning == 'warning' %}
+                <h4 class="alert-heading">Moderately Safe Location</h4>
+                <p>Your destination is mildly contaminated with diseases which might create health issues for you. You are requested to have precautional look at them below for further details before you visit {{pincode}}</p>
+                <hr>
+                <p class="mb-0">{{pincode}} is safe to visit but with certain limitations. Happy and safe journey!</p>
+                {% else %}
+                <h4 class="alert-heading">Not Safe Location</h4>
+                <p>Your destination is unsafe for visit due the contagious spread of certain diseases at {{pincode}}. So it is advisable to cancel your visit.</p>
+                <hr>
+                <p class="mb-0">Please refer the below given data to know more about the health hazards at {{pincode}}</p>
+                {% endif %}
               </div>
               
             <!--?Details reagarding -->

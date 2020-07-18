@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/hospitalReport.css' %}">
     <title>{Name of Hospital}</title>
   </head>
+  
   <body id="myPage">
 
     <main>
@@ -33,11 +34,20 @@
           </nav>
           <section id="reportRequest">
               <div class="container">
-                <h2 class="ser-title">Requests submitted for Verification to {Name of Hospital} </h2> <!--? Name of hospital to be dynamic-->
+                <h2 class="ser-title">Requests submitted for Verification to {{hospitalName}} </h2> <!--? Name of hospital to be dynamic-->
                 <hr class="botm-line w-25">
+                {% for report in reports%}
                 <div class="jumbotron">
-
-                    <h4 class="text-danger">Request No</h4> <!--?Color of request no to be decided based on the vulnerability of the disease reported-->
+                    <h4 class="text-danger">Report ID: {{report.0.id}}</h4> <!--?Color of request no to be decided based on the vulnerability of the disease reported-->
+                    <p class="lead">{{report.0.disease.disease_name}} reported on {{report.0.reported_on}} at {{report.1.results.1.formatted_address}}.</p>
+                    <hr class="my-4 botm-line w-100">
+                    <p>{Any special measurement to be taken for this particular reportment}</p>
+                    <button class="btn btn-outline-success rounded-pill px-4">Verify</button>
+                    <button class="btn btn-outline-danger rounded-pill px-4">Dismiss</button>
+                  </div>
+                  {% endfor %}
+                  <!-- <div class="jumbotron">
+                    <h4 class="text-danger">Request No</h4> 
                     <p class="lead">{Message body submitted for Verification by the client} Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, hic.</p>
                     <hr class="my-4 botm-line w-100">
                     <p>{Any special measurement to be taken for this particular reportment}</p>
@@ -45,7 +55,7 @@
                     <button class="btn btn-outline-danger rounded-pill px-4">Dismiss</button>
                   </div>
                   <div class="jumbotron">
-                    <h4 class="text-danger">Request No</h4> <!--?Color of request no to be decided based on the vulnerability of the disease reported-->
+                    <h4 class="text-danger">Request No</h4> 
                     <p class="lead">{Message body submitted for Verification by the client} Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, hic.</p>
                     <hr class="my-4 botm-line w-100">
                     <p>{Any special measurement to be taken for this particular reportment}</p>
@@ -53,26 +63,18 @@
                     <button class="btn btn-outline-danger rounded-pill px-4">Dismiss</button>
                   </div>
                   <div class="jumbotron">
-                    <h4 class="text-danger">Request No</h4> <!--?Color of request no to be decided based on the vulnerability of the disease reported-->
+                    <h4 class="text-danger">Request No</h4> 
                     <p class="lead">{Message body submitted for Verification by the client} Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, hic.</p>
                     <hr class="my-4 botm-line w-100">
                     <p>{Any special measurement to be taken for this particular reportment}</p>
                     <button class="btn btn-outline-success rounded-pill px-4">Verified</button>
                     <button class="btn btn-outline-danger rounded-pill px-4">Dismiss</button>
-                  </div>
-                  <div class="jumbotron">
-                    <h4 class="text-danger">Request No</h4> <!--?Color of request no to be decided based on the vulnerability of the disease reported-->
-                    <p class="lead">{Message body submitted for Verification by the client} Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus, hic.</p>
-                    <hr class="my-4 botm-line w-100">
-                    <p>{Any special measurement to be taken for this particular reportment}</p>
-                    <button class="btn btn-outline-success rounded-pill px-4">Verified</button>
-                    <button class="btn btn-outline-danger rounded-pill px-4">Dismiss</button>
-                  </div>
+                  </div> -->
               </div>
              <a href="/admin"> <button class="btn btn-outline-warning px-5 py-3 rounded-pill" onclick="" id="admin-btn">Admin Dashboard</button></a>
           </section>
     </main>
-
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

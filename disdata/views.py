@@ -9,7 +9,7 @@ from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count   
 from datetime import datetime, timedelta
 from django.contrib.gis.geos import Point
-
+import requests
 
 # Create your views here.
 def index(request):
@@ -24,8 +24,19 @@ def check_hospital_staff(user):
 # @login_required
 @user_passes_test(check_hospital_staff,login_url='/login')
 def hospitalReport(request):
-    reports=list(Report.objects.filter(source=request.user).filter(verified=False).values())
-    return render(request, 'hospitalReport.html',{'reports':reports})
+    reports=list(Report.objects.filter(source=request.user).filter(verified=False))
+    hospitalName = Hospital.objects.get(user=request.user).name
+    # print(hospitalName)
+    print(reports)
+    loca=[]
+    for r in reports:
+        url=f"https://maps.googleapis.com/maps/api/geocode/json?latlng={r.reported_at.y},{r.reported_at.x}&key=AIzaSyDI0rZJabSHwnaVtPU71KsqokaqowHSQ70"
+        res=requests.get(url)
+        # print(res.json())
+        loca.append(res.json())
+        # loca.append([r.reported_at.x,r.reported_at.)
+    reports=zip(reports,loca)
+    return render(request, 'hospitalReport.html',{'reports':reports, 'hospitalName':hospitalName})
 
 @csrf_exempt
 def report_api(req):
@@ -42,12 +53,12 @@ def areaReport(request,pincode):
     thres_yellow_reports=2   # THreshold for yellow reports
     thres_time_gap= 30       # Threshold value for reports
     q = Report.objects.filter(pincode__pincode=pincode).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap))
-    cnt = q.values('disease__disease_name').annotate(Count('disease'))
+    cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
     ret_json=[]
     for c in cnt:
         if(c["disease__count"]<thres_yellow_reports):
             ret_part={"warning":"success"} #? Success == green zone
-        elif(q.count()>=thres_red_reports): 
+        elif(c["disease__count"]>=thres_red_reports): 
             ret_part={"warning":"danger"}  #? Danger == red zone
         else:
             ret_part={"warning":"warning"} #? Warning == yellow zone
