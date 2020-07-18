@@ -54,7 +54,7 @@ def delete_report_api(req):
             Report.objects.get(pk=req.POST.get('report_id')).delete()
     return HttpResponse("done",status=200)
 
-
+# !Biswajit karini shibani kariba
 @csrf_exempt
 def report_api(req):
     if req.method == 'POST':
