@@ -26,6 +26,8 @@ from django.views.generic.base import RedirectView
 urlpatterns = [
     path('', views.index, name='index'),
     path('hospital/', views.hospitalReport, name='hospitalReport'),
+    path('report_delete/',views.delete_report_api, name='delete report'),
+    path('report_verify/',views.verify_report_api, name='verify report'),
     re_path(r'^area/(?P<pincode>[0-9]{6})/$', views.areaReport, name='areaReport'),
     path('admin/', admin.site.urls),
     path('login/',LoginView.as_view(template_name='admin/login.html',extra_context={'site_header':'Login form'})),
