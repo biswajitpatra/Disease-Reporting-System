@@ -2,18 +2,23 @@ from django.shortcuts import render
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test,login_required
-from django.http import JsonResponse,HttpResponse
+from django.http import JsonResponse,HttpResponse, HttpResponseRedirect
 from disdata.models import Pincode, Report, Disease,Hospital
 # from django.core import serializers
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count   
 from datetime import datetime, timedelta
 from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.measure import D
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point
 import requests
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    list_of_diseases = list(Disease.objects.all())
+    return render(request, 'index.html', { "diseases": list_of_diseases})
 
 def check_hospital_staff(user):
     if user.is_authenticated:
@@ -24,7 +29,7 @@ def check_hospital_staff(user):
 # @login_required
 @user_passes_test(check_hospital_staff,login_url='/login')
 def hospitalReport(request):
-    reports=list(Report.objects.filter(source=request.user).filter(verified=False))
+    reports=list(Report.objects.all().filter(source=request.user).filter(verified=False))
     hospitalName = Hospital.objects.get(user=request.user).name
     # print(hospitalName)
     print(reports)
@@ -36,14 +41,26 @@ def hospitalReport(request):
         loca.append(res.json())
         # loca.append([r.reported_at.x,r.reported_at.)
     reports=zip(reports,loca)
-    return render(request, 'hospitalReport.html',{'reports':reports, 'hospitalName':hospitalName})
+    list_of_diseases = list(Disease.objects.all())
+    return render(request, 'hospitalReport.html',{'reports':reports, 'hospitalName':hospitalName, 'diseases': list_of_diseases})
 
 def verify_report_api(req):
     if(req.user.is_authenticated):
         rt=Report.objects.get(pk=req.POST.get('report_id'))
         rt.verified=True
+        corrected_category = req.POST.get('report_category')
+        print('yare yare daze: ', corrected_category)
+        if corrected_category is not None:
+            rt.category = corrected_category
+
+        corrected_disease = req.POST.get('disease_name')
+        if corrected_disease is not None:
+            corrected_disease = Disease.objects.get(disease_name=corrected_disease)
+            rt.disease = corrected_disease
+
         rt.save()
-    return HttpResponse("Failed",status=401)
+        return HttpResponseRedirect('/hospital')
+    return HttpResponseRedirect('/hospital?failed')
 
 
 def delete_report_api(req):
@@ -54,14 +71,35 @@ def delete_report_api(req):
             Report.objects.get(pk=req.POST.get('report_id')).delete()
     return HttpResponse("done",status=200)
 
-# !Biswajit karini shibani kariba
+# Done?
 @csrf_exempt
 def report_api(req):
     if req.method == 'POST':
-        req=json.loads(req.body.decode('utf-8'))
-        if "pincode" in req:
-            tmp=Pincode.objects.filter(pincode=req["pincode"])
-        return HttpResponse("done",status=200)
+        # req=json.loads(req.body.decode('utf-8'))
+        print('Post body: ', req.POST)
+        report_pincode = req.POST.get('pincode')
+        if report_pincode is not None:
+            report_pincode=Pincode.objects.filter(pincode=report_pincode).first()
+            report_location = Point(x=report_pincode.located_at.x, y=report_pincode.located_at.y, srid=4326)
+
+            suspected_disease = Disease.objects.get(disease_name=req.POST.get("disease_name"))
+
+            closest_hospital = Hospital.objects.annotate(distance=Distance('located_at', report_location)).order_by('distance').first()
+            report_source = closest_hospital.user
+            public_report = Report(
+                source=report_source,
+                disease=suspected_disease,
+                mortality=0,
+                morbidity=0,
+                infections=1,
+                death=False,
+                pincode=report_pincode,
+                report_info=req.POST.get('report_info'),
+                reported_at=report_location,
+                verified=False
+            )
+            public_report.save()
+            return HttpResponse("done",status=200)
     return HttpResponse("sorry",status=500)
 
 def areaReport(request,pincode):

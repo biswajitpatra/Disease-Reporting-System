@@ -24,7 +24,8 @@
             url: locationAPI,
             success: function(data) {
                 console.log(data);
-                // const pincode = data.
+                const pincode = data.results[0].address_components.filter(d => d.types.includes('postal_code'))[0].long_name
+                $("#id-pincode-field").val(pincode)
                 $('#location-search').attr('placeholder',`${data.plus_code.compound_code.slice(7)}`)
             }
         })
