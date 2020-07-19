@@ -14,6 +14,8 @@ import requests
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
+def govtReport(request):
+    return render(request, 'govtReport.html')   
 
 def check_hospital_staff(user):
     if user.is_authenticated:

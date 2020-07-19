@@ -10,3 +10,7 @@ new Cleave('.mobile',{
     prefix:'(+91)',
     blocks: [5,10]
 })
+
+new Cleave('#otp',{
+    numericOnly: true
+})

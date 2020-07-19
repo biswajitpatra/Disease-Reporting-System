@@ -30,6 +30,7 @@ urlpatterns = [
     path('report_verify/',views.verify_report_api, name='verify report'),
     re_path(r'^area/(?P<pincode>[0-9]{6})/$', views.areaReport, name='areaReport'),
     path('admin/', admin.site.urls),
+    path('govt/', views.govtReport, name='govtReport'),
     path('login/',LoginView.as_view(template_name='admin/login.html',extra_context={'site_header':'Login form'})),
     path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),
     path('area_summary_api',views.area_summary_api,name="Area summary API"),

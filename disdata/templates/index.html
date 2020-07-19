@@ -29,7 +29,6 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-      
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item active">
@@ -135,7 +134,7 @@
         <div class="col-md-12 col-sm-12 marb20">
             <div id="sendmessage">Your message has been sent. Thank you!</div>
             <div id="errormessage"></div>
-            <form action="../static/js/reportFormValidation.js" method="post" role="form">
+            <form action="" method="post" role="form" id="reportForm">
               <small>Please fill out the form below with authentic information for the welfare of the society</small>
              <div class="row from-group">
                 <div class="col-lg-4 msg-area">
@@ -146,13 +145,23 @@
                 </div>
                 <div class="col-lg-4 msg-area">
                   <label class="ui-form-input-container">
-                    <input class="ui-form-input mobile" required minLength="16" maxLength="16" pattern="^\(\+91\)[1-9]{1}[0-9]{9}$">
+                   <div class="d-flex">
+                      <input class="ui-form-input mobile" required minLength="16" maxLength="16">
+                      <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Enter the 10 digit Mobile phone number to which OTP will be sent" style="background:transparent; outline:none;border:none">
+                        <i class="fa fa-info-circle" style="color: rgb(88, 79, 79)"></i>
+                       </button>
+                   </div>
                     <span class="form-input-label">Phone Number</span>
                   </label>
                 </div>
                <div class="col-lg-4 msg-area">
-                    <label class="ui-form-input-container">
-                      <input class="ui-form-input aadhaar" required minLength="12" pattern= "^[2-9]{1}[0-9]{3}-[0-9]{4}-[0-9]{4}$">
+                    <label class="ui-form-input-container">                     
+                      <div class="d-flex">
+                        <input class="ui-form-input aadhaar" required minLength="12" pattern= "^[2-9]{1}[0-9]{3}-[0-9]{4}-[0-9]{4}$">
+                        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Enter the 12 digit Aadhaar number" style="background:transparent; outline:none;border:none">
+                         <i class="fa fa-info-circle" style="color: rgb(88, 79, 79)"></i>
+                        </button>
+                      </div>
                       <span class="form-input-label">Aadhaar Number</span>
                     </label>
                </div>
@@ -177,15 +186,46 @@
                   <span class="form-input-label">Enter your message report</span>
                 </label>
                </div>
-               <button class="btn btn-outline-primary mx-auto rounded-pill px-4" type="submit">Submit Request</button>
              </div>
             </form>
+            <button type ="button" class="btn btn-outline-primary rounded-pill px-4" id="modal-btn" style="margin-left: 30rem;">Submit Request</button>
+            <!-- Modal -->
+         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+           <div class="modal-dialog modal-dialog-centered" role="document">
+             <div class="modal-content">
+               <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalCenterTitle">Mobile Number Verification</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">&times;</span>
+                 </button>
+               </div>
+               <div class="modal-body">
+              
+                   <form action="">
+                    <div class="d-flex">
+                      <label class="text-dark">Enter the OTP sent to your number:</label>
+                      <input id="otp" minlength="6" maxLength="6">
+                    </div>
+                   </form>
+                
+               </div>
+               <div class="modal-footer d-flex justify-content-center">
+                 <button type="button" class="btn btn-outline-success" data-dismiss="modal">Verify Phone</button>
+                 <button type="button" class="btn btn-outline-danger">Resend OTP</button>
+               </div>
+             </div>
+           </div>
+         </div>
         </div>
       </div>
     </div>
+
+
   </section>
   <!--/ contact-->
+
   <!--footer-->
+
   <footer id="footer">
     <div class="top-footer">
       <div class="container">
@@ -237,16 +277,31 @@
     </div>
   </footer>
   <!--/ footer-->
-
-  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  <!-- <script src="{% static 'js/jquery.min.js' %}"></script> -->
   <script src="{% static 'js/jquery.easing.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <!-- <script src="{% static 'js/bootstrap.min.js' %}"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cleave.js/0.7.17/cleave.min.js"></script>
   <script src="{% static 'js/custom.js' %}"></script>
   <script src="{% static 'js/reportFormValidation.js' %}"></script>
   <script src="{% static 'js/geolocation.js' %}"></script>
   <script src="{% static 'contactform/contactform.js' %}"></script>
+  <script>
+    $(document).ready(() => {
+      $('#modal-btn').click((e) => {
+          if(document.getElementById("reportForm").reportValidity()){
+            $('#exampleModalCenter').modal('show');
+          }
+    })
+    })
+   
 
+   function SMSOTPGet(number) {
+
+   }
+  </script>
 </body>
 
 </html>
