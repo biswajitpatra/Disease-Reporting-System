@@ -42,12 +42,28 @@
                     <p class="lead">{{report.0.disease.disease_name}} reported on {{report.0.reported_on}} at {{report.1.results.1.formatted_address}}.</p>
                     <hr class="my-4 botm-line w-100">
                     <span class="badge badge-pill badge-danger mb-5 px-3" style="font-size:1rem;">{{report.0.disease.disease_name}}</span>
-                    <form action="post" >
-                      <input type="checkbox"> Zoonotic
-                    <div class="mt-3">
-                        <button class="btn btn-outline-success rounded-pill px-4">Verify</button>
-                        <button class="btn btn-outline-danger rounded-pill px-4">Dismiss</button>
-                    </div>
+                    <form action="/report_verify/" method="post" id="form_{{report.0.id}}">
+                      {% csrf_token %}
+                      <input type="text" name="report_id" value="{{report.0.id}}" style="display: none;">
+                      <label for="report_category_select_{{ report.0.id }}">Type of Infection:</label>
+                      <select name="report_category" id="report_category_select_{{ report.0.id }}">
+                        <option disabled selected value>Select a category</option>
+                        <option value="human">Human Infection</option>
+                        <option value="animal">Animal Infection</option>
+                      </select>
+                      <select name="disease_name">
+                        <option disabled selected value>Select a disease</option>
+                        {% for disease in diseases %}
+                          <option
+                            value="{{ disease.disease_name }}"
+                          >{{ disease.disease_name }}</option>
+                        {% endfor %}
+                      </select>
+                      <div class="mt-3">
+                        <input type="submit" class="btn btn-outline-success rounded-pill px-4" value="Verify">
+    
+                        <input type="submit" class="btn btn-outline-danger rounded-pill px-4" value="Dismiss" formaction="/report_reject">
+                      </div>
                     </form>
                   </div>
                   {% endfor %}
@@ -60,5 +76,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="{% static 'js/hospitalReport.js' %}"></script>
   </body>
 </html>

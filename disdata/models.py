@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import MinLengthValidator
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 import requests
 import json
@@ -64,14 +66,23 @@ class Disease(models.Model):
     def __str__(self):
         return self.disease_name
 
+def validate_report_category(value):
+    if value != None and value != 'human' and value != 'animal':
+        raise ValidationError(
+            _('%(value)s is not a valid report category, please  use either "human" or "animal"'),
+            params={'value': value},
+        )
+
 class Report(models.Model):
     source = models.ForeignKey(User, on_delete=models.CASCADE)
-    disease = models.ForeignKey(Disease, on_delete=models.CASCADE)
+    disease = models.ForeignKey(Disease, on_delete=models.CASCADE, null=True, blank=True)
     reported_on = models.DateTimeField(default=timezone.now)
     mortality = models.FloatField()
     morbidity = models.FloatField()
     infections = models.IntegerField()
     death = models.BooleanField()
+    report_info = models.CharField(max_length=255, blank=True)
+    category = models.CharField(max_length=255, null=True, blank=True, choices=(("human", "Human"),("animal","Animal")))
     pincode = models.ForeignKey(Pincode,on_delete=models.CASCADE)
     reported_at = models.PointField()
     verified = models.BooleanField(default=True)
