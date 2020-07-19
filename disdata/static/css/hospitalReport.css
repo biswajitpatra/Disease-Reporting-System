@@ -8,6 +8,7 @@
     left: 38%;
 }
 
+ 
 @media (max-width:768px){
     #reportRequest{
         left: 0;
@@ -15,4 +16,5 @@
     #admin-btn{
         left: 22%;
     }
+   
 }
