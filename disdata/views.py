@@ -19,9 +19,12 @@ import requests
 def index(request):
     list_of_diseases = list(Disease.objects.all())
     return render(request, 'index.html', { "diseases": list_of_diseases})
-    
+
 def govtReport(request):
-    return render(request, 'govtReport.html')   
+    list_of_diseases = list(Disease.objects.all())
+    reports = list(Report.objects.filter(verified=True))
+
+    return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports})   
     
 
 def check_hospital_staff(user):
