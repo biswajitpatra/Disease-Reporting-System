@@ -139,18 +139,21 @@
              <div class="row from-group">
                 <div class="col-lg-4 msg-area">
                   <label class="ui-form-input-container">
-                    <input class="ui-form-input" required>
+                    <input type="text" class="ui-form-input full_name" required onkeypress="return (event.charCode > 64 && 
+                    event.charCode < 91)">
                     <span class="form-input-label">Full Name</span>
+                    <small>Kindly enter your full name in upper case only</small>
                   </label>
                 </div>
                 <div class="col-lg-4 msg-area">
                   <label class="ui-form-input-container">
                    <div class="d-flex">
-                      <input class="ui-form-input mobile" required minLength="16" maxLength="16">
+                      <input class="ui-form-input mobile" minLength="16" maxLength="16" required>
                       <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Enter the 10 digit Mobile phone number to which OTP will be sent" style="background:transparent; outline:none;border:none">
                         <i class="fa fa-info-circle" style="color: rgb(88, 79, 79)"></i>
                        </button>
                    </div>
+                   <small>This number will be used to contact you</small>
                     <span class="form-input-label">Phone Number</span>
                   </label>
                 </div>
@@ -162,10 +165,11 @@
                          <i class="fa fa-info-circle" style="color: rgb(88, 79, 79)"></i>
                         </button>
                       </div>
+                      <small>We won't share your Aadhaar with anyone!</small>
                       <span class="form-input-label">Aadhaar Number</span>
                     </label>
                </div>
-               <div class="col-md-6 msg-area">
+               <div class="col-md-8 msg-area">
                   <div class="input-group mb-3">
                     <label class="ui-form-input-container"></label>
                     <!-- <div class="input-group-prepend">
@@ -179,11 +183,12 @@
                     </select>
                     <span class="form-input-label">Enter suspicious disease</span>
                   </div>
+                  <small>Kindly select the disease for which you want to report suspicions</small>
                </div>
-               <div class="col-md-6 msg-area">
+               <div class="col-md-4 msg-area w-100">
                 <div class="input-group mb-3">
                   <label class="ui-form-input-container">
-                    <input class="ui-form-input" name="pincode" id="pincode-field" readonly>
+                    <input class="ui-form-input" name="pincode" id="pincode-field" required readonly>
                     <span class="form-input-label">Pincode</span>
                   </label>
                 </div>
@@ -203,7 +208,7 @@
              <div class="modal-content">
                <div class="modal-header">
                  <h5 class="modal-title" id="exampleModalCenterTitle">Mobile Number Verification</h5>
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="outline:none"> 
                    <span aria-hidden="true">&times;</span>
                  </button>
                </div>
@@ -211,15 +216,15 @@
               
                    <form action="">
                     <div class="d-flex">
-                      <label class="text-dark">Enter the OTP sent to your number:</label>
-                      <input id="otp" minlength="6" maxLength="6">
+                      <label class="text-dark">Enter the 6 digit OTP sent to your number:</label>
+                      <input id="otp" minlength="7" maxLength="7">
                     </div>
                    </form>
                 
                </div>
                <div class="modal-footer d-flex justify-content-center">
-                 <button type="button" class="btn btn-outline-success" data-dismiss="modal" id="verify-otp">Verify Phone</button>
-                 <button type="button" class="btn btn-outline-danger">Resend OTP</button>
+                 <button type="button" class="btn btn-outline-success px-4 rounded-pill" data-dismiss="modal" id="verify-otp">Verify Phone</button>
+                 <button type="button" class="btn btn-outline-danger px-4 rounded-pill">Resend OTP</button>
                </div>
              </div>
            </div>
@@ -336,6 +341,7 @@
           if(document.getElementById("reportForm").reportValidity()){
             
             const phoneNumber = $('input.mobile').val()
+            console.log(phoneNumber)
             const appVerifier = window.recaptchaVerifier;
             firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
               .then(function (confirmationResult) {

@@ -12,5 +12,7 @@ new Cleave('.mobile',{
 })
 
 new Cleave('#otp',{
-    numericOnly: true
+    numericOnly: true,
+    blocks: [0, 9999]
 })
+
