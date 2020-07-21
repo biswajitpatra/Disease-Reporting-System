@@ -5,10 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/govtReport.css' %}">
+
     <title>Govt Insights</title>
   </head>
   <body>
@@ -34,49 +37,63 @@
             </ul>
         </div>
       </nav>
-    <div class="container">
+     <section>
+      <ul id="newsticker">
+        <li class="close">
+                  <div>
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                    <strong>MOSTRA MORTAL REMAIN</strong><span>: Pink Floyd Exhibition al Macro di Roma</span>
+                  </div>
+                </li><li class="close">
+                  <div>
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                    <strong>CONCERTO</strong><span>: Roger Waters a Bologna, PalaForum</span>
+                  </div>
+                </li>
+              <li class="close">
+                  <div>
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                    <strong>NUOVO ALBUM</strong><span>: In uscita nuovo album di Gilmoure</span>
+                  </div>
+                </li>
+              <li class="close">
+                  <div>
+                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
+                    <strong>HIGH HOPES</strong><span>: Best Pink Floyd song!</span>
+                  </div>
+                </li>
+    </ul>
+    <!-- <button id="stop">STOP SCROLL</button> -->
+     </section>
+    <!-- <div class="container">
+
         <div id="city-info">
-            <h2 class="ser-title">Cities Insights</h2>
+            <h2 class="ser-title">Diseases Insights</h2>
             <hr class="botm-line w-25">
         </div>
         <div class="card-deck">
+          {% for disease in diseases%}
             <div class="card">
               <img class="card-img-top" src="https://images.unsplash.com/photo-1567157577867-05ccb1388e66?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80" alt="Card image cap">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <h5 class="card-title">{{disease}}</h5>
+                <p class="card-text">{{reports.infections}}</p>
               </div>
               <div class="card-footer">
                 <small class="text-muted">Last updated 3 mins ago</small>
               </div>
             </div>
-            <div class="card">
-              <img class="card-img-top" src="https://images.unsplash.com/photo-1534430480872-3498386e7856?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" alt="Card image cap">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
-              </div>
-            </div>
-            <div class="card">
-              <img class="card-img-top" src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1489&q=80" alt="Card image cap">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
-              </div>
-            </div>
+            {% endfor %}
+          
           </div>
-    </div>
-
+    </div> -->
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="{% static 'js/govtReport.js' %}"></script>
   </body>
 </html>

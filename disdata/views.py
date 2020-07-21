@@ -23,7 +23,8 @@ def index(request):
 def govtReport(request):
     list_of_diseases = list(Disease.objects.all())
     reports = list(Report.objects.filter(verified=True))
-
+    print(list_of_diseases)
+    print(reports)
     return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports})   
     
 
