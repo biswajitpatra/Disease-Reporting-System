@@ -16,6 +16,10 @@
           <li class="breadcrumb-item"><a href="#">Outbreak Alert Panel</a></li>
           <li class="breadcrumb-item"><a href="#">Name of District</a></li>
           <li class="breadcrumb-item active" aria-current="page">Notice Board</li>
+          <li class="breadcrumb-item">
+              <!-- TODO: The number represents the number of Notices that need action, and the text represents the choosen filter option-->
+                  Unread Notices <span class="badge badge-info ml-2">4</span>
+          </li>
         </ol>
       </nav>
       <!-- TODO: Filter Notices based on read/unread-->
@@ -50,6 +54,8 @@
                 <button class="btn btn-outline-success rounded-pill mr-4">Approve</button>
                 <button class="btn btn-outline-danger rounded-pill">Reject</button>
            </div>
+           <!-- TODO:This badge would be enabled once the button action is completed, in this type of notice if a notice is rejected then replace the success class with danger for red color -->
+           <span class="badge badge-pill badge-success mt-3">This notice has been read and processed</span>
             <div class="card-footer mt-4">
               <small class="text-muted">Add time when this notice was issued</small>
             </div>
@@ -67,7 +73,10 @@
                 <h4 class="card-title">Heading of Notice</h4>
                 <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur iure aperiam quaerat tempore expedita, maxime repudiandae tempora autem ipsum et eos optio saepe dolores nemo dicta soluta, quidem explicabo fugit. Vero soluta quibusdam dolor saepe natus et recusandae quo neque qui in ullam corporis molestiae, accusamus eum pariatur dolores? Libero eos explicabo tenetur praesentium qui veritatis dicta assumenda quia dolores officiis aut possimus, aliquam officia eum est totam nemo culpa reprehenderit ab mollitia neque ducimus. Voluptate voluptatem perferendis dignissimos, cumque fugit voluptates sapiente obcaecati minima praesentium quas aliquid et a repudiandae dolor cum ullam quidem vero reprehenderit eligendi totam! Voluptatibus?</p>
               </div>
+              <!-- TODO: Once the action of button is implemented, just add 'disabled' class or remove it from DOM -->
               <button class="btn btn-outline-info rounded-pill mt-3">Read</button>
+              <!-- TODO:This badge would be enabled once the button action is completed -->
+              <span class="badge badge-pill badge-success mt-3">This notice has been read and processed</span>
             <div class="card-footer mt-4">
               <small class="text-muted">Add time when this notice was issued</small>
             </div>
