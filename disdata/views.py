@@ -26,7 +26,9 @@ def govtReport(request):
     print(list_of_diseases)
     print(reports)
     return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports})   
-    
+
+def user(requests):
+    return render(requests,'user-notice.html')
 
 def check_hospital_staff(user):
     if user.is_authenticated:

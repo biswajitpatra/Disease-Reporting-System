@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/user.css' %}">
+    <title>Notice Board</title>
+  </head>
+  <body>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Outbreak Alert Panel</a></li>
+          <li class="breadcrumb-item"><a href="#">Name of District</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Notice Board</li>
+        </ol>
+      </nav>
+      <!-- TODO: Filter Notices based on read/unread-->
+      <center>
+          <div class="dropdown">
+            <button class="btn px-5 btn-outline-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Filter Notices
+            </button>
+            <div class="dropdown-menu px-5" aria-labelledby="dropdownMenu2">
+              <button class="dropdown-item" type="button">Read</button>
+              <button class="dropdown-item" type="button">Unread</button>
+            </div>
+          </div>
+      </center>
+      <!-- TODO: Add for loop for multiple cards by creating separate rows for each Notice Card-->
+    <div class="container mt-5">
+        <!-- ? This card is for approval notices -->
+        <div class="row">
+          <div class="col-xs-12 col-md-12 col-lg-8">
+            <div class="card p-5">
+            <div class="card-block">
+                <!-- TODO: Add dynamic alert based on importance of Notice -->
+                <div class="alert alert-danger text-center mx-auto" role="alert">
+                    This is an higly important notice which needs immediate attention
+                  </div>
+              <h4 class="card-title">Heading of Notice</h4>
+              <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur iure aperiam quaerat tempore expedita, maxime repudiandae tempora autem ipsum et eos optio saepe dolores nemo dicta soluta, quidem explicabo fugit. Vero soluta quibusdam dolor saepe natus et recusandae quo neque qui in ullam corporis molestiae, accusamus eum pariatur dolores? Libero eos explicabo tenetur praesentium qui veritatis dicta assumenda quia dolores officiis aut possimus, aliquam officia eum est totam nemo culpa reprehenderit ab mollitia neque ducimus. Voluptate voluptatem perferendis dignissimos, cumque fugit voluptates sapiente obcaecati minima praesentium quas aliquid et a repudiandae dolor cum ullam quidem vero reprehenderit eligendi totam! Voluptatibus?</p>
+            </div>
+            <!-- TODO: Write a conditional test to check whether notice needs approval or is just for informational-->
+            <!-- TODO: Accordingly add the buttons dynamically for each card -->
+           <div class="btn-group mt-3">
+                <button class="btn btn-outline-success rounded-pill mr-4">Approve</button>
+                <button class="btn btn-outline-danger rounded-pill">Reject</button>
+           </div>
+            <div class="card-footer mt-4">
+              <small class="text-muted">Add time when this notice was issued</small>
+            </div>
+            </div>
+          </div>
+        </div>
+        <!-- ?This card is for warning notices -->
+        <div class="row mt-5">
+            <div class="col-xs-12 col-md-12 col-lg-8">
+              <div class="card p-5">
+              <div class="card-block">
+                <div class="alert alert-warning text-center mx-auto" role="alert">
+                    This is an moderately important notice which needs immediate attention
+                  </div>
+                <h4 class="card-title">Heading of Notice</h4>
+                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur iure aperiam quaerat tempore expedita, maxime repudiandae tempora autem ipsum et eos optio saepe dolores nemo dicta soluta, quidem explicabo fugit. Vero soluta quibusdam dolor saepe natus et recusandae quo neque qui in ullam corporis molestiae, accusamus eum pariatur dolores? Libero eos explicabo tenetur praesentium qui veritatis dicta assumenda quia dolores officiis aut possimus, aliquam officia eum est totam nemo culpa reprehenderit ab mollitia neque ducimus. Voluptate voluptatem perferendis dignissimos, cumque fugit voluptates sapiente obcaecati minima praesentium quas aliquid et a repudiandae dolor cum ullam quidem vero reprehenderit eligendi totam! Voluptatibus?</p>
+              </div>
+              <button class="btn btn-outline-info rounded-pill mt-3">Read</button>
+            <div class="card-footer mt-4">
+              <small class="text-muted">Add time when this notice was issued</small>
+            </div>
+              </div>
+            </div>
+          </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </body>
+</html>
