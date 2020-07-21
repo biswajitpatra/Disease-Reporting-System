@@ -29,15 +29,17 @@
               Filter Notices
             </button>
             <div class="dropdown-menu px-5" aria-labelledby="dropdownMenu2">
-              <button class="dropdown-item" type="button">Read</button>
-              <button class="dropdown-item" type="button">Unread</button>
+                <button class="dropdown-item" type="button" onclick="filterNotices(`*`)">All</button>
+              <button class="dropdown-item" type="button" onclick="filterNotices(`.read`)">Read</button>
+              <button class="dropdown-item" type="button" onclick="filterNotices(`.unread`)">Unread</button>
             </div>
           </div>
       </center>
       <!-- TODO: Add for loop for multiple cards by creating separate rows for each Notice Card-->
-    <div class="container mt-5">
+    <div class="container mt-5 grid">
         <!-- ? This card is for approval notices -->
-        <div class="row">
+        <!-- TODO: For filtration just add read/unread classes to the respective row as down below -->
+        <div class="row read">
           <div class="col-xs-12 col-md-12 col-lg-8">
             <div class="card p-5">
             <div class="card-block">
@@ -63,7 +65,7 @@
           </div>
         </div>
         <!-- ?This card is for warning notices -->
-        <div class="row mt-5">
+        <div class="row mt-5 unread">
             <div class="col-xs-12 col-md-12 col-lg-8">
               <div class="card p-5">
               <div class="card-block">
@@ -90,5 +92,14 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-  </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+</body>
+  <script>
+
+          function filterNotices(status) {
+              console.log(status)
+              $('.grid').isotope({filter: status})
+           }
+   
+  </script>
 </html>
