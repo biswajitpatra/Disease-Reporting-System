@@ -122,6 +122,7 @@ class Report(models.Model):
                 ppls = Person.objects.filter(animal_owner=True)
                 for people in ppls:
                     people.notify()
+                district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])[0]
                 new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
                 tmp_new.save()
                 new_not.save()
