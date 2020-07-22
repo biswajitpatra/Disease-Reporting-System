@@ -214,7 +214,7 @@ class Notice(models.Model):
     attn = models.CharField(max_length=7,choices=(('danger','danger'),('warning','warning')))
     msg_notice = models.BooleanField(default=True)
     time = models.DateTimeField(default=timezone.now)
-    msg_head = models.CharField(max_length=20)
+    msg_head = models.CharField(max_length=100)
     msg_body = models.CharField(max_length=255)
     approved = models.BooleanField(default=False)
     action = models.CharField(max_length=100,blank=True)
