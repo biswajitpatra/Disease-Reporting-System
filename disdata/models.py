@@ -123,6 +123,7 @@ class Report(models.Model):
                 for people in ppls:
                     people.notify()
                 new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
+                tmp_new.save()
                 new_not.save()
             else:
                 lst=lst[0]
