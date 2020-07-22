@@ -93,10 +93,11 @@ class Report(models.Model):
     def __str__(self):
         return "{} report from {} reported at {}".format(self.disease, self.source, self.reported_on)
     def save(self, *args, **kwargs):
+        super(Report, self).save(*args, **kwargs)
         if(self.category=='human'):
             lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
             if(lst.count()==0):
-                tmp_new = Outbreak(self.disease,1,0,self,False,'human')
+                tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='human')
                 tmp_new.save()
             else:
                 lst=lst[0]
@@ -116,12 +117,12 @@ class Report(models.Model):
         else:
             lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
             if(lst.count()==0):
-                tmp_new = Outbreak(self.disease,1,0,self,False,'animal')
+                tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='animal')
+                tmp_new.save()
                 ppls = Person.objects.filter(animal_owner=True)
                 for people in ppls:
                     people.notify()
-                tmp_new.save()
-                new_not = Notice(district.district_official,'warning',True,msg_head='New case detected',msg_body='A new case has been deteced')
+                new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
                 new_not.save()
             else:
                 lst=lst[0]
@@ -135,7 +136,7 @@ class Report(models.Model):
                         district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])
                         if(district.count()!=0):
                             district=district[0]
-                            new_not = Notice(district.district_official,'danger',False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area",action='notify_all_people',action_msg=district.area_id)
+                            new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area",action='notify_all_people',action_msg=district.area_id)
                             new_not.save()
                             # ppls = Person.abjects.filter(pincode__pincode__startswith=district.area_id)
                             # for p in ppls:
@@ -150,7 +151,6 @@ class Report(models.Model):
         # if self.mortality>10:
         #     for person in risk_population:
         #         person.notify()
-        super(Report, self).save(*args, **kwargs)
 
 class Person(models.Model):
     class Meta:
