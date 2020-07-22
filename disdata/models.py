@@ -97,7 +97,11 @@ class Report(models.Model):
         if(self.category=='human'):
             lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
             if(lst.count()==0):
+<<<<<<< HEAD
                 tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='human')
+=======
+                tmp_new = Outbreak.objects.create(self.disease,1,0,self,False,'human')
+>>>>>>> 9c27870b141915683c368e480e38243702dd80cd
                 tmp_new.save()
             else:
                 lst=lst[0]
@@ -122,7 +126,12 @@ class Report(models.Model):
                 ppls = Person.objects.filter(animal_owner=True)
                 for people in ppls:
                     people.notify()
+<<<<<<< HEAD
                 new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
+=======
+                tmp_new.save()
+                new_not = Notice.objects.create(district.district_official,'warning',True,msg_head='New case detected',msg_body='A new case has been deteced')
+>>>>>>> 9c27870b141915683c368e480e38243702dd80cd
                 new_not.save()
             else:
                 lst=lst[0]
@@ -136,7 +145,11 @@ class Report(models.Model):
                         district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])
                         if(district.count()!=0):
                             district=district[0]
+<<<<<<< HEAD
                             new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area",action='notify_all_people',action_msg=district.area_id)
+=======
+                            new_not = Notice.objects.create(district.district_official,'danger',False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area",action='notify_all_people',action_msg=district.area_id)
+>>>>>>> 9c27870b141915683c368e480e38243702dd80cd
                             new_not.save()
                             # ppls = Person.abjects.filter(pincode__pincode__startswith=district.area_id)
                             # for p in ppls:
