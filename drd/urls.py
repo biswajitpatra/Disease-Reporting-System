@@ -36,7 +36,8 @@ urlpatterns = [
     path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),
     path('area_summary_api',views.area_summary_api,name="Area summary API"),
     path('report_api',views.report_api,name="Report API"),
-    path('favicon.ico',RedirectView.as_view(url=staticfiles_storage.url('img/favicon.ico')))
+    path('favicon.ico',RedirectView.as_view(url=staticfiles_storage.url('img/favicon.ico'))),
+    path('user_action',views.usernotice_action,name='Notice action API')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

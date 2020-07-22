@@ -47,9 +47,9 @@ def usernotice_action(req):
             notice.approved =True
             getattr(notice,notice.action)() 
             notice.save()            
-        return HttpResponse("/user",status=200)
+        return HttpResponseRedirect("/user")
     else:
-        return HttpResponse("/user?failed",status=500)
+        return HttpResponseRedirect("/user?failed")
 
 
 def check_hospital_staff(user):

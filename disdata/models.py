@@ -223,6 +223,9 @@ class Notice(models.Model):
         for p in ppls:
             p.notify()
 
+    def sample():
+        pass
+
 
 
 
