@@ -55,7 +55,7 @@ class Hospital(models.Model):
 class Disease(models.Model):
     disease_name = models.CharField(max_length=1024)
     zoonotic = models.BooleanField(default=False)
-    category= models.CharField(choices = (("Water","Water borne"),("Food","Food borne"),("Vector","Vector borne"),("Air","Air borne")),max_length=6)
+    category= models.CharField(choices = (("Water","Water borne"),("Food","Food borne"),("Vector","Vector borne"),("Air","Air borne"),("Animal","Animal transmitted")),max_length=6)
     suseptible_prone_age=models.IntegerField()
     mortality = models.FloatField()
     morbidity = models.FloatField()
@@ -94,57 +94,58 @@ class Report(models.Model):
         return "{} report from {} reported at {}".format(self.disease, self.source, self.reported_on)
     def save(self, *args, **kwargs):
         super(Report, self).save(*args, **kwargs)
-        if(self.category=='human'):
-            lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
-            if(lst.count()==0):
-                tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='human')
-                tmp_new.save()
-            else:
-                lst=lst[0]
-                if(self.death==True):
-                    lst.death+=1
+        if(self.verified==True):
+                if(self.category=='human'):
+                    lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
+                    if(lst.count()==0):
+                        tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='human')
+                        tmp_new.save()
+                    else:
+                        lst=lst[0]
+                        if(self.death==True):
+                            lst.death+=1
+                        else:
+                            lst.infected+=1
+                        if(lst.first_alert==False):    
+                            if(lst.infected + lst.death > self.disease.threshold_alert):
+                                ppls = Person.objects.filter(pincode__pincode__startswith=self.pincode[:3])
+                                lst.first_alert =True
+                                for people in ppls:
+                                    people.notify()
+
+                                # TODO: notify disease officials
+                        lst.save()
                 else:
-                    lst.infected+=1
-                if(lst.first_alert==True):    
-                    if(lst.infected > self.disease.threshold_alert):
-                        ppls = Person.objects.filter(pincode__pincode__startswith=self.pincode[:3])
-                        lst.first_alert =True
+                    lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
+                    if(lst.count()==0):
+                        tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='animal')
+                        tmp_new.save()
+                        ppls = Person.objects.filter(animal_owner=True)
                         for people in ppls:
                             people.notify()
+                        district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])[0]
+                        new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
+                        tmp_new.save()
+                        new_not.save()
+                    else:
+                        lst=lst[0]
+                        if(self.death==True):
+                            lst.death+=1
+                        else:
+                            lst.infected+=1
+                        if(lst.first_alert==False):    
+                            if(lst.infected + lst.death > self.disease.threshold_alert):
+                                lst.first_alert =True
+                                district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])
+                                if(district.count()!=0):
+                                    district=district[0]
+                                    new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area should we notify?",action='notify_all_people',action_msg=district.area_id)
+                                    new_not.save()
+                                    # ppls = Person.abjects.filter(pincode__pincode__startswith=district.area_id)
+                                    # for p in ppls:
+                                    #     p.notify()                                          # notification of  2nd level
 
-                        # TODO: notify disease officials
-                lst.save()
-        else:
-            lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
-            if(lst.count()==0):
-                tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='animal')
-                tmp_new.save()
-                ppls = Person.objects.filter(animal_owner=True)
-                for people in ppls:
-                    people.notify()
-                district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])[0]
-                new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
-                tmp_new.save()
-                new_not.save()
-            else:
-                lst=lst[0]
-                if(self.death==True):
-                    lst.death+=1
-                else:
-                    lst.infected+=1
-                if(lst.first_alert==True):    
-                    if(lst.infected > self.disease.threshold_alert):
-                        lst.first_alert =True
-                        district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])
-                        if(district.count()!=0):
-                            district=district[0]
-                            new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area",action='notify_all_people',action_msg=district.area_id)
-                            new_not.save()
-                            # ppls = Person.abjects.filter(pincode__pincode__startswith=district.area_id)
-                            # for p in ppls:
-                            #     p.notify()                                          # notification of  2nd level
-
-                lst.save()
+                        lst.save()
         # if not self.pk:
         
         # source_user = User.objects.get(id=self.source.pk)
@@ -216,7 +217,7 @@ class Notice(models.Model):
     msg_head = models.CharField(max_length=20)
     msg_body = models.CharField(max_length=255)
     approved = models.BooleanField(default=False)
-    action = models.CharField(max_length=20,blank=True)
+    action = models.CharField(max_length=100,blank=True)
     action_msg = models.CharField(max_length=100,blank=True)
     read=models.BooleanField(default=False)
 
