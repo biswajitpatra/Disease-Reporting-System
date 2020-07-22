@@ -14,15 +14,13 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="#">Outbreak Alert Panel</a></li>
-          <li class="breadcrumb-item"><a href="#">Name of District</a></li>
+          <!-- <li class="breadcrumb-item"><a href="#">Name of District</a></li> -->
           <li class="breadcrumb-item active" aria-current="page">Notice Board</li>
           <li class="breadcrumb-item">
-              <!-- TODO: The number represents the number of Notices that need action, and the text represents the choosen filter option-->
-                  Unread Notices <span class="badge badge-info ml-2">4</span>
+                  Unread Notices <span class="badge badge-info ml-2">{{unread_notices_length}}</span>
           </li>
         </ol>
       </nav>
-      <!-- TODO: Filter Notices based on read/unread-->
       <center>
           <div class="dropdown">
             <button class="btn px-5 btn-outline-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -35,56 +33,48 @@
             </div>
           </div>
       </center>
-      <!-- TODO: Add for loop for multiple cards by creating separate rows for each Notice Card-->
-    <div class="container mt-5 grid">
-        <!-- ? This card is for approval notices -->
-        <!-- TODO: For filtration just add read/unread classes to the respective row as down below -->
-        <div class="row read">
+      <div class="container mt-5 grid">
+        {% for notice in notices %}
+          {% if notice.read == True %}
+             <div class="row read">
+          {% elif notice.read == False%}
+              <div class="row unread">
+          {% endif %}
           <div class="col-xs-12 col-md-12 col-lg-8">
             <div class="card p-5">
             <div class="card-block">
-                <!-- TODO: Add dynamic alert based on importance of Notice -->
-                <div class="alert alert-danger text-center mx-auto" role="alert">
+                <div class="alert alert-{{notice.attn |safe}} text-center mx-auto" role="alert">
+                  {% if notice.attn == 'danger' %}
                     This is an higly important notice which needs immediate attention
+                   {% else %}
+                    This is an moderately important notice which needs immediate attention
+                   {% endif %} 
                   </div>
-              <h4 class="card-title">Heading of Notice</h4>
-              <p class="card-text">e dolor cum ullam quidem vero reprehenderit eligendi totam! Voluptatibus?</p>
+              <h4 class="card-title">{{notice.msg_head}}</h4>
+              <p class="card-text">{{notice.msg_body}}</p>
             </div>
-            <!-- TODO: Write a conditional test to check whether notice needs approval or is just for informational-->
-            <!-- TODO: Accordingly add the buttons dynamically for each card -->
-           <div class="btn-group mt-3">
-                <button class="btn btn-outline-success rounded-pill mr-4">Approve</button>
-                <button class="btn btn-outline-danger rounded-pill">Reject</button>
-           </div>
-           <!-- TODO:This badge would be enabled once the button action is completed, in this type of notice if a notice is rejected then replace the success class with danger for red color -->
+            {% if notice.msg_notice  %}
+            <button class='btn btn-outline-info rounded-pill mt-3 {{ notice.read|yesno:"disabled, " }}''>Read</button>
+            {%else%}
+            <div class="btn-group mt-3">
+                 <button class='btn btn-outline-success rounded-pill mr-4 {{ notice.read|yesno:"disabled, " }}'>Approve</button>
+                 <button class='btn btn-outline-danger rounded-pill {{ notice.read|yesno:"disabled, " }}'>Reject</button>
+            </div>
+            {%endif%}
+           {% if notice.read %}
+           {% if notice.msg_notice %}
            <span class="badge badge-pill badge-success mt-3">This notice has been read and processed</span>
-            <div class="card-footer mt-4">
-              <small class="text-muted">Add time when this notice was issued</small>
+           {% else %}
+           <span class="badge badge-pill badge-{{ notice.approved|yesno:"success,danger" }} mt-3">This notice has been read and processed</span>
+           {% endif %} 
+           {% endif %} 
+           <div class="card-footer mt-4">
+              <small class="text-muted">{{notice.time}}</small>
             </div>
             </div>
           </div>
         </div>
-        <!-- ?This card is for warning notices -->
-        <div class="row mt-5 unread">
-            <div class="col-xs-12 col-md-12 col-lg-8">
-              <div class="card p-5">
-              <div class="card-block">
-                <div class="alert alert-warning text-center mx-auto" role="alert">
-                    This is an moderately important notice which needs immediate attention
-                  </div>
-                <h4 class="card-title">Heading of Notice</h4>
-                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur iure aperiam quaerat tempore expedita, maxime repudiandae tempora autem ipsum et eos optio saepe dolores nemo dicta soluta, quidem explicabo fugit. Vero soluta quibusdam dolor saepe natus et recusandae quo neque qui in ullam corporis molestiae, accusamus eum pariatur dolores? Libero eos explicabo tenetur praesentium qui veritatis dicta assumenda quia dolores officiis aut possimus, aliquam officia eum est totam nemo culpa reprehenderit ab mollitia neque ducimus. Voluptate voluptatem perferendis dignissimos, cumque fugit voluptates sapiente obcaecati minima praesentium quas aliquid et a repudiandae dolor cum ullam quidem vero reprehenderit eligendi totam! Voluptatibus?</p>
-              </div>
-              <!-- TODO: Once the action of button is implemented, just add 'disabled' class or remove it from DOM -->
-              <button class="btn btn-outline-info rounded-pill mt-3">Read</button>
-              <!-- TODO:This badge would be enabled once the button action is completed -->
-              <span class="badge badge-pill badge-success mt-3">This notice has been read and processed</span>
-            <div class="card-footer mt-4">
-              <small class="text-muted">Add time when this notice was issued</small>
-            </div>
-              </div>
-            </div>
-          </div>
+          {% endfor %}
     </div>
 
     <!-- Optional JavaScript -->

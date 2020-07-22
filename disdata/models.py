@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User , Group
 from django.utils import timezone
 from django.core.validators import MinLengthValidator
 from django.contrib.postgres.fields import ArrayField
@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 import requests
 import json
+import re
+
 # Create your models here.
 def sendPostRequest(reqUrl, apiKey, secretKey, useType, phoneNo, senderId, textMessage):
   req_params = {
@@ -57,7 +59,9 @@ class Disease(models.Model):
     suseptible_prone_age=models.IntegerField()
     mortality = models.FloatField()
     morbidity = models.FloatField()
+    threshold_alert = models.IntegerField(default=0)
     vacination_available=models.BooleanField(default=False)
+    victim_id=models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Ship')))
     info_spread=models.TextField()
     info_precautions=models.TextField()
     info_diagnostic = models.TextField()
@@ -77,9 +81,9 @@ class Report(models.Model):
     source = models.ForeignKey(User, on_delete=models.CASCADE)
     disease = models.ForeignKey(Disease, on_delete=models.CASCADE, null=True, blank=True)
     reported_on = models.DateTimeField(default=timezone.now)
-    mortality = models.FloatField()
-    morbidity = models.FloatField()
-    infections = models.IntegerField()
+    # mortality = models.FloatField()
+    # morbidity = models.FloatField()
+    # infections = models.IntegerField()
     death = models.BooleanField()
     report_info = models.CharField(max_length=255, blank=True)
     category = models.CharField(max_length=255, null=True, blank=True, choices=(("human", "Human"),("animal","Animal")))
@@ -89,13 +93,63 @@ class Report(models.Model):
     def __str__(self):
         return "{} report from {} reported at {}".format(self.disease, self.source, self.reported_on)
     def save(self, *args, **kwargs):
+        if(self.category=='human'):
+            lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
+            if(lst.count()==0):
+                tmp_new = Outbreak(self.disease,1,0,self,False,'human')
+                tmp_new.save()
+            else:
+                lst=lst[0]
+                if(self.death==True):
+                    lst.death+=1
+                else:
+                    lst.infected+=1
+                if(lst.first_alert==True):    
+                    if(lst.infected > self.disease.threshold_alert):
+                        ppls = Person.objects.filter(pincode__pincode__startswith=self.pincode[:3])
+                        lst.first_alert =True
+                        for people in ppls:
+                            people.notify()
+
+                        # TODO: notify disease officials
+                lst.save()
+        else:
+            lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
+            if(lst.count()==0):
+                tmp_new = Outbreak(self.disease,1,0,self,False,'animal')
+                ppls = Person.objects.filter(animal_owner=True)
+                for people in ppls:
+                    people.notify()
+                tmp_new.save()
+                new_not = Notice(district.district_official,'warning',True,msg_head='New case detected',msg_body='A new case has been deteced')
+                new_not.save()
+            else:
+                lst=lst[0]
+                if(self.death==True):
+                    lst.death+=1
+                else:
+                    lst.infected+=1
+                if(lst.first_alert==True):    
+                    if(lst.infected > self.disease.threshold_alert):
+                        lst.first_alert =True
+                        district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])
+                        if(district.count()!=0):
+                            district=district[0]
+                            new_not = Notice(district.district_official,'danger',False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area",action='notify_all_people',action_msg=district.area_id)
+                            new_not.save()
+                            # ppls = Person.abjects.filter(pincode__pincode__startswith=district.area_id)
+                            # for p in ppls:
+                            #     p.notify()                                          # notification of  2nd level
+
+                lst.save()
         # if not self.pk:
-        source_user = User.objects.get(id=self.source.pk)
-        risk_population = Person.objects.filter(city=source_user.hospital.city)
-        print("done",risk_population)
-        if self.mortality>10:
-            for person in risk_population:
-                person.notify()
+        
+        # source_user = User.objects.get(id=self.source.pk)
+        # risk_population = Person.objects.filter(city=source_user.hospital.city)
+        # print("done",risk_population)
+        # if self.mortality>10:
+        #     for person in risk_population:
+        #         person.notify()
         super(Report, self).save(*args, **kwargs)
 
 class Person(models.Model):
@@ -112,8 +166,64 @@ class Person(models.Model):
     located_at = models.PointField()
     def __str__(self):
         return "{} from {}".format(self.full_name, self.city)
-    def notify(self):
-        URL = 'https://www.sms4india.com/api/v1/sendCampaign'
-        response = sendPostRequest(URL, "PT5VPWDIY5UHKR5W9Z7LJA723XAJ4O9L", 'VOT5R4ICAHKB80QP', 'stage', '+919439832766', 'sai.nayak1503@gmail.com', 'Swine flu detected in your vicinity' )
-        print(response.text)
+    def notify(self,msg=None):
+        #TODO: do it
+        pass
+        # URL = 'https://www.sms4india.com/api/v1/sendCampaign'
+        # response = sendPostRequest(URL, "PT5VPWDIY5UHKR5W9Z7LJA723XAJ4O9L", 'VOT5R4ICAHKB80QP', 'stage', '+919439832766', 'sai.nayak1503@gmail.com', 'Swine flu detected in your vicinity' )
+        # print(response.text)
+
+class Outbreak(models.Model):
+    disease = models.ForeignKey(Disease,on_delete=models.CASCADE)
+    infected = models.IntegerField(default=0)
+    death = models.IntegerField(default=0)
+    start_report=models.ForeignKey(Report,on_delete=models.CASCADE)
+    outbreak_over=models.BooleanField(default=False)
+    first_alert=models.BooleanField(default=False)
+    category = models.CharField(max_length=10, choices=(("human", "Human"),("animal","Animal")))
+
+
+
+    def sir_model(self):
+        if(self.category=='human'):
+            pass
+            # District.objectsself.start_report.pincode.pincode[:3]
+
+
+class District(models.Model):
+    area_id=models.CharField(max_length=3,primary_key=True,unique=True)
+    name= models.CharField(max_length=30)
+    district_official = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
+    rainfall = models.FloatField()
+    altitude= models.IntegerField()
+    temprature=models.FloatField()
+    population = models.IntegerField()
+    water_source = models.IntegerField() # Untreated water source
+    humidity = models.FloatField()
+    age_frequency_vector = ArrayField(models.IntegerField())
+    slums_count = models.IntegerField()
+    victim_ids = ArrayField( models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Ship'))))
+    # neighbours = models.ManyToManyField('self')
+
+
+class Notice(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    attn = models.CharField(max_length=7,choices=(('danger','danger'),('warning','warning')))
+    msg_notice = models.BooleanField(default=True)
+    time = models.DateTimeField(default=timezone.now)
+    msg_head = models.CharField(max_length=20)
+    msg_body = models.CharField(max_length=255)
+    approved = models.BooleanField(default=False)
+    action = models.CharField(max_length=20,blank=True)
+    action_msg = models.CharField(max_length=100,blank=True)
+    read=models.BooleanField(default=False)
+
+    def notify_all_people(self):
+        ppls = People.objects.filter(pincode__pincode__startswith=self.action_msg)
+        for p in ppls:
+            p.notify()
+
+
+
+
 

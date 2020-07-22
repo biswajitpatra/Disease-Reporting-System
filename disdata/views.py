@@ -3,7 +3,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import JsonResponse,HttpResponse, HttpResponseRedirect
-from disdata.models import Pincode, Report, Disease,Hospital
+from disdata.models import Pincode, Report, Disease,Hospital,Notice
 # from django.core import serializers
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count   
@@ -25,10 +25,32 @@ def govtReport(request):
     reports = list(Report.objects.filter(verified=True))
     print(list_of_diseases)
     print(reports)
-    return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports})   
+    return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports}) 
 
+
+@login_required(login_url='/login')
 def user(requests):
-    return render(requests,'user-notice.html')
+    unread_notices_length = Notice.objects.filter(user=requests.user).filter(read=False).count()
+    notices = Notice.objects.filter(user=requests.user).order_by('-time')
+    return render(requests,'user-notice.html',{"unread_notices_length":unread_notices_length,"notices":notices})
+
+def usernotice_action(req):
+    if(req.user.is_authenticated):
+        notice_id = req.POST.get('notice_id')
+        res = req.POST.get('response')
+        notice= Notice.objects.get(pk=notice_id)
+        if(res=="seen" or res=='reject'):
+            notice.read=True
+            notice.save()
+        elif (res=='accept'):
+            notice.read= True
+            notice.approved =True
+            getattr(notice,notice.action)() 
+            notice.save()            
+        return HttpResponse("/user",status=200)
+    else:
+        return HttpResponse("/user?failed",status=500)
+
 
 def check_hospital_staff(user):
     if user.is_authenticated:
