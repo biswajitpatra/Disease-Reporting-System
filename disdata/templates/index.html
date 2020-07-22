@@ -180,7 +180,7 @@
                 <div class="col-lg-4 msg-area">
                   <label class="ui-form-input-container">
                    <div class="d-flex">
-                      <input class="ui-form-input mobile" minLength="16" maxLength="16" required>
+                      <input class="ui-form-input mobile" required>
                       <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="right" title="Enter the 10 digit Mobile phone number to which OTP will be sent" style="background:transparent; outline:none;border:none">
                         <i class="fa fa-info-circle" style="color: rgb(88, 79, 79)"></i>
                        </button>
@@ -249,7 +249,7 @@
                    <form action="">
                     <div class="d-flex">
                       <label class="text-dark">Enter the 6 digit OTP sent to your number:</label>
-                      <input id="otp" minlength="7" maxLength="7">
+                      <input id="otp">
                     </div>
                    </form>
                 
@@ -349,7 +349,7 @@
   <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
+<!-- TODO: Add SDKs for Firebase products that you want to use -->
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-analytics.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
@@ -383,6 +383,7 @@
   <script>
     $(document).ready(() => {
       $('#modal-btn').click((e) => {
+        $('#reportForm').submit();
           if(document.getElementById("reportForm").reportValidity()){
             
             const phoneNumber = $('input.mobile').val()
@@ -398,6 +399,7 @@
 
                 $('#verify-otp').click(function() {
                   const otp = $('#otp').val()
+                  console.log(otp)
                   confirmationResult.confirm(otp).then(function (result) {
                     // User signed in successfully.
                     var user = result.user;

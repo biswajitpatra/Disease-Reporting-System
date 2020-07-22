@@ -54,7 +54,7 @@
               <p class="card-text">{{notice.msg_body}}</p>
             </div>
             {% if notice.msg_notice  %}
-            <button class='btn btn-outline-info rounded-pill mt-3 {{ notice.read|yesno:"disabled, " }}''>Read</button>
+            <button class='btn btn-outline-info rounded-pill mt-3 {{ notice.read|yesno:"disabled, " }}'>Read</button>
             {%else%}
             <div class="btn-group mt-3">
                  <button class='btn btn-outline-success rounded-pill mr-4 {{ notice.read|yesno:"disabled, " }}'>Approve</button>
@@ -65,7 +65,7 @@
            {% if notice.msg_notice %}
            <span class="badge badge-pill badge-success mt-3">This notice has been read and processed</span>
            {% else %}
-           <span class="badge badge-pill badge-{{ notice.approved|yesno:"success,danger" }} mt-3">This notice has been read and processed</span>
+           <span class="badge badge-pill badge-{{ notice.approved|yesno:'success,danger' }} mt-3">This notice has been read and processed</span>
            {% endif %} 
            {% endif %} 
            <div class="card-footer mt-4">

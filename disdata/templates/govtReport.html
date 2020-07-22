@@ -6,94 +6,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
-
+    <link rel="stylesheet" href="{% static 'css/govtReport.css'%}">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/govtReport.css' %}">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <title>Govt Insights</title>
   </head>
   <body>
-    <!-- <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(28,74,90, 0.9) ;">
-        <a class="navbar-brand text-light" href="#">Disease REPORTING</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link text-light" href="#banner">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#service">Services</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#contact">Report</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="/hospital">For Hospitals</a>
-              </li>
-            </ul>
-        </div>
-      </nav> -->
+    
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Outbreak Alert</a></li>
+          <li class="breadcrumb-item"><a href="#">Govt Insights</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+      </nav>
      <section>
       <ul id="newsticker">
-        <li class="close">
+        <li class="closed">
                   <div>
                     <i class="fa fa-bullhorn" aria-hidden="true"></i>
                     <strong>MOSTRA MORTAL REMAIN</strong><span>: Pink Floyd Exhibition al Macro di Roma</span>
                   </div>
-                </li><li class="close">
+                </li><li class="closed">
                   <div>
                     <i class="fa fa-bullhorn" aria-hidden="true"></i>
                     <strong>CONCERTO</strong><span>: Roger Waters a Bologna, PalaForum</span>
                   </div>
                 </li>
-              <li class="close">
+              <li class="closed">
                   <div>
                     <i class="fa fa-bullhorn" aria-hidden="true"></i>
                     <strong>NUOVO ALBUM</strong><span>: In uscita nuovo album di Gilmoure</span>
                   </div>
                 </li>
-              <li class="close">
+              <li class="closed">
                   <div>
                     <i class="fa fa-bullhorn" aria-hidden="true"></i>
                     <strong>HIGH HOPES</strong><span>: Best Pink Floyd song!</span>
                   </div>
                 </li>
     </ul>
-    <!-- <button id="stop">STOP SCROLL</button> -->
     </section>
-    <!-- <div class="container">
+    <div id='imageGalleryWithTitle' class="news-container"></div>
+    <section>
 
-        <div id="city-info">
-            <h2 class="ser-title">Diseases Insights</h2>
-            <hr class="botm-line w-25">
+      <div class="ticker">
+        <div class="ticker__list">
+          <div class="ticker__item"><img src="https://img.clock.co.uk/250x100?text=Item 1&amp;color=f3e5f5"/></div>
+          <div class="ticker__item"><img src="https://img.clock.co.uk/300x100?text=Item 2&amp;color=ede7f6"/></div>
+          <!-- <div class="ticker__item"><img src="https://img.clock.co.uk/200x100?text=Item 3&amp;color=ffcdd2"/></div>
+          <div class="ticker__item"><img src="https://img.clock.co.uk/100x100?text=Item 4&amp;color=f8bbd0"/></div>
+          <div class="ticker__item"><img src="https://img.clock.co.uk/350x100?text=Item 5&amp;color=e8eaf6"/></div>
+          <div class="ticker__item"><img src="https://img.clock.co.uk/100x100?text=Item 6&amp;color=e3f2fd"/></div>
+          <div class="ticker__item"><img src="https://img.clock.co.uk/250x100?text=Item 7&amp;color=e1f5fe"/></div>
+          <div class="ticker__item"><img src="https://img.clock.co.uk/150x100?text=Item 8&amp;color=e0f7fa"/></div> -->
         </div>
-        <div class="card-deck">
-          {% for disease in diseases%}
-            <div class="card">
-              <img class="card-img-top" src="https://images.unsplash.com/photo-1567157577867-05ccb1388e66?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80" alt="Card image cap">
-              <div class="card-body">
-                <h5 class="card-title">{{disease}}</h5>
-                <p class="card-text">{{reports.infections}}</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
-              </div>
-            </div>
-            {% endfor %}
-          
-          </div>
-    </div> -->
+      </div>
+    </section>
     
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
   </body>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
   <script src="{% static 'js/govtReport.js' %}"></script>
 </html>

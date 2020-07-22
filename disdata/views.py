@@ -121,9 +121,6 @@ def report_api(req):
             public_report = Report(
                 source=report_source,
                 disease=suspected_disease,
-                mortality=0,
-                morbidity=0,
-                infections=1,
                 death=False,
                 pincode=report_pincode,
                 report_info=req.POST.get('report_info'),
