@@ -1,0 +1,253 @@
+:root {
+    --grey-d1: #585858;
+    --grey-d2: #F4F4F4;
+    --grey-d3: #000000;
+    --red-1: #F2B8D1;
+    --red-2: #F04B92;
+    --red-3: #EB1E77;
+    --red-4: #AD1257;
+    --white: #FFFFFF;
+    --blue: #329EF4;
+    --grey: #eeeeee;
+    --bg-clr: #382f60;
+  --card-bg-clr: #8274A6;
+  --card-clr-left: #445199;
+  --card-clr-right: #8677e7;
+  --bg-clr-button: #8274A6;
+  --text-clr-light: #d3cedf;
+  --text-clr: #fff;
+}
+.dashboard-container{
+    position: absolute;
+    top: 25%;
+    left: 20%;
+}
+.card-1, .card-2, .card-3 {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 2px 2px 5px 2px #D7D7D7;
+}
+.chart-lbl {
+    margin-left: 5%;
+    font-size: 12px;
+    color: var(--grey-d3);
+    opacity: 0.8;
+    text-align: center;
+    line-height: 1.5;
+    height: 10px;
+}
+.divider {
+    background-color: var(--grey-d2);
+    height: 2px;
+    margin: auto;
+    width: 75%;
+}
+
+/*  media queries*/
+
+@media only screen and (min-width: 320px) {
+    .bar-chart-container {
+        margin: 5% 5% 5% 5%;
+        width: 90%;
+        height: 70%;
+    }
+    .dashboard-container {
+        display: grid;
+        grid-template: 17% 17% 17% 17% 17% 17% / repeat(1, 1fr);
+        grid-gap: 20px;
+        padding: 5% 0 25% 0;
+    }
+    .doughnut-chart-container, .pie-chart-container {
+        margin: 5% auto 5% auto;
+        width: 100%;
+    }
+    .card-1, .card-2, .card-3 {
+        border-radius: 10px;
+    }
+    /*doughnut chart*/
+    .card-1 {
+        grid-row: 1 / 3;
+    }
+    /*pie chart*/
+    .card-2 {
+        grid-row: 3 / 5;
+    }
+    /*bar chart*/
+    .card-3 {
+        grid-row: 5 / 7;
+    }
+}
+@media only screen and (min-width: 400px) {
+    .dashboard-container {
+        margin: 0 5% 0 5%;
+    }
+}
+@media only screen and (min-width: 800px) {
+    .dashboard-container {
+        grid-template: 19% 19% 19% 19% 12% 12% / repeat(2, 1fr);
+        margin: 10% 10% 0 10%;
+    }
+    /*doughnut chart*/
+    .card-1 {
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+    }
+    /*pie chart*/
+    .card-2 {
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
+    }
+    /*bar chart*/
+    .card-3 {
+        grid-column: 1 / 3;
+        grid-row: 3 / 7;
+    }
+}
+@media only screen and (min-width: 1000px) {
+    .dashboard-container {
+        grid-template: repeat(6, 15%) / repeat(11, 1fr);
+        grid-gap: 10px;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+    .doughnut-chart-container, .pie-chart-container {
+        margin: 3% 0 5% 0;
+        width: 100%;
+    }
+    /*doughnut chart*/
+    .card-1 {
+        grid-column: 1 / 5;
+        grid-row: 1 / 4;
+    }
+    /*pie chart*/
+    .card-2 {
+        grid-column: 1 / 5;
+        grid-row: 4 / 7;
+    }
+    /*bar chart*/
+    .card-3 {
+        grid-column: 5 / -1;
+        grid-row: 1 / 7;
+    }
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+        width: 80vw;
+        margin: 5vh 10vw 0 10vw;
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .container {
+        max-width: 1500px;
+    }
+}
+@media screen and (min-width: 1500px){
+    .dashboard-container{
+        max-width: 1200px;
+    }
+}
+/* ?Disease Card */
+.disease-container{
+    color: var(--text-clr);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .disease-card{
+    background: linear-gradient(to right, var(--card-clr-left), var(--card-clr-right));
+    margin: 1em 1em;
+    padding: 8em 8em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  
+  .type h1{
+    letter-spacing: 0.1rem;
+    font-weight: 600;
+  }
+  
+  .type p{
+    width: 45ch;
+    height: auto;
+    margin: 1rem auto 1rem;
+  }
+  
+  .type button{
+    outline: none;
+    border: none;
+    background: var(--bg-clr-button);
+    color: var(--text-clr);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.2ch;
+    padding: 1em 2em;
+    border-radius: 2px;
+    transition: all 150ms;
+  }
+  
+  .type button:hover{
+    transform: translateY(-10%);
+    background: #382f60;
+  }
+  
+  .stats{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5em;
+    position: relative;
+    left: 10%;
+  }
+  
+  .stats span{
+    font-weight: 600;
+    font-size: 3rem;
+  }
+  
+  .stats p{
+    font-size: 0.7rem;
+    margin-left: 1em;
+    text-transform: uppercase;
+    color: var(--text-clr-light);
+  }
+  
+  .stats::before, .stats::after{
+    content: '';
+    position: absolute;
+  }
+  
+  .stats::before{
+    top: 50%;
+    left: -5%;
+    width: 110%;
+    height: 1px;
+    background: var(--text-clr-light);
+  }
+  
+  .stats::after{
+    left: 50%;
+    top: -5%;
+    width: 0.8px;
+    height: 110%;
+    background: var(--text-clr-light);
+  }
+  
+  .disease-card::before{
+    content: '';
+    position: absolute;
+    z-index: -10;
+    width: 90%;
+    height: 110%;
+    left: 5%;
+    right: 0;
+    top: -5%;
+    bottom: 0;
+    background: linear-gradient(-90deg, var(--card-clr-left), var(--card-clr-right));
+  }

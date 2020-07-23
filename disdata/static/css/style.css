@@ -152,15 +152,7 @@ banner
     max-height: 50vh;
     width: 100%;
   }
-section .card{
-    position: absolute;
-    top: 55%;
-    left: 20%;
-    width:55%;
-    height: auto;
-    border-radius: 25px;
-    box-shadow: 3px 3px #7FD9BA, -.4em 0 .4em #325b6a9d;
-}
+
 .alert{
     left: 20%;
     width:55%;

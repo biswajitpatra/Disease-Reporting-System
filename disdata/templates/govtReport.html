@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'css/govtReport.css'%}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -15,8 +16,8 @@
     
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Outbreak Alert</a></li>
-          <li class="breadcrumb-item"><a href="#">Govt Insights</a></li>
+          <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Outbreak Alert</a></li>
+          <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Govt Insights</a></li>
           <li class="breadcrumb-item active" aria-current="page">Data</li>
         </ol>
       </nav>
@@ -47,23 +48,58 @@
                 </li>
     </ul>
     </section>
-    <div id='imageGalleryWithTitle' class="news-container"></div>
-    <section>
-
-      <div class="ticker">
-        <div class="ticker__list">
-          <div class="ticker__item"><img src="https://img.clock.co.uk/250x100?text=Item 1&amp;color=f3e5f5"/></div>
-          <div class="ticker__item"><img src="https://img.clock.co.uk/300x100?text=Item 2&amp;color=ede7f6"/></div>
-          <!-- <div class="ticker__item"><img src="https://img.clock.co.uk/200x100?text=Item 3&amp;color=ffcdd2"/></div>
-          <div class="ticker__item"><img src="https://img.clock.co.uk/100x100?text=Item 4&amp;color=f8bbd0"/></div>
-          <div class="ticker__item"><img src="https://img.clock.co.uk/350x100?text=Item 5&amp;color=e8eaf6"/></div>
-          <div class="ticker__item"><img src="https://img.clock.co.uk/100x100?text=Item 6&amp;color=e3f2fd"/></div>
-          <div class="ticker__item"><img src="https://img.clock.co.uk/250x100?text=Item 7&amp;color=e1f5fe"/></div>
-          <div class="ticker__item"><img src="https://img.clock.co.uk/150x100?text=Item 8&amp;color=e0f7fa"/></div> -->
+    <section class="container">
+      <div class="disease-container">
+        <div class="row justify-content-between">
+          {% for disease in diseases%}
+          <div class="col-md-3">
+            <div class="disease-card">
+              <p class="card__name"><i class="icon fa fa-heartbeat" aria-hidden="true"></i><span>{{disease.disease_name}}</span></p>
+              <p class="card__number">{{disease.mortality}}</p>
+              <p class="card__followers">Total Infected</p>
+              <div class="card__change">
+                  <div class="card__triangle-up"></div>
+                  <span>12 Today</span>
+              </div>
+          </div>
+          </div>
+          {% endfor %}
+          <!-- <div class="col-md-3">
+            <div class="disease-card mx-2">
+              <p class="card__name"><i class="icon fa fa-heartbeat" aria-hidden="true"></i><span>{{diseases.1.disease_name}}</span></p>
+              <p class="card__number">1044</p>
+              <p class="card__followers">Total Infected</p>
+              <div class="card__change">
+                  <div class="card__triangle-up"></div>
+                  <span>99 Today</span>
+              </div>
+          </div>
+          </div> -->
+          <!-- <div class="col-md-3">
+            <div class="disease-card card__ig mx-2">
+              <p class="card__name"><i class="icon fa fa-heartbeat" aria-hidden="true"></i><span>{{diseases.0.disease_name}}</span></p>
+              <p class="card__number">11k</p>
+              <p class="card__followers">Total INfected</p>
+              <div class="card__change">
+                  <div class="card__triangle-up"></div>
+                  <span>1099 Today</span>
+              </div>
+          </div>
+          </div> -->
+          <!-- <div class="col-md-3">
+            <div class="disease-card card__yt mx-2">
+              <p class="card__name"><i class="icon fa fa-heartbeat" aria-hidden="true"></i><span>{{diseases.1.disease_name}}</span></p>
+              <p class="card__number">8239</p>
+              <p class="card__followers">Total INfected</p>
+              <div class="card__change-down">
+                  <div class="card__triangle-down"></div>
+                  <span>1443 Today</span>
+              </div>
+          </div>
+          </div> -->
         </div>
-      </div>
+    </div>
     </section>
-    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
