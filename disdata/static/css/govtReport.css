@@ -12,7 +12,7 @@
     background-color: orange;
     color: black;
     position: absolute;
-    top: 3%;
+    top: 8%;
     width:98%;
     margin: 0 1rem;
   }
@@ -27,14 +27,256 @@
     transition-duration: .5s;
     transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   }
-  #newsticker li.open {
+  #newsticker li.opened {
     height: 50px;
     max-height: 50px;
     opacity: 1;
   }
-  #newsticker li.close {
+  #newsticker li.closed {
     height: 0;
     max-height: 0;
     opacity: 0;
   }
+  /* ?GOvt News */
+  #govtNews {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 80vw;
+    height: 60vh;
+    background-color: #fff;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    margin: 20px auto;
+    border-radius: 2px;
+  }
   
+  #govtNews .header {
+    width: 100%;
+    height: 140px;
+    background-color: #3498db;
+    overflow: hidden;
+  }
+  #govtNews .header .circle {
+    position: relative;
+    top: 20px;
+    left: 60px;
+    width: 50px;
+    height: 50px;
+    background-color: #f1c40f;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    z-index: 10;
+  }
+  #govtNews .header h1 {
+    position: relative;
+    top: 10px;
+    left: 110px;
+    font-size: 2.5em;
+    color: #fff;
+    border-bottom: 1px solid #f1c40f;
+  }
+  
+  .line {
+    position: absolute;
+    z-index: 0;
+    top: 50px;
+    left: 85px;
+    height: calc(100% + 200px);
+    width: 0px;
+    border-right: 1px solid #f1c40f;
+  }
+  
+  #content {
+    width: inherit;
+    height: 400px;
+    overflow: hidden;
+    padding-top: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  #content::-webkit-scrollbar {
+    width: 6px;
+    background-color: #EBEBEB;
+  }
+  #content::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+  }
+  #content .object {
+    width: 100%;
+  }
+  #content .object:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+  }
+  #content .object .date {
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin: 20px;
+    background-color: #f1c40f;
+    color: #fff;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 1.9em;
+    font-size: 1.4em;
+  }
+  #content .object .circle {
+    position: relative;
+    float: left;
+    z-index: 10;
+    margin: 30px 0 0 -5px;
+    width: 20px;
+    height: 20px;
+    background-color: #3498db;
+    border-radius: 50%;
+  }
+  #content .object .context {
+    float: left;
+    color: #666;
+    max-width: 1400px;
+    min-height: 40px;
+    margin: 10px 0 10px 0px;
+    padding: 20px;
+    line-height: 1.5em;
+  }
+  
+/* ?Disaese Card */
+  .disease-container{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 30px 30px;
+    position: absolute;
+    top: 80%;
+    left: 10%;
+}
+.disease-card{
+    display: flex;
+    flex-direction: column;
+    background-color: #252b43;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-radius: 3px;
+    position: relative;
+    margin: 0 30px 0 30px;
+    min-width: 20rem;
+}
+.disease-card::after{
+    content: "";
+    border-top: 5px solid #1ba2f4;
+    border-radius: 3px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+.card__ig{
+    display: flex;
+    flex-direction: column;
+    background-color: #252b43;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    position: relative;
+    margin-bottom: 30px;
+    /* margin-top: 5px; */
+}
+.card__ig::after {
+    content: "";
+    border-top: none;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg,#fac06c,#db4e93);
+}
+.card__yt::after{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-top: 5px solid #c2042a;
+}
+.fa-heartbeat{
+    color: #1ba2f4;
+}
+.fa-youtube-play{
+    color: #c2042a;
+}
+.icon{
+    font-size: 22px !important;
+}
+.fa-instagram{
+color: red;
+display: block;
+background: linear-gradient(0deg,#fac06c,#db4e93);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+.card__name{
+    padding: 15px 0;
+    color: #8a91bd;
+    display: flex;
+}
+.card__number{
+    font-size: 56px;
+    font-weight: 700;
+    color: #fff;
+}
+.card__followers{
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #8a91bd;
+    letter-spacing: 5px;
+}
+.card__change{
+    padding: 15px 0;
+    color: #079076;
+    display: flex;
+}
+span{
+    margin-left: 5px;
+}
+.card__triangle-up {
+    width: 0;
+    height: 0;
+    position: relative;
+    top: 3px;
+    border-right: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-left: 5px solid transparent;
+    border-bottom: 5px solid #079076;
+}
+.card__change-down{
+    padding: 15px 0;
+    color: #da4e5b;
+    display: flex;
+}
+.card__triangle-down {
+    width: 0;
+    height: 0;
+    position: relative;
+    top: 9px;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #da4e5b;
+    border-left: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}

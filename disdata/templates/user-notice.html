@@ -65,7 +65,7 @@
            {% if notice.msg_notice %}
            <span class="badge badge-pill badge-success mt-3">This notice has been read and processed</span>
            {% else %}
-           <span class="badge badge-pill badge-{{ notice.approved|yesno:"success,danger" }} mt-3">This notice has been read and processed</span>
+           <span class="badge badge-pill badge-{{ notice.approved|yesno:'success,danger' }} mt-3">This notice has been read and processed</span>
            {% endif %} 
            {% endif %} 
            <div class="card-footer mt-4">

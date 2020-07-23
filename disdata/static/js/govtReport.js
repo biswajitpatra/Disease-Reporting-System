@@ -26,7 +26,7 @@ const TickerScrolling = function ({ id = '#newsticker', time = 3000, typeChild =
   
     const init = () => {
       active = firstElement;
-      removeAdd(firstElement, 'close', 'open');
+      removeAdd(firstElement, 'closed', 'opened');
   
       initTimeout();
     };
@@ -34,13 +34,13 @@ const TickerScrolling = function ({ id = '#newsticker', time = 3000, typeChild =
     const _next = () => {
       const sibling = active.nextElementSibling;
       if (sibling) {
-        removeAdd(active, 'open', 'close');
-        removeAdd(sibling, 'close', 'open');
+        removeAdd(active, 'opened', 'closed');
+        removeAdd(sibling, 'closed', 'opened');
   
         active = sibling;
       } else {
-        removeAdd(active, 'open', 'close');
-        removeAdd(firstElement, 'close', 'open');
+        removeAdd(active, 'opened', 'closed');
+        removeAdd(firstElement, 'closed', 'opened');
   
         active = firstElement;
       }
@@ -66,8 +66,6 @@ const TickerScrolling = function ({ id = '#newsticker', time = 3000, typeChild =
   const scroll = new TickerScrolling({
     id: '#newsticker',
     typeChild: 'li' });
-  
-  
-  $('#stop').on('click', function () {
-    scroll.stop();
-  });
+
+
+

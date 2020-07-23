@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" rel="stylesheet" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/areaReport.css'%}">
 </head>
 <body id="myPage">
   <script>
@@ -50,7 +52,7 @@
                   </div>
             </div>
            
-            <div class="alert alert-{{ diseases.0.warning}}" role="alert">
+            <div class="alert alert-{{ diseases.0.warning}} ml-5" role="alert">
                 {% if diseases.0.warning == 'success' %}
                 <h4 class="alert-heading">Safe Location</h4>
                 <p>Your destination is completely safe for you to visit. Any future probable health hazards will be notified to you via our mobile app during your stay at {{pincode}}</p>
@@ -71,49 +73,90 @@
               
             <!--?Details reagarding -->
         </section>
+        <!-- ? Graph section -->
         {% if diseases %}
-          <section id="disease-graph">
-           <canvas id="myChart" width="600" height="600"></canvas>
-          </section>
-          <section class='mb-5'> 
-            <div class="card">
-                <div class="card-body">
-                  {% for disease in diseases %}
-                  <h5 class="card-title">{{disease.disease.disease_name}}</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Mode of transmission: {{disease.disease.category}}</h6>
-                  <p class="card-text">The susceptible age group is {{disease.disease.suseptible_prone_age}}. 
-                    Information about it's diagnosis are: {{disease.disease.info_diagnostic}}.
-                    The morbidity and mortality rate for this disease are: {{disease.disease.morbidity}} & {{disease.disease.mortality}} respectively.
-                    {% if disease.disease.vacination_available %}
-                    The vaccination is available for this disease.
-                    {% else %}
-                    The vaccination is not available for this disease.
-                    {% endif %}
-                    {% if disease.disease.zoonotic %}
-                    It's a zoonotic disease
-                    {% else %}
-                    It's not a zoonotic disease
-                    {% endif %}
-                    </p>
-                  <h6 class='text-danger'>Precautions:</h6>
-                  <ul>
-                      <li> {{disease.disease.info_precautions}}</li>
-                      <!-- <li> {{disease.disease.info_precautions}}</li> -->
-                  </ul>
-                  <a href="#" class="card-link">{{disease.disease.info_url}}</a>
-                  <hr>
-                  {% endfor %}
-                  <!-- <h5 class="card-title">{{diseases.1.disease.disease_name}}</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">{{diseases.1.disease.category}}</h6>
-                  <p class="card-text">Details regarding this disease and other diagnostic information</p>
-                  <h6 class='text-danger'>Precautions:</h6>
-                  <ul>
-                      <li>1</li>
-                      <li>2</li>
-                  </ul>
-                  <a href="#" class="card-link">{{diseases.1.disease.info_url}}</a> -->
-                </div>
+        <div class="container">
+          <main>
+              <div class="dashboard-container">
+                  <div class="card-1">
+                      <h4 class="chart-lbl">
+                          Vulnerability of diseases in {{pincode}}
+                      </h4>
+                      <div class="divider">
+                      </div>
+                      <div class="doughnut-chart-container">
+                          <canvas class="doughnut-chart" id="doughnut">
+                          </canvas>
+                      </div>
+                  </div>
+                  <div class="card-2">
+                      <h4 class="chart-lbl">
+                          How many people dropped plan to visit {{pincode}}
+                      </h4>
+                      <div class="divider">
+                      </div>
+                      <div class="pie-chart-container">
+                          <canvas class="pie-chart" id="pie">
+                          </canvas>
+                      </div>
+                  </div>
+                  <div class="card-3">
+                      <h4 class="chart-lbl">
+                          Diseaases
+                      </h4>
+                      <div class="divider">
+                      </div>
+                      <div class="bar-chart-container">
+                          <canvas class="bar-chart" id="bar">
+                          </canvas>
+                      </div>
+                  </div>
               </div>
+          </main>
+      </div>
+          <section class='mb-5' style="position:absolute;top: 60%;left: 25%;"> 
+            <div class="row">
+              {% for disease in diseases%}
+              <div class="disease-container my-5">
+                    <div class="disease-card">
+                    <div class="type w-25">
+                      <h1 class="text-light">{{disease.disease.disease_name }}</h1>
+                      <p>{{disease.disease.info_spread}}{{disease.disease.info_precautions}}{{disease.disease.info_diagnostic}}{{disease.disease.info_managerial}}</p>
+                        {% if disease.disease.vacination_available %}
+                        <p class="text-success">Vaccine is available</p>
+                        {% else %}
+                        <p class="text-warning">Vaccine is not available</p>
+                        {% endif %}
+                        {% if disease.disease.zoonotic %}
+                        <p class="text-warning">Its a zoonotic disease</p>
+                        {% else %}
+                        <p class="text-success">Its not a zoonotic disease</p>
+                        {% endif %}
+                      <a href="{{disease.disease.info_url}}" target="_blank"><button >Read More</button></a>
+                    </div>
+                    <div class="stats">
+                      <div class="clientrev text-center">
+                        <span>{{disease.disease.mortality}}</span>
+                        <p>mortality rate</p>
+                      </div>
+                      <div class="adspend text-center">
+                        <span>{{disease.disease.morbidity}}</span>
+                        <p>morbidity rate</p>
+                      </div>
+                      <div class="maus text-center">
+                        <span>{{disease.disease.suseptible_prone_age}}</span>
+                        <p>susceptible age-group</p>
+                      </div>
+                      <div class="roi text-center">
+                        <span>{{disease.disease.category}}</span>
+                        <p>Mode of transmission
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  {% endfor %}
+            </div>
           </section>
           {% endif %}
 
