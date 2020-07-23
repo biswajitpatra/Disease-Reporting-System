@@ -135,6 +135,22 @@ def sendPostRequest(reqUrl, apiKey, secretKey, useType, phoneNo, senderId, textM
   }
   return requests.post(reqUrl, req_params)
 
+class District(models.Model):
+    name= models.CharField(max_length=30)
+    district_official = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
+    rainfall = models.FloatField()
+    altitude= models.IntegerField()
+    temprature=models.FloatField()
+    population = models.IntegerField()
+    water_source = models.IntegerField() # Untreated water source
+    humidity = models.FloatField()
+    age_frequency_vector = ArrayField(models.IntegerField())
+    slums_count = models.IntegerField()
+    wind = models.FloatField()
+    victim_ids = ArrayField( models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Ship'))))
+    def __str__(self):
+        return self.name
+
 class Pincode(models.Model):
     pincode=models.CharField(max_length=6,validators=[MinLengthValidator(6)],primary_key=True,unique=True)
     area=models.CharField(max_length=40)
@@ -144,6 +160,7 @@ class Pincode(models.Model):
     province2=models.CharField(max_length=40)
     accuracy=models.IntegerField()
     located_at=models.PointField()
+    district = models.ForeignKey(District,on_delete=models.CASCADE,null=True)
     is_alerted=models.BooleanField(default=False)
     # adjacent_places=ArrayField(models.ForeignKey('self',on_delete=models.PROTECT),blank=True,default=None)
     def __str__(self):
@@ -203,7 +220,7 @@ class Report(models.Model):
         super(Report, self).save(*args, **kwargs)
         if(self.verified==True):
                 if(self.category=='human'):
-                    district = District.objects.filter(area_id = self.pincode.pincode[:3])[0]
+                    district = District.objects.filter(name = self.pincode.province)[0]
                     lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
                     if(lst.count()==0):
                         tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='human')
@@ -316,21 +333,6 @@ class Outbreak(models.Model):
             # District.objectsself.start_report.pincode.pincode[:3]
 
 
-class District(models.Model):
-    area_id=models.CharField(max_length=3,primary_key=True,unique=True)
-    name= models.CharField(max_length=30)
-    district_official = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
-    rainfall = models.FloatField()
-    altitude= models.IntegerField()
-    temprature=models.FloatField()
-    population = models.IntegerField()
-    water_source = models.IntegerField() # Untreated water source
-    humidity = models.FloatField()
-    age_frequency_vector = ArrayField(models.IntegerField())
-    slums_count = models.IntegerField()
-    wind = models.FloatField()
-    victim_ids = ArrayField( models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Ship'))))
-    # neighbours = models.ManyToManyField('self')
 
 
 class Notice(models.Model):

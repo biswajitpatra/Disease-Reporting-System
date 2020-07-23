@@ -7,7 +7,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 # Register your models here.
 
-from .models import Disease, Report, Person, Hospital,Pincode, District,Notice,Outbreak
+from .models import Disease, Report, Person, Hospital,Pincode,Notice,Outbreak,District
 from .forms import ReportAdminForm, PHAdminForm
 
 admin.site.register(Disease)
