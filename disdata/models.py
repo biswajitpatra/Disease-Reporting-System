@@ -6,9 +6,122 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+import datetime
 import requests
 import json
 import re
+import math
+
+'''
+s => susceptible (population)
+i => infected 
+r => recovered
+morbidity => morbidity value
+incubation => incubation count
+t => time passed  in days
+'''
+def sir_model(s,i,r,morbidity,incubation,t):
+
+    total_population = s
+
+    # his intimacy factor increases in places where trading is more, because trading means more people at work, hence more spread
+    intimacy_factor = 4   
+
+    if(t<10):
+        beta=0.00005
+    else:
+        beta=0.00001
+    
+    # more value means more infectious is the disease
+    gamma = 1/incubation
+    infection_rate = beta*s*i/total_population
+    transmission_index = beta/gamma
+
+    rep_factor = beta*s/gamma
+
+    ret_value = dict()
+
+    if(rep_factor > 1):
+        ret_value["spread"]=True
+    else:
+        ret_value["spread"] = False
+
+    ret_value["infected"] = i+s -((gamma/beta)*(1+math.log(rep_factor)))
+
+    return ret_value
+
+'''
+category (borne):
+    1:water
+    2.vector
+    3.viral
+rainfall =    //not clear
+disease_id = 3 chars 
+population = database
+age_frq = [<12,12<<25,25<] 
+drink = untreated_source drinking
+slum  = number of slum
+temp: avg temprature of area
+area_id :first three digits
+'''
+def demographic_model(category,rainfall,area_id,disease_id,altitude,population,age_freq,drink,slum,temprature,wind):
+    score=0
+    if(category==1):
+        infant=age_freq[0]
+        adult=age_freq[1]
+        tw5=age_freq[2]
+        if(max(max(infant,adult),tw5)==tw5 or max(max(infant,adult),tw5)==infant):
+            score+=1
+        
+        if(rainfall>=45.0):
+            score+=1
+            diff=rainfall-45.0
+            roll=diff/10
+            score= score+(roll*0.42)
+
+        risk = (drink/population)*100
+        if(risk>15):
+            score+=1
+
+        slum_count =(slum/population)*100
+        if(slum_count>8):
+            score+=1
+
+    elif(category==2):
+        
+        if(temprature<=25):
+            score+=1
+        elif(temprature>30):
+            score-=1
+        
+        if(rainfall>60):
+            score-=1
+        elif(rainfall>20 and rainfall<60):
+            score+=1
+
+    # adjacent cities and compare altitude
+
+    elif(category==3):
+
+        if(temprature>30):
+            score-=1
+        else:
+            trans= 30-temprature
+            trans =trans/8
+            score+=1
+            score = score + trans
+
+        if wind>8.00:
+            score+=1
+    # print(score)
+        
+    if(score>=3):
+        return 1
+    else:
+        return 0
+
+
+
 
 # Create your models here.
 def sendPostRequest(reqUrl, apiKey, secretKey, useType, phoneNo, senderId, textMessage):
@@ -31,13 +144,6 @@ class Pincode(models.Model):
     province2=models.CharField(max_length=40)
     accuracy=models.IntegerField()
     located_at=models.PointField()
-    temprature=models.IntegerField()
-    population=models.IntegerField()
-    altitude=models.IntegerField()
-    rainfall=models.IntegerField()
-    sanitation_condition=models.CharField(max_length=20)
-    humidity=models.IntegerField()
-    age_frequency_vector=ArrayField(models.IntegerField(), blank=True)
     is_alerted=models.BooleanField(default=False)
     # adjacent_places=ArrayField(models.ForeignKey('self',on_delete=models.PROTECT),blank=True,default=None)
     def __str__(self):
@@ -55,14 +161,15 @@ class Hospital(models.Model):
 class Disease(models.Model):
     disease_name = models.CharField(max_length=1024)
     zoonotic = models.BooleanField(default=False)
-    category= models.CharField(choices = (("Water","Water borne"),("Food","Food borne"),("Vector","Vector borne"),("Air","Air borne"),("Animal","Animal transmitted")),max_length=6)
-    suseptible_prone_age=models.IntegerField()
+    category= models.CharField(choices = (("1","Water borne"),("Food","Food borne"),("2","Vector borne"),("3","Air borne"),("Animal","Animal transmitted")),max_length=6)
+    incubation_period = models.IntegerField()
     mortality = models.FloatField()
     morbidity = models.FloatField()
     threshold_alert = models.IntegerField(default=0)
     vacination_available=models.BooleanField(default=False)
-    victim_id=models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Ship')))
+    victim_id=models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Sheep')))
     info_spread=models.TextField()
+    info_symptoms = models.TextField()
     info_precautions=models.TextField()
     info_diagnostic = models.TextField()
     info_managerial = models.TextField()
@@ -96,24 +203,42 @@ class Report(models.Model):
         super(Report, self).save(*args, **kwargs)
         if(self.verified==True):
                 if(self.category=='human'):
+                    district = District.objects.filter(area_id = self.pincode.pincode[:3])[0]
                     lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
                     if(lst.count()==0):
                         tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='human')
                         tmp_new.save()
+                        ppls = Person.objects.filter(pincode__pincode__startswith=pincode[:3])
+                        for p in ppls:
+                            p.notify()
+                        new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
+                        new_not.save()
                     else:
                         lst=lst[0]
                         if(self.death==True):
                             lst.death+=1
                         else:
                             lst.infected+=1
-                        if(lst.first_alert==False):    
-                            if(lst.infected + lst.death > self.disease.threshold_alert):
-                                ppls = Person.objects.filter(pincode__pincode__startswith=self.pincode[:3])
-                                lst.first_alert =True
-                                for people in ppls:
-                                    people.notify()
+                        if( lst.infected + lst.death > self.disease.threshold_alert):
+                            s = district.population
+                            i = lst.infected + lst.death
+                            days = datetime.now().date()-timelst.start_report.reported_on
+                            res = sir_model(s,i,0,self.disease.morbidity,self.disease.incubation_period,days.days)
+                            if res["spread"]==True:
+                                if(lst.first_alert==False):    
+                                    new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area should we notify?"+res["infected"],action='notify_all_people',action_msg=district.area_id)
+                                    new_not.save()
+                                    
+                                res_pre = demographic_model(int(self.disease.category),district.rainfall,district.area_id,disease.disease_name,district.altitude,district.population,district.age_frequency_vector,district.water_source,district.slums_count,district.temprature,district.wind)                   
+                                    # TODO: goverment notice
+                                    # TODO: distance based on district 
+                                
+                            # ppls = Person.objects.filter(pincode__pincode__startswith=self.pincode[:3])
+                            # lst.first_alert =True
+                            # for people in ppls:
+                            #     people.notify()
 
-                                # TODO: notify disease officials
+                            # TODO: notify disease officials
                         lst.save()
                 else:
                     lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
@@ -185,8 +310,6 @@ class Outbreak(models.Model):
     first_alert=models.BooleanField(default=False)
     category = models.CharField(max_length=10, choices=(("human", "Human"),("animal","Animal")))
 
-
-
     def sir_model(self):
         if(self.category=='human'):
             pass
@@ -205,6 +328,7 @@ class District(models.Model):
     humidity = models.FloatField()
     age_frequency_vector = ArrayField(models.IntegerField())
     slums_count = models.IntegerField()
+    wind = models.FloatField()
     victim_ids = ArrayField( models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Ship'))))
     # neighbours = models.ManyToManyField('self')
 
@@ -222,7 +346,7 @@ class Notice(models.Model):
     read=models.BooleanField(default=False)
 
     def notify_all_people(self):
-        ppls = People.objects.filter(pincode__pincode__startswith=self.action_msg)
+        ppls = Person.objects.filter(pincode__pincode__startswith=self.action_msg)
         for p in ppls:
             p.notify()
 
