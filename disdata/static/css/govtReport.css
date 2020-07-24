@@ -142,6 +142,19 @@
     padding: 20px;
     line-height: 1.5em;
   }
+  /* ?Choropleth map */
+  #choroplethMap{
+    position: absolute;
+    top: 85%;
+    left: 30%;
+  }
+  #choropleth{
+    position: absolute;
+    top: 90%;
+    left:10%;
+    height: 60vh;
+    width: 80vw;
+  }
   
 /* ?Disaese Card */
   .disease-container{
@@ -151,7 +164,7 @@
     flex-wrap: wrap;
     margin: 30px 30px;
     position: absolute;
-    top: 80%;
+    top: 15em;
     left: 10%;
 }
 .disease-card{

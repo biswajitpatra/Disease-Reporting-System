@@ -22,6 +22,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
+from disdata.views import FoliumView
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -32,6 +33,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', views.user, name='user'),
     path('govt/', views.govtReport, name='govtReport'),
+    path('govt/disease_report/<slug:diseaseName>',views.mapping),
+    # path('maps/', FoliumView.as_view(), name='choropleth'),
     path('login/',LoginView.as_view(template_name='admin/login.html',extra_context={'site_header':'Login form'})),
     path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),
     path('area_summary_api',views.area_summary_api,name="Area summary API"),
