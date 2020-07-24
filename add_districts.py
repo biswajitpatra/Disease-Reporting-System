@@ -25,6 +25,11 @@ for p in Pincode.objects.all():
         p.delete()
 
 
+for p in Pincode.objects.all():
+    p.district = District.objects.get(name=p.province)
+    p.save()
+
+
 # for p in Pincode.objects.all():
 #     if(p.state_code not in states):
 #         try:

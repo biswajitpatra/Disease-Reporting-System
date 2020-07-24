@@ -145,6 +145,7 @@ class District(models.Model):
     water_source = models.IntegerField() # Untreated water source
     humidity = models.FloatField()
     age_frequency_vector = ArrayField(models.IntegerField())
+    density = models.IntegerField()
     slums_count = models.IntegerField()
     wind = models.FloatField()
     victim_ids = ArrayField( models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Ship'))))
