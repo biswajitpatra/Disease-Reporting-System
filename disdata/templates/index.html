@@ -209,7 +209,7 @@
                     </div> -->
                     <select class="custom-select ui-form-input" name="disease_name" id="inputGroupSelect01" style="border-radius: 10px; height: 50px;">
                       <option selected>Choose...</option>
-                      {% for disease in diseases%}
+                      {% for disease in diseases %}
                       <option value="{{ disease.disease_name }}">{{ disease.disease_name }}</option>
                       {% endfor %}
                     </select>

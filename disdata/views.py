@@ -20,6 +20,10 @@ import folium
 import os
 
 # Create your views here.
+def diseases(request):
+    list_of_diseases = list(Disease.objects.all())
+    return render(request, 'diseases.html', { "diseases": list_of_diseases})
+
 def index(request):
     list_of_diseases = list(Disease.objects.all())
     return render(request, 'index.html', { "diseases": list_of_diseases})
@@ -30,50 +34,16 @@ def govtReport(request):
     print(list_of_diseases)
     print(reports)
 
-    
-    # # figure = folium.Figure()
-    # state = open(os.path.join('data', 'odisha.json')).read()
-    # # print(os.getcwd())
-    
-    # data_name=[]
-    # data_number=[]
-    # state_json = json.loads(state)
-    # for s in state_json["features"]:
-    #     disi = s["properties"]["district"]
-    #     data_name.append(disi)
-    #     data_number.append(Report.objects.filter(pincode__province__iexact=disi).count())
-    #     s["properties"]["infections"]=data_number[-1]
-    
-    # data=pd.DataFrame({'name':data_name,'number':data_number})
-    # m = folium.Map(location = [20.9517, 85.0985], zoom_start=7)
-    # # m.add_to(figure)
-
-
-
-    # choropleth = folium.Choropleth(
-    # geo_data = state_json,
-    # # geojson = 'objects.disctricts',
-    # name = 'choropleth',
-    # data = data ,
-    # columns=['name', 'number'],
-    # key_on='feature.properties.district',
-    # fill_color='YlGn',
-    # fill_opacity=1,
-    # line_opacity=1,
-    # legend_name='Infection Rate',
-    # highlight=True,
-    # ).add_to(m)
-
-    # # folium.GeoJson(
-    # #     state,
-    # #     tooltip=folium.features.Tooltip(' Infection ' + )
-    # # ).add_to(m)
-    # choropleth.geojson.add_child(
-    #     folium.features.GeoJsonTooltip(['infections'], labels=False)
-    # )
-    
-    # figure.render()
-    # # return {"map": figure}
+    m = folium.Map(location = [20.9517, 85.0985], zoom_start=5)
+    hm  = folium.Map(location = [20.9517, 85.0985], zoom_start=5)
+    for h in Hospital.objects.all():
+        latt = h.located_at.y
+        long = h.located_at.x
+        folium.Marker([latt, long],popup='<strong class="text-info text-uppercase" > PIC:'+ str(h.user) +'</strong>', tooltip='<strong>'+str(h.name)+', '+ str(h.city)+'</strong>').add_to(m)
+        
+    m.save(os.path.join('disdata','static','hospitalMap.html'))
+    folium.Marker([latt, long],popup='<strong class="text-info text-uppercase" > PIC:'+ str(h.user) +'</strong>', tooltip='<strong>'+str(h.name)+', '+ str(h.city)+'</strong>').add_to(hm)
+    hm.save(os.path.join('disdata','static','heatMap.html'))
 
     return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports}) 
 
@@ -125,6 +95,17 @@ def mapping(request,diseaseName):
     # return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports,"map":figure}) 
     m.save(os.path.join('disdata','static','choropleth.html'))
     return HttpResponse(status=200)
+
+# def hospitalMapping(request):
+#     m = folium.Map(location = [20.9517, 85.0985], zoom_start=7)
+
+#     for h in Hospital.objects.all():
+#         latt = h.located_at.y
+#         long = h.located_at.x
+#         folium.Marker([latt, long],popup='<strong>Location</strong>', tooltip='Click for more information').add_to(m)
+
+#     m.save(os.path.join('disdata','static','hospitalMap.html'))
+#     return HttpResponse(status=200)
 
 @login_required(login_url='/login')
 def user(requests):

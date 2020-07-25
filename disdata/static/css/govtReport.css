@@ -143,19 +143,26 @@
     line-height: 1.5em;
   }
   /* ?Choropleth map */
-  #choroplethMap{
-    position: absolute;
-    top: 85%;
-    left: 30%;
-  }
-  #choropleth{
-    position: absolute;
-    top: 90%;
-    left:10%;
-    height: 60vh;
-    width: 80vw;
-  }
-  
+ .district-choropleth{
+   position: absolute;
+   top: 90%;
+   left: 10%;
+ }
+ #hospitalMap{
+   position: relative;
+   top: 10%;
+   width: 80vw;
+   height: 80vh;
+ }
+ hr.botm-line {
+  height: 3px;
+  width: 60px;
+  background: #ffb737;
+  position: relative;
+  border: 0;
+  margin: 20px 0 20px 0;
+}
+
 /* ?Disaese Card */
   .disease-container{
     display: flex;
@@ -164,7 +171,7 @@
     flex-wrap: wrap;
     margin: 30px 30px;
     position: absolute;
-    top: 15em;
+    top: 380%;
     left: 10%;
 }
 .disease-card{

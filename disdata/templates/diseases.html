@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <title>Diseases</title>
+  </head>
+  <style>
+       hr.botm-line {
+  height: 3px;
+  width: 60px;
+  background: #ffb737;
+  position: relative;
+  border: 0;
+  margin: 20px 0 20px 0;
+}
+.btn:focus{
+    outline:none;
+    box-shadow: none;
+}
+  </style>
+  <body>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active" aria-current="page">Diseases Data</li>
+        </ol>
+      </nav>
+   <div class="container mt-5">
+        <div class="col-md-12">
+            <h2 class="ser-title">Outbreak Diseases</h2>
+            <hr class="botm-line">
+          </div>
+        <div class="accordion" id="accordionExample">
+            {% for disease in diseases %}
+            <div class="card my-2">
+              <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                  <button class="btn btn-link btn-block text-left text-decoration-none" type="button" data-toggle="collapse" data-target="#collapse{{disease.id}}" aria-expanded="true" aria-controls="collapseOne">
+                   {{ disease.disease_name }}
+                  </button>
+                </h2>
+              </div>
+          
+              <div id="collapse{{disease.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <p>{{disease.info_precautions}}.{{disease.info_managerial}}.{{disease.info_diagnostic}}</p>
+                    <p>Mortality:{{disease.mortality}}</p>
+                    <p>Morbidity:{{disease.morbidity}}</p>
+                    {% if disease.vaccination_available %}
+                    <p class="text-success">Vaccine is available</p>
+                    {% else %}
+                    <p class="text-danger">Vaccine is not available</p>
+                    {% endif %}
+                    {% if disease.zoonotic %}
+                    <p class="text-danger">It is zoonotic disease</p>
+                    {% else %}
+                    <p class="text-warning">It is not zoonotic disease</p>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+        </div>
+   </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </body>
+</html>

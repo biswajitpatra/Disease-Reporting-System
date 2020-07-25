@@ -34,6 +34,8 @@ urlpatterns = [
     path('user/', views.user, name='user'),
     path('govt/', views.govtReport, name='govtReport'),
     path('govt/disease_report/<slug:diseaseName>',views.mapping),
+    path('diseases/' , views.diseases),
+    # path('govt/hospitalMap', views.hospitalMapping),
     # path('maps/', FoliumView.as_view(), name='choropleth'),
     path('login/',LoginView.as_view(template_name='admin/login.html',extra_context={'site_header':'Login form'})),
     path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),

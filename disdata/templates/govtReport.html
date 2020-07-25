@@ -126,13 +126,46 @@
         {{map.script.render|safe}}
       </script>
     </section> -->
-    <div id="choroplethMap" class="d-flex">
-        <input type="text" class="form-control">
-        <button class="btn btn-outline-success rounded-pill ml-3 px-4" onclick="getRequest(this.parentNode.children[0].value)">Search</button>
+  <div class="container district-choropleth">
+   <div class="row ">
+    <div class="col-md-12">
+      <h2 class="ser-title">Detailed information about any Outbreak</h2>
+      <hr class="botm-line w-25">
     </div>
-      <iframe  id="choropleth" src="/static/choropleth.html" frameborder="0"></iframe>
+       <div class="col-md-12 ">
+            <div class="form-group d-flex mb-5" style="margin-left: 22rem;">
+              <select id="inputState" class="form-control">
+                <option selected>Select a disease</option>
+               {% for disease in diseases%}
+               <option value="{{ disease.disease_name }}">{{ disease.disease_name }}</option>
+               {% endfor %}
+              </select>
+              <button class="btn btn-outline-success rounded-pill ml-3 px-4" onclick="getRequest(this.parentNode.children[0].value)">Search</button>
+            </div>
+            <iframe id="choropleth" src="/static/choropleth.html" frameborder="0" style="width:80vw; height: 60vh;"></iframe>
+       </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-md-12">
+          <h2 class="ser-title">Information about associated hospitals</h2>
+          <hr class="botm-line w-25">
+        </div>
+         <div class="col-md-12">
+            <iframe  id="hospitalMap" src="/static/hospitalMap.html" frameborder="0"></iframe>
+       </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-md-12">
+          <h2 class="ser-title">Infection Heat Map</h2>
+          <hr class="botm-line">
+        </div>
+         <div class="col-md-12">
+            <iframe  id="hospitalMap" src="/static/heatMap.html" frameborder="0"></iframe>
+       </div>
+      </div>
+  </div>
     <!-- ?Disease Cards -->
-    <section class="container" style="position: absolute;top: 130%;">
+    <section class="container">
       <div class="disease-container">
         <div class="row justify-content-between">
           {% for disease in diseases %}
