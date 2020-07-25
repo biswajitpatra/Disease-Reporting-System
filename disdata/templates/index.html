@@ -376,13 +376,15 @@
   firebase.initializeApp(firebaseConfig);
   firebase.analytics();
 
-  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('verify-otp', {
-  'size': 'invisible',
-  'callback': function(response) {
-    // reCAPTCHA solved, allow signInWithPhoneNumber.
-    onSignInSubmit();
-  }
-});
+  $(document).ready(() => {
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('verify-otp', {
+      'size': 'invisible',
+      'callback': function(response) {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        onSignInSubmit();
+      }
+    });
+  })
 </script>
 <!-- TODO -->
   <script>
@@ -405,7 +407,7 @@
                 $('#verify-otp').click(function() {
                   const otp = $('#otp').val()
                   console.log(otp)
-                  confirmationResult.confirm(otp).then(function (result) {
+                  confirmationResult.confirm(otp.trim()).then(function (result) {
                     // User signed in successfully.
                     var user = result.user;
                     console.log('OTP verified')
