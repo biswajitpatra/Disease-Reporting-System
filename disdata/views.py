@@ -19,6 +19,39 @@ from django.views.generic import TemplateView
 import folium
 import os
 
+def sir_model(s,i,r,morbidity,incubation,t):
+    
+    total_population = s
+
+    # his intimacy factor increases in places where trading is more, because trading means more people at work, hence more spread
+    intimacy_factor = 4   
+
+    if(t<10):
+        beta=0.00005
+    else:
+        beta=0.00001
+    
+    # more value means more infectious is the disease
+    gamma = 1/incubation
+    infection_rate = beta*s*i/total_population
+    transmission_index = beta/gamma
+
+    rep_factor = beta*s/gamma
+    print("rep_factor",rep_factor)
+    ret_value = dict()
+
+    if(rep_factor > 1):
+        ret_value["spread"]=True
+    else:
+        ret_value["spread"] = False
+
+    ret_value["infected"] = int(i+s -((gamma/beta)*(1+math.log(rep_factor))))
+
+    return ret_value
+
+
+
+
 # Create your views here.
 def diseases(request):
     list_of_diseases = list(Disease.objects.all())
@@ -182,7 +215,7 @@ def delete_report_api(req):
             Report.objects.get(pk=req.POST.get('report_id')).delete()
     return HttpResponse("done",status=200)
 
-# Done?
+
 @csrf_exempt
 def report_api(req):
     if req.method == 'POST':
@@ -211,23 +244,27 @@ def report_api(req):
     return HttpResponseRedirect('/?failed')
 
 def areaReport(request,pincode):
-    print(pincode)
-    thres_red_reports= 5     # Threshold for red reports
-    thres_yellow_reports=2   # THreshold for yellow reports
-    thres_time_gap= 30       # Threshold value for reports
-    q = Report.objects.filter(pincode__pincode=pincode).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap))
+    thres_time_gap= 30       # Time gap for reports
+    district = Pincode.objects.get(pincode=int(pincode)).district
+    q = Report.objects.filter(pincode__district=district).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap)).filter(verified=True)
     cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
     ret_json=[]
     for c in cnt:
-        if(c["disease__count"]<thres_yellow_reports):
+        disease = Disease.objects.get(disease_name = c["disease__disease_name"])
+        try:
+            total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)/district.population) 
+        except:
+            total_infected_per = 0 
+        if(total_infected_per < 0.02):
             ret_part={"warning":"success"} #? Success == green zone
-        elif(c["disease__count"]>=thres_red_reports): 
+        elif(total_infected_per >= 0.12): 
             ret_part={"warning":"danger"}  #? Danger == red zone
         else:
             ret_part={"warning":"warning"} #? Warning == yellow zone
 
         ret_part["report_count"]=c["disease__count"]
         ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
+        ret_part["disease_level"]=disease.morbidity
         ret_json.append(ret_part)
     # print(ret_json)
     # print(ret_json[0]['warning'])
@@ -243,7 +280,7 @@ def area_summary_api(req):
     if("location" in req and "pincode" not in req):
         tmp=Pincode.objects.annotate(distance=Distance('located_at',Point(req["location"]["long"],req["location"]["latt"]))).order_by('distance').last()
         req["pincode"]=tmp.pincode
-    q = Report.objects.filter(pincode__pincode=req["pincode"]).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap))
+    q = Report.objects.filter(pincode__pincode=req["pincode"]).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap)).filter(verified=True)
     cnt = q.values('disease__disease_name').annotate(Count('disease'))
     ret_json = dict()
     for c in cnt:
@@ -263,8 +300,27 @@ def area_summary_api(req):
 
 # Function for dialogflow requests
 @csrf_exempt
-def telephony_bot(request):
-    req = json.loads(request.body)
+def telephony_bot(req):
+    req = json.loads(req.body)
+    report_pincode = req.POST.get('pincode')
+    if report_pincode is not None:
+            report_pincode=Pincode.objects.filter(pincode=report_pincode).first()
+            report_location = Point(x=report_pincode.located_at.x, y=report_pincode.located_at.y, srid=4326)
+
+            suspected_disease = Disease.objects.get(disease_name=req.POST.get("disease_name"))
+
+            closest_hospital = Hospital.objects.annotate(distance=Distance('located_at', report_location)).order_by('distance').first()
+            report_source = closest_hospital.user
+            public_report = Report(
+                source=report_source,
+                disease=suspected_disease,
+                death=False,
+                pincode=report_pincode,
+                report_info=req.POST.get('report_info'),
+                reported_at=report_location,
+                verified=False
+            )
+            public_report.save()
     print(json.dumps(req, indent=4, sort_keys=True))
     ret_json = {}
     if (req["queryResult"]["intent"]["displayName"] == "info_place"):
@@ -287,34 +343,34 @@ def telephony_bot(request):
     return JsonResponse(ret_json, safe=False)
 
     
-class FoliumView(TemplateView):
-    template_name = "maps/choropleth.html"
+# class FoliumView(TemplateView):
+#     template_name = "maps/choropleth.html"
 
-    def get_context_data(self, **kwargs):
-        figure = folium.Figure()
-        m = folium.Map(
-            location=[45.372, -121.6972],
-            zoom_start=12,
-            tiles='Stamen Terrain'
-        )
-        m.add_to(figure)
+#     def get_context_data(self, **kwargs):
+#         figure = folium.Figure()
+#         m = folium.Map(
+#             location=[45.372, -121.6972],
+#             zoom_start=12,
+#             tiles='Stamen Terrain'
+#         )
+#         m.add_to(figure)
 
-        folium.Marker(
-            location=[45.3288, -121.6625],
-            popup='Mt. Hood Meadows',
-            icon=folium.Icon(icon='cloud')
-        ).add_to(m)
+#         folium.Marker(
+#             location=[45.3288, -121.6625],
+#             popup='Mt. Hood Meadows',
+#             icon=folium.Icon(icon='cloud')
+#         ).add_to(m)
 
-        folium.Marker(
-            location=[45.3311, -121.7113],
-            popup='Timberline Lodge',
-            icon=folium.Icon(color='green')
-        ).add_to(m)
+#         folium.Marker(
+#             location=[45.3311, -121.7113],
+#             popup='Timberline Lodge',
+#             icon=folium.Icon(color='green')
+#         ).add_to(m)
 
-        folium.Marker(
-            location=[45.3300, -121.6823],
-            popup='Some Other Location',
-            icon=folium.Icon(color='red', icon='info-sign')
-        ).add_to(m)
-        figure.render()
-        return {"map": figure}
+#         folium.Marker(
+#             location=[45.3300, -121.6823],
+#             popup='Some Other Location',
+#             icon=folium.Icon(color='red', icon='info-sign')
+#         ).add_to(m)
+#         figure.render()
+#         return {"map": figure}

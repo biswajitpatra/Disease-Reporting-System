@@ -38,7 +38,7 @@ def sir_model(s,i,r,morbidity,incubation,t):
     transmission_index = beta/gamma
 
     rep_factor = beta*s/gamma
-
+    print("rep_factor",rep_factor)
     ret_value = dict()
 
     if(rep_factor > 1):
@@ -46,7 +46,7 @@ def sir_model(s,i,r,morbidity,incubation,t):
     else:
         ret_value["spread"] = False
 
-    ret_value["infected"] = i+s -((gamma/beta)*(1+math.log(rep_factor)))
+    ret_value["infected"] = int(i+s -((gamma/beta)*(1+math.log(rep_factor))))
 
     return ret_value
 
@@ -64,8 +64,9 @@ slum  = number of slum
 temp: avg temprature of area
 area_id :first three digits
 '''
-def demographic_model(category,rainfall,disease_id,altitude,population,age_freq,drink,slum,temprature,wind):
+def demographic_model(category,rainfall,disease_id,altitude,population,age_freq,drink,slum,temprature,wind,density):
     score=0
+    category=int(category)
     if(category==1):
         infant=age_freq[0]
         adult=age_freq[1]
@@ -102,10 +103,11 @@ def demographic_model(category,rainfall,disease_id,altitude,population,age_freq,
     # adjacent cities and compare altitude
 
     elif(category==3):
-
-        if(temprature>30):
-            score-=1
-        else:
+        # print(score)
+        # if(temprature>30):
+        #     score-=1
+        # else:
+        if(temprature<30):
             trans= 30-temprature
             trans =trans/8
             score+=1
@@ -113,7 +115,10 @@ def demographic_model(category,rainfall,disease_id,altitude,population,age_freq,
 
         if wind>8.00:
             score+=1
-    # print(score)
+
+        if density>400:
+            score+=(density-400)/200
+    print(score)
         
     if(score>=3):
         return 1
@@ -226,7 +231,7 @@ class Report(models.Model):
                     if(lst.count()==0):
                         tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='human')
                         tmp_new.save()
-                        ppls = Person.objects.filter(pincode__pincode__startswith=pincode[:3])
+                        ppls = Person.objects.filter(pincode__district=self.pincode.district)
                         for p in ppls:
                             p.notify()
                         new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
@@ -238,25 +243,30 @@ class Report(models.Model):
                         else:
                             lst.infected+=1
                         if( lst.infected + lst.death > self.disease.threshold_alert):
-                            s = district.population
-                            i = lst.infected + lst.death
-                            days=timezone.now()-lst.start_report.reported_on
-                            # res = sir_model(s,i,0,self.disease.morbidity,self.disease.incubation_period,days.days)
-                            # if res["spread"]==True:
-                            #     if(lst.first_alert==False):    
-                            #         new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area should we notify?"+res["infected"],action='notify_all_people',action_msg=district.area_id)
-                            #         new_not.save()
+                            try:
+                                s = district.population
+                                i = lst.infected + lst.death
+                                days=timezone.now()-lst.start_report.reported_on
+                                res = sir_model(s,i,0,self.disease.morbidity,self.disease.incubation_period,days.days)
+                                print(res)
+                                if res["spread"]==True:
+                                    if(lst.first_alert==False):    
+                                        new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area should we notify?"+str(res["infected"]),action='notify_all_people',action_msg="Notify all people msg")
+                                        new_not.save()
+                                        
+                                    res_pre = demographic_model(int(self.disease.category),district.rainfall,self.disease.disease_name,district.altitude,district.population,district.age_frequency_vector,district.water_source,district.slums_count,district.temprature,district.wind,district.density)                   
+                                    print(res_pre)
+                                    # TODO: goverment notice
+                                    # TODO: distance based on district 
                                     
-                            #     res_pre = demographic_model(int(self.disease.category),district.rainfall,disease.disease_name,district.altitude,district.population,district.age_frequency_vector,district.water_source,district.slums_count,district.temprature,district.wind)                   
-                            #         # TODO: goverment notice
-                            #         # TODO: distance based on district 
-                                
-                            # # ppls = Person.objects.filter(pincode__pincode__startswith=self.pincode[:3])
-                            # # lst.first_alert =True
-                            # # for people in ppls:
-                            # #     people.notify()
+                                # ppls = Person.objects.filter(pincode__pincode__startswith=self.pincode[:3])
+                                # lst.first_alert =True
+                                # for people in ppls:
+                                #     people.notify()
 
-                            # # TODO: notify disease officials
+                                # TODO: notify disease officials
+                            except:
+                                print("Error occured at predictive models")
                         lst.save()
                 else:
                     lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
@@ -327,7 +337,8 @@ class Outbreak(models.Model):
     outbreak_over=models.BooleanField(default=False)
     first_alert=models.BooleanField(default=False)
     category = models.CharField(max_length=10, choices=(("human", "Human"),("animal","Animal")))
-
+    def __str__(self):
+        return f'Outbreak at {self.start_report.pincode.district.name}'
     def sir_model(self):
         if(self.category=='human'):
             pass
@@ -348,6 +359,8 @@ class Notice(models.Model):
     action_msg = models.CharField(max_length=100,blank=True)
     read=models.BooleanField(default=False)
 
+    def __str__(self):
+        return "{} level notice reported at {}".format(self.attn, self.time)
     def notify_all_people(self):
         ppls = Person.objects.filter(pincode__pincode__startswith=self.action_msg)
         for p in ppls:
