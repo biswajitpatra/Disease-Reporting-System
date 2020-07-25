@@ -17,7 +17,7 @@
 
 <!-- Latest compiled and minified JavaScript -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-  
+
 </head>
 
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
@@ -55,10 +55,15 @@
               <p>Enter any location across India to get insights about any record of potential risk to your health.</p>
               <div class="form-group has-search">
                 <span class="fa fa-map-marker form-control-feedback"></span>
-                <input type="text" class="form-control rounded-pill" id='location-search' placeholder="">
+                <select class="custom-select form-control rounded " id="inputGroupSelect">
+                  <option selected disabled></option>
+                  {% for pincode in pincodes %}
+                  <option value="{{ pincode.pincode }}" data-token="{{ pincode.pincode }}">{{ pincode.district.name|capfirst }}, {{ pincode.pincode }}</option>
+                  {% endfor %}
+                  </select>
               </div>
               <div class="btn-grp d-flex justify-content-center mb-3">
-                <button class="btn btn-sm btn-outline-success mr-3 px-3 rounded-pill">Search</button>
+                <button class="btn btn-sm btn-outline-success mr-3 px-3 rounded-pill" onclick="searchLocation()">Search</button>
                 <button class="btn btn-sm btn-outline-warning px-3 rounded-pill" onclick="knowMyLocation()">Know my Location</button>
               </div>
                 <p class="text-center" id="user-location"></p>
@@ -415,5 +420,4 @@
     })
   </script>
 </body>
-
 </html>

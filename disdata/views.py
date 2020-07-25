@@ -3,7 +3,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import JsonResponse,HttpResponse, HttpResponseRedirect
-from disdata.models import Pincode, Report, Disease,Hospital,Notice
+from disdata.models import Pincode, Report, Disease,Hospital,Notice,District
 # from django.core import serializers
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count   
@@ -26,7 +26,10 @@ def diseases(request):
 
 def index(request):
     list_of_diseases = list(Disease.objects.all())
-    return render(request, 'index.html', { "diseases": list_of_diseases})
+    list_of_districts = list(District.objects.all())
+    list_of_pincodes = list(Pincode.objects.all())
+    print(list_of_pincodes[0].pincode)
+    return render(request, 'index.html', { "diseases": list_of_diseases, "districts": list_of_districts, "pincodes": list_of_pincodes})
 
 def govtReport(request):
     list_of_diseases = list(Disease.objects.all())
@@ -231,7 +234,9 @@ def areaReport(request,pincode):
         ret_json.append(ret_part)
     # print(ret_json)
     # print(ret_json[0]['warning'])
-    return render(request, 'areaReport.html',{'pincode':pincode,"diseases_json":json.dumps({"disease_list":ret_json}),"diseases":ret_json})    
+    pincodes = list(Pincode.objects.all())
+    pincode_details = Pincode.objects.get(pincode=pincode)
+    return render(request, 'areaReport.html',{"pincodes":pincodes,"diseases_json":json.dumps({"disease_list":ret_json}),"diseases":ret_json, "pincode_details":pincode_details})    
 
 
 @csrf_exempt
