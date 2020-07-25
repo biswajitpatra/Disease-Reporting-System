@@ -119,15 +119,18 @@
               </div>
           </main>
       </div>
-          <section class='mb-5' style="position:absolute;top: 60%;left: 25%;"> 
+          <section class='mb-5' style="position:absolute;top: 60%;left: 20%;"> 
             <div class="row">
               {% for disease in diseases%}
               <div class="disease-container my-5">
                     <div class="disease-card">
                     <div class="type w-25">
                       <h1 class="text-light">{{disease.disease.disease_name }}</h1>
-                      <p>{{disease.disease.info_spread}}{{disease.disease.info_precautions}}{{disease.disease.info_diagnostic}}{{disease.disease.info_managerial}}</p>
-                        {% if disease.disease.vacination_available %}
+                      <p><strong class="text-uppercase">symptoms: </strong>{{disease.disease.info_symptoms}}</p>
+                      <p><strong class="text-uppercase">How it spreads: </strong>{{disease.disease.info_spread}}</p>
+                      <p><strong class="text-uppercase">Precautional measures: </strong>{{disease.disease.info_precautions}}</p>
+                      <p><strong class="text-uppercase">Managerial Information: </strong>{{disease.disease.info_managerial}}</p>
+                      <p><strong class="text-uppercase">Diagnostic Information: </strong>{{disease.disease.info_diagnostic}}</p>                        {% if disease.disease.vacination_available %}
                         <p class="text-success">Vaccine is available</p>
                         {% else %}
                         <p class="text-warning">Vaccine is not available</p>
