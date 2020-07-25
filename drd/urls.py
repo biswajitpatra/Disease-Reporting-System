@@ -33,7 +33,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', views.user, name='user'),
     path('govt/', views.govtReport, name='govtReport'),
-    path('govt/disease_report/<slug:diseaseName>',views.mapping),
+    path('govt/disease_report/<str:diseaseName>',views.mapping),
     path('diseases/' , views.diseases),
     # path('govt/hospitalMap', views.hospitalMapping),
     # path('maps/', FoliumView.as_view(), name='choropleth'),
