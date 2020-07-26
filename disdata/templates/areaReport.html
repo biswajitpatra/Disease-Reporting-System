@@ -57,7 +57,7 @@
               <h2 class="ser-title">{{ pincode_details.district.name }} </h2> <!--? Loaction to be dynamic-->
               <hr class="botm-line">
             </div>
-            <div class="alert alert-{{ diseases.0.warning}} ml-5 " role="alert">
+            <div class="alert alert-{{ max_warn }} ml-5 " role="alert">
                 {% if diseases.0.warning == 'success' %}
                 <h4 class="alert-heading">Safe Location</h4>
                 <p>Your destination is completely safe for you to visit. Any future probable health hazards will be notified to you via our mobile app during your stay at {{pincode}}</p>
