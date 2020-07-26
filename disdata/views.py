@@ -252,18 +252,22 @@ def areaReport(request,pincode):
     q = Report.objects.filter(pincode__district=district).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap)).filter(verified=True)
     cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
     ret_json=[]
+    max_warn=0
     for c in cnt:
         disease = Disease.objects.get(disease_name = c["disease__disease_name"])
         try:
             total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)/district.population) 
         except:
             total_infected_per = 0 
-        if(total_infected_per < 0.02):
+                
+        if(total_infected_per < 0.012):
             ret_part={"warning":"success"} #? Success == green zone
         elif(total_infected_per >= 0.12): 
             ret_part={"warning":"danger"}  #? Danger == red zone
         else:
             ret_part={"warning":"warning"} #? Warning == yellow zone
+        
+        max_warn=max(total_infected_per,max_warn)
 
         ret_part["report_count"]=c["disease__count"]
         ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
@@ -271,9 +275,16 @@ def areaReport(request,pincode):
         ret_json.append(ret_part)
     # print(ret_json)
     # print(ret_json[0]['warning'])
+     if(total_infected_per < 0.012):
+            max_warn="success" #? Success == green zone
+        elif(total_infected_per >= 0.12): 
+            max_warn="danger"  #? Danger == red zone
+        else:
+            max_warn="warning"
+
     pincodes = list(Pincode.objects.all())
     pincode_details = Pincode.objects.get(pincode=pincode)
-    return render(request, 'areaReport.html',{"pincodes":pincodes,"diseases_json":json.dumps({"disease_list":ret_json}),"diseases":ret_json, "pincode_details":pincode_details})    
+    return render(request, 'areaReport.html',{"pincodes":pincodes,"diseases_json":json.dumps({"disease_list":ret_json,"max_warn":max_warn}),"diseases":ret_json, "pincode_details":pincode_details,"max_warn":max_warn})    
 
 
 @csrf_exempt
