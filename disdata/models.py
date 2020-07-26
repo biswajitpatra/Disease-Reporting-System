@@ -189,7 +189,7 @@ class Disease(models.Model):
     mortality = models.FloatField()
     morbidity = models.FloatField()
     threshold_alert = models.IntegerField(default=0)
-    vacination_available=models.BooleanField(default=False)
+    vaccination_available=models.BooleanField(default=False)
     victim_id=models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Sheep')))
     info_spread=models.TextField()
     info_symptoms = models.TextField()
