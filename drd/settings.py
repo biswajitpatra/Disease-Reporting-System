@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
 
+    'mapwidgets'
+
 ]
 
 MIDDLEWARE = [
@@ -147,3 +149,13 @@ STATIC_URL = '/static/'
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MAP_WIDGETS = {
+    "GooglePointFieldWidget": (
+        ("zoom", 6),
+        ("mapCenterLocationName", "India"),
+        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'in'}}),
+        ("markerFitZoom", 12),
+    ),
+    "GOOGLE_MAP_API_KEY": "AIzaSyDI0rZJabSHwnaVtPU71KsqokaqowHSQ70"
+}
