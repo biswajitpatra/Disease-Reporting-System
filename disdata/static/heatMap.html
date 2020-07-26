@@ -23,7 +23,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_e812d962eef24c66acfcf9c35cb31b53 {
+                #map_b0ee4df3eb0342fe87d7fc02485790d6 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -32,16 +32,17 @@
                 }
             </style>
         
+    <script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
 </head>
 <body>    
     
-            <div class="folium-map" id="map_e812d962eef24c66acfcf9c35cb31b53" ></div>
+            <div class="folium-map" id="map_b0ee4df3eb0342fe87d7fc02485790d6" ></div>
         
 </body>
 <script>    
     
-            var map_e812d962eef24c66acfcf9c35cb31b53 = L.map(
-                "map_e812d962eef24c66acfcf9c35cb31b53",
+            var map_b0ee4df3eb0342fe87d7fc02485790d6 = L.map(
+                "map_b0ee4df3eb0342fe87d7fc02485790d6",
                 {
                     center: [20.9517, 85.0985],
                     crs: L.CRS.EPSG3857,
@@ -55,36 +56,15 @@
 
         
     
-            var tile_layer_56332fca7ba544009b2645205dcb6c64 = L.tileLayer(
-                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_e812d962eef24c66acfcf9c35cb31b53);
+            var tile_layer_aa60601763aa467280b62264a1446365 = L.tileLayer(
+                "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"http://cartodb.com/attributions\"\u003eCartoDB\u003c/a\u003e, CartoDB \u003ca href =\"http://cartodb.com/attributions\"\u003eattributions\u003c/a\u003e", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_b0ee4df3eb0342fe87d7fc02485790d6);
         
     
-            var marker_61d9ba16b6984291bcd197a0f3714c11 = L.marker(
-                [19.80202, 85.824053],
-                {}
-            ).addTo(map_e812d962eef24c66acfcf9c35cb31b53);
-        
-    
-        var popup_f04e36781e154323a8155e022de98cdc = L.popup({"maxWidth": "100%"});
-
-        
-            var html_a2af6314026f44dd8ffa98a1878d3c94 = $(`<div id="html_a2af6314026f44dd8ffa98a1878d3c94" style="width: 100.0%; height: 100.0%;"><strong class="text-info text-uppercase" > PIC:E24Hospital@puri</strong></div>`)[0];
-            popup_f04e36781e154323a8155e022de98cdc.setContent(html_a2af6314026f44dd8ffa98a1878d3c94);
-        
-
-        marker_61d9ba16b6984291bcd197a0f3714c11.bindPopup(popup_f04e36781e154323a8155e022de98cdc)
-        ;
-
-        
-    
-    
-            marker_61d9ba16b6984291bcd197a0f3714c11.bindTooltip(
-                `<div>
-                     <strong>E 24 Hospital, puri</strong>
-                 </div>`,
-                {"sticky": true}
-            );
+            var heat_map_595eca78ee4d413f8993a71dea8b102b = L.heatLayer(
+                [[25.19775, 85.517952, 0], [20.184975, 85.613037, 0], [20.23139, 85.775086, 0], [20.330386, 85.822393, 0], [20.472399, 85.89157, 0], [20.464132, 85.910637, 0], [20.467002, 85.883034, 0], [19.814878, 85.840326, 0], [19.824843, 85.852826, 0], [19.946152, 85.819894, 0], [19.80202, 85.824053, 0]],
+                {"blur": 15, "max": 1.0, "maxZoom": 18, "minOpacity": 0.5, "radius": 25}
+            ).addTo(map_b0ee4df3eb0342fe87d7fc02485790d6);
         
 </script>

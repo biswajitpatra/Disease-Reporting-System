@@ -17,6 +17,7 @@ import requests
 import pandas as pd
 from django.views.generic import TemplateView
 import folium
+import folium.plugins as plugins
 import os
 
 def sir_model(s,i,r,morbidity,incubation,t):
@@ -71,17 +72,27 @@ def govtReport(request):
     print(reports)
 
     m = folium.Map(location = [20.9517, 85.0985], zoom_start=5)
-    hm  = folium.Map(location = [20.9517, 85.0985], zoom_start=5)
     for h in Hospital.objects.all():
         latt = h.located_at.y
         long = h.located_at.x
         folium.Marker([latt, long],popup='<strong class="text-info text-uppercase" > PIC:'+ str(h.user) +'</strong>', tooltip='<strong>'+str(h.name)+', '+ str(h.city)+'</strong>').add_to(m)
-        
+
     m.save(os.path.join('disdata','static','hospitalMap.html'))
-    folium.Marker([latt, long],popup='<strong class="text-info text-uppercase" > PIC:'+ str(h.user) +'</strong>', tooltip='<strong>'+str(h.name)+', '+ str(h.city)+'</strong>').add_to(hm)
-    hm.save(os.path.join('disdata','static','heatMap.html'))
 
     return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports}) 
+
+def heatMap(request,diseaseName):
+    m = folium.Map(location = [20.9517, 85.0985], tiles='CartoDB Positron', zoom_start=5)
+    hospital_data = []
+    for h in Hospital.objects.all():
+        cnt = Report.objects.filter(verified=True).filter(source=h.user).filter(disease__disease_name=diseaseName).count()
+        cnt*10000
+        lat =h.located_at.y
+        lng =h.located_at.x
+        hospital_data.append([lat, lng, cnt]) 
+    plugins.HeatMap(hospital_data).add_to(m)
+    m.save(os.path.join('disdata','static','heatMap.html'))
+    return HttpResponse(status=200)
 
 def mapping(request,diseaseName):
     state = open(os.path.join('data', 'odisha.json')).read()

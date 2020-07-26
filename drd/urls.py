@@ -34,6 +34,7 @@ urlpatterns = [
     path('user/', views.user, name='user'),
     path('govt/', views.govtReport, name='govtReport'),
     path('govt/disease_report/<str:diseaseName>',views.mapping),
+    path('govt/disease_heatmap/<str:diseaseName>',views.heatMap),
     path('diseases/' , views.diseases),
     # path('govt/hospitalMap', views.hospitalMapping),
     # path('maps/', FoliumView.as_view(), name='choropleth'),

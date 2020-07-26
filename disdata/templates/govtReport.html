@@ -160,7 +160,16 @@
           <hr class="botm-line">
         </div>
          <div class="col-md-12">
-            <iframe  id="hospitalMap" src="/static/heatMap.html" frameborder="0"></iframe>
+          <div class="form-group d-flex mb-5" style="margin-left: 22rem;">
+            <select id="inputState" class="form-control">
+              <option selected>Select a disease</option>
+             {% for disease in diseases%}
+             <option value="{{ disease.disease_name }}">{{ disease.disease_name }}</option>
+             {% endfor %}
+            </select>
+            <button class="btn btn-outline-success rounded-pill ml-3 px-4" onclick="getRequestHeat(this.parentNode.children[0].value)">Search</button>
+          </div>
+            <iframe  id="heatMap" src="/static/heatMap.html" frameborder="0" style="width:80vw; height: 60vh;"></iframe>
        </div>
       </div>
   </div>
@@ -199,6 +208,13 @@
       }
       ).then(()=>{
       document.getElementById("choropleth").contentDocument.location.reload(true);});
+    }
+    function getRequestHeat(disease_name){
+      $.get(
+        { url:`disease_heatmap/${disease_name}`
+      }
+      ).then(()=>{
+      document.getElementById("heatMap").contentDocument.location.reload(true);});
     }
   </script>
 </html>
