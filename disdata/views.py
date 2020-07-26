@@ -254,7 +254,7 @@ def report_api(req):
                 verified=False
             )
             public_report.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/?success')
     return HttpResponseRedirect('/?failed')
 
 def areaReport(request,pincode):
