@@ -275,12 +275,12 @@ def areaReport(request,pincode):
         ret_json.append(ret_part)
     # print(ret_json)
     # print(ret_json[0]['warning'])
-     if(total_infected_per < 0.012):
+    if(max_warn < 0.012):
             max_warn="success" #? Success == green zone
-        elif(total_infected_per >= 0.12): 
-            max_warn="danger"  #? Danger == red zone
-        else:
-            max_warn="warning"
+    elif(max_warn >= 0.12): 
+        max_warn="danger"  #? Danger == red zone
+    else:
+        max_warn="warning"
 
     pincodes = list(Pincode.objects.all())
     pincode_details = Pincode.objects.get(pincode=pincode)
