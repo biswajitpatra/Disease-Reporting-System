@@ -48,9 +48,13 @@
           
               <div id="collapse{{disease.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                 <div class="card-body">
-                    <p>{{disease.info_precautions}}.{{disease.info_managerial}}.{{disease.info_diagnostic}}</p>
-                    <p>Mortality:{{disease.mortality}}</p>
-                    <p>Morbidity:{{disease.morbidity}}</p>
+                    <p><strong class="text-uppercase">symptoms: </strong>{{disease.info_symptoms}}</p>
+                    <p><strong class="text-uppercase">How it spreads: </strong>{{disease.info_spread}}</p>
+                    <p><strong class="text-uppercase">Precautional measures: </strong>{{disease.info_precautions}}</p>
+                    <p><strong class="text-uppercase">Managerial Information: </strong>{{disease.info_managerial}}</p>
+                    <p><strong class="text-uppercase">Diagnostic Information: </strong>{{disease.info_diagnostic}}</p>
+                    <p><strong class="text-uppercase">Mortality</strong>: {{disease.mortality}}</p>
+                    <p><strong class="text-uppercase">Morbidity</strong>: {{disease.morbidity}}</p>
                     {% if disease.vaccination_available %}
                     <p class="text-success">Vaccine is available</p>
                     {% else %}

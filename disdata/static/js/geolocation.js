@@ -25,13 +25,20 @@
             success: function(data) {
                 console.log(data);
                 const pincode = data.results[0].address_components.filter(d => d.types.includes('postal_code'))[0].long_name
+                const district = data.results[0].address_components.filter(d => d.types.includes('administrative_area_level_2'))[0].long_name
                 console.log(pincode);
+                console.log(district);
                 $("#pincode-field").val(pincode)
-                $('#location-search').attr('placeholder',`${data.plus_code.compound_code.slice(7)}`)
+                // $('#location-search').html(`${data.plus_code.compound_code.slice(7)}`)
+                $('#inputGroupSelect').val(pincode)
+                // $('#location-search').html(`${district}, ${pincode}`)
             }
         })
     }
    }
 
-
+   function searchLocation() {
+       pincode = $('#inputGroupSelect').val();
+       window.location = `/area/${pincode.trim()}`
+   }
   
