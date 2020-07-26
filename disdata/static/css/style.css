@@ -815,15 +815,21 @@ a background is specified in the script */
   }
   
   .goog-te-menu2 {
-    max-width: 100%;
+    /* max-width: 100%; */
+    position: absolute;
+    left:0;
+    width: 20%;
   }
   
   .goog-te-menu-value {
     color: #fff !important;
   }
+  .goog-te-menu-value:hover {
+    text-decoration: none;
+  }
   .goog-te-menu-value:before {
     font-family: 'Material Icons';
-    content: "\E927";
+    /* content: "\E927"; */
     margin-right: 16px;
     font-size: 2rem;
     vertical-align: -10px;
@@ -839,7 +845,7 @@ a background is specified in the script */
   }
   .goog-te-menu-value span:nth-child(3):after {
     font-family: 'Material Icons';
-    content: "\E5C5";
+    /* content: "\E5C5"; */
     font-size: 1.5rem;
     vertical-align: -6px;
   }

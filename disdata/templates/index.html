@@ -21,8 +21,7 @@
 </head>
 
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60" >
-  <div id="google_translate_element" ></div>
-
+  
   <!--banner-->
   <section id="banner" class="banner">
     <div class="bg-color">
@@ -32,23 +31,21 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link text-light" href="#banner">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#service">Services</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="#contact">Report</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" href="/hospital">For Hospitals</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-light" id="translate" href="#">Translate</a>
-              </li>
+          <ul class="navbar-nav" style="position: relative; left: 66%;">
+            <li class="nav-item active">
+              <a class="nav-link text-light" href="#banner">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light" href="#service">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light" href="#contact">Report</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-light" href="/hospital">For Hospitals</a>
+            </li>
             </ul>
+            <div id="google_translate_element" style="top: 0;" class="nav-link"></div>
         </div>
       </nav>
       <div class="container">
@@ -451,7 +448,7 @@
   </script> -->
 <script type="text/javascript">
  function googleTranslateElementInit() {
-  new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'ar,en,es,jv,ko,pa,pt,ru,zh-CN', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false}, 'google_translate_element');
+  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false}, 'google_translate_element');
 }
   </script>
   
