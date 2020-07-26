@@ -38,7 +38,7 @@ urlpatterns = [
     path('diseases/' , views.diseases),
     # path('govt/hospitalMap', views.hospitalMapping),
     # path('maps/', FoliumView.as_view(), name='choropleth'),
-    path('login/',LoginView.as_view(template_name='admin/login.html',extra_context={'site_header':'Login form'})),
+    path('login/',LoginView.as_view(template_name='admin/login.html',extra_context={'site_header':'Login form', 'site_title':'Staff Login Form'})),
     path('telephony_bot/',views.telephony_bot,name='Dialogflow bot'),
     path('area_summary_api',views.area_summary_api,name="Area summary API"),
     path('report_api',views.report_api,name="Report API"),
