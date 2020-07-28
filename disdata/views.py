@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import JsonResponse,HttpResponse, HttpResponseRedirect
 from disdata.models import Pincode, Report, Disease,Hospital,Notice,District
-# from django.core import serializers
+from django.core import serializers
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count   
 from datetime import datetime, timedelta
@@ -115,17 +115,17 @@ def mapping(request,diseaseName):
 
 
     choropleth = folium.Choropleth(
-    geo_data = state_json,
-    # geojson = 'objects.disctricts',
-    name = 'choropleth',
-    data = data ,
-    columns=['name', 'number'],
-    key_on='feature.properties.district',
-    fill_color='YlGn',
-    fill_opacity=1,
-    line_opacity=1,
-    legend_name='Infection Rate',
-    highlight=True,
+        geo_data = state_json,
+        # geojson = 'objects.disctricts',
+        name = 'choropleth',
+        data = data ,
+        columns=['name', 'number'],
+        key_on='feature.properties.district',
+        fill_color='YlGn',
+        fill_opacity=1,
+        line_opacity=1,
+        legend_name='Infection Rate',
+        highlight=True,
     ).add_to(m)
 
     # folium.GeoJson(
@@ -229,6 +229,84 @@ def delete_report_api(req):
             Report.objects.get(pk=req.POST.get('report_id')).delete()
     return HttpResponse("done",status=200)
 
+@csrf_exempt
+def disease_list_api(req):
+    disease_list=list(Disease.objects.all().values_list('disease_name',flat=True))
+    return JsonResponse({"disease_list": disease_list})
+
+@csrf_exempt
+def device_report_api(req):
+    report_pincode = req.POST.get('pincode')
+    if report_pincode is not None:
+        report_pincode=Pincode.objects.filter(pincode=report_pincode).first()
+        report_location = Point(x=report_pincode.located_at.x, y=report_pincode.located_at.y, srid=4326)
+
+        suspected_disease = Disease.objects.get(disease_name=req.POST.get("disease_name"))
+
+        closest_hospital = Hospital.objects.annotate(distance=Distance('located_at', report_location)).order_by('distance').first()
+        report_source = closest_hospital.user
+        public_report = Report(
+            source=report_source,
+            disease=suspected_disease,
+            death=False,
+            pincode=report_pincode,
+            report_info=req.POST.get('report_info'),
+            reported_at=report_location,
+            verified=False
+        )
+        public_report.save()
+        return HttpResponse(status=200)
+    return HttpResponse(status=500)
+
+@csrf_exempt
+def location_warn_state(req,pincode):
+    thres_time_gap= 30       
+    district = Pincode.objects.get(pincode=int(pincode)).district
+    q = Report.objects.filter(pincode__district=district).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap)).filter(verified=True)
+    cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
+    ret_json=[]
+    max_warn=0
+    for c in cnt:
+        disease = Disease.objects.get(disease_name = c["disease__disease_name"])
+        try:
+            total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)/district.population) 
+        except:
+            total_infected_per = 0 
+                
+        if(total_infected_per < 0.012):
+            ret_part={"warning":"success"} #? Success == green zone
+        elif(total_infected_per >= 0.12): 
+            ret_part={"warning":"danger"}  #? Danger == red zone
+        else:
+            ret_part={"warning":"warning"} #? Warning == yellow zone
+        
+        max_warn=max(total_infected_per,max_warn)
+
+        ret_part["report_count"]=c["disease__count"]
+        ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
+        ret_part["disease_level"]=disease.morbidity
+        ret_json.append(ret_part)
+    # print(ret_json)
+    # print(ret_json[0]['warning'])
+    if(max_warn < 0.012):
+        max_warn=0 #? Success == green zone
+    elif(max_warn >= 0.12): 
+        max_warn=2  #? Danger == red zone
+    else:
+        max_warn=1
+    return JsonResponse({'warn':max_warn})
+
+@csrf_exempt
+def get_notices_api(req,days=0):
+    if(days==0):
+        nt = Notice.objects.all()
+        ret_json = serializers.serialize('json',nt)
+        return HttpResponse(ret_json, content_type='application/json')
+    else:
+        nt = Notice.objects.filter(time__gte=datetime.now()-timedelta(days=days))
+        ret_json = serializers.serialize('json',nt)
+        return HttpResponse(ret_json, content_type='application/json')
+
 
 @csrf_exempt
 def report_api(req):
@@ -287,7 +365,7 @@ def areaReport(request,pincode):
     # print(ret_json)
     # print(ret_json[0]['warning'])
     if(max_warn < 0.012):
-            max_warn="success" #? Success == green zone
+        max_warn="success" #? Success == green zone
     elif(max_warn >= 0.12): 
         max_warn="danger"  #? Danger == red zone
     else:

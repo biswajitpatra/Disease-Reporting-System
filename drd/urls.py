@@ -43,7 +43,11 @@ urlpatterns = [
     path('area_summary_api',views.area_summary_api,name="Area summary API"),
     path('report_api',views.report_api,name="Report API"),
     path('favicon.ico',RedirectView.as_view(url=staticfiles_storage.url('img/favicon.ico'))),
-    path('user_action',views.usernotice_action,name='Notice action API')
+    path('user_action',views.usernotice_action,name='Notice action API'),
+    path('disease_list',views.disease_list_api,name="List of Diseasea"),
+    path('device_report_api',views.device_report_api,name="Report api for devices"),
+    path('location_warn_states/<int:pincode>',views.location_warn_state,name='Warn state for location'),
+    path('get_notices_api/<int:days>',views.get_notices_api,name='Get notices'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
