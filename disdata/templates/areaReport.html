@@ -85,7 +85,7 @@
               <div class="dashboard-container">
                   <div class="card-1">
                       <h4 class="chart-lbl">
-                          Vulnerability of diseases in {{pincode}}
+                          Vulnerability of diseases in {{pincode_details.district.name}}
                       </h4>
                       <div class="divider">
                       </div>
@@ -96,7 +96,7 @@
                   </div>
                   <div class="card-2">
                       <h4 class="chart-lbl">
-                          How many people dropped plan to visit {{pincode}}
+                          How many people dropped plan to visit {{pincode_details.district.name}}
                       </h4>
                       <div class="divider">
                       </div>
@@ -126,11 +126,12 @@
                     <div class="disease-card">
                     <div class="type w-25">
                       <h1 class="text-light">{{disease.disease.disease_name }}</h1>
-                      <p><strong class="text-uppercase">symptoms: </strong>{{disease.disease.info_symptoms}}</p>
-                      <p><strong class="text-uppercase">How it spreads: </strong>{{disease.disease.info_spread}}</p>
-                      <p><strong class="text-uppercase">Precautional measures: </strong>{{disease.disease.info_precautions}}</p>
-                      <p><strong class="text-uppercase">Managerial Information: </strong>{{disease.disease.info_managerial}}</p>
-                      <p><strong class="text-uppercase">Diagnostic Information: </strong>{{disease.disease.info_diagnostic}}</p>                        {% if disease.disease.vacination_available %}
+                      <p><strong class="text-uppercase">symptoms: </strong>{{disease.disease.info_symptoms|truncatewords:20}}</p>
+                      <p><strong class="text-uppercase">How it spreads: </strong>{{disease.disease.info_spread|truncatewords:20}}</p>
+                      <p><strong class="text-uppercase">Precautional measures: </strong>{{disease.disease.info_precautions|truncatewords:20}}</p>
+                      <p><strong class="text-uppercase">Managerial Information: </strong>{{disease.disease.info_managerial|truncatewords:20 }}</p>
+                      <p><strong class="text-uppercase">Diagnostic Information: </strong>{{disease.disease.info_diagnostic|truncatewords:20}}</p>   
+                        {% if disease.disease.vacination_available %}
                         <p class="text-success">Vaccine is available</p>
                         {% else %}
                         <p class="text-warning">Vaccine is not available</p>
@@ -140,7 +141,7 @@
                         {% else %}
                         <p class="text-success">Its not a zoonotic disease</p>
                         {% endif %}
-                      <a href="{{disease.disease.info_url}}" target="_blank"><button >Read More</button></a>
+                      <a href="/diseases#{{disease.disease.disease_name}}" target="_blank"><button>Know More About {{disease.disease.disease_name}}</button></a>
                     </div>
                     <div class="stats">
                       <div class="clientrev text-center">
@@ -152,11 +153,19 @@
                         <p>morbidity rate</p>
                       </div>
                       <div class="maus text-center">
-                        <span>{{disease.disease.suseptible_prone_age}}</span>
+                        <span>{{disease.disease.category}}</span>
                         <p>susceptible age-group</p>
                       </div>
                       <div class="roi text-center">
-                        <span>{{disease.disease.category}}</span>
+                        {% if disease.disease.category == '1' %}
+                        <span>Water borne</span>
+                        {% elif disease.disease.category == '2' %}
+                        <span>Vector borne</span>
+                        {% elif disease.disease.category == '3' %}
+                        <span>Air borne</span>
+                        {% else %}
+                        <span>Animal transmitted</span>
+                        {% endif %}
                         <p>Mode of transmission
                         </p>
                       </div>

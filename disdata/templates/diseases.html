@@ -33,20 +33,20 @@
    <div class="container mt-5">
         <div class="col-md-12">
             <h2 class="ser-title">Outbreak Diseases</h2>
-            <hr class="botm-line">
+            <hr class="botm-line w-25">
           </div>
         <div class="accordion" id="accordionExample">
             {% for disease in diseases %}
             <div class="card my-2">
               <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
-                  <button class="btn btn-link btn-block text-left text-decoration-none" type="button" data-toggle="collapse" data-target="#collapse{{disease.id}}" aria-expanded="true" aria-controls="collapseOne">
+                  <button class="btn btn-link btn-block text-left text-decoration-none" type="button" data-toggle="collapse" data-target="#collapse{{disease.id}}" aria-expanded="true" aria-controls="collapseOne" onclick="location.href='#{{disease.disease_name}}'">
                    {{ disease.disease_name }}
                   </button>
                 </h2>
               </div>
           
-              <div id="collapse{{disease.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div id="collapse{{disease.id}}" class="collapse" aria-labelledby="headingOne" data-disease="{{disease.disease_name}}" data-parent="#accordionExample">
                 <div class="card-body">
                     <p><strong class="text-uppercase">symptoms: </strong>{{disease.info_symptoms}}</p>
                     <p><strong class="text-uppercase">How it spreads: </strong>{{disease.info_spread}}</p>
@@ -61,9 +61,9 @@
                     <p class="text-danger">Vaccine is not available</p>
                     {% endif %}
                     {% if disease.zoonotic %}
-                    <p class="text-danger">It is zoonotic disease</p>
+                    <p class="text-danger">It is a zoonotic disease</p>
                     {% else %}
-                    <p class="text-warning">It is not zoonotic disease</p>
+                    <p class="text-warning">It is not a zoonotic disease</p>
                     {% endif %}
                 </div>
               </div>
@@ -76,5 +76,19 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+   <script>
+     $(document).ready(function() {
+
+       let disease =  window.location.href.split('#')[1]
+       let matched = $('.collapse').filter(function(){
+         return $(this).data('disease') == disease
+       })
+       matched.addClass('show')
+       $(window).scrollTop($(matched).offset().top);  
+       if(!matched.hasClass('show')){
+         location.href = window.location.href .split('#')[0]   
+       }
+     })
+   </script>
   </body>
 </html>

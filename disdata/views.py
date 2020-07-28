@@ -63,6 +63,7 @@ def index(request):
     list_of_districts = list(District.objects.all())
     list_of_pincodes = list(Pincode.objects.all())
     print(list_of_pincodes[0].pincode)
+    
     return render(request, 'index.html', { "diseases": list_of_diseases, "districts": list_of_districts, "pincodes": list_of_pincodes})
 
 def govtReport(request):
@@ -284,7 +285,7 @@ def areaReport(request,pincode):
         ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
         ret_part["disease_level"]=disease.morbidity
         ret_json.append(ret_part)
-    # print(ret_json)
+    print(ret_json)
     # print(ret_json[0]['warning'])
     if(max_warn < 0.012):
             max_warn="success" #? Success == green zone

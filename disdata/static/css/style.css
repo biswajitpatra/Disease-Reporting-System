@@ -11,6 +11,7 @@ body {
     overflow: visible;
     height: 1920px;
     position: relative;
+    
 }
 ol, ul {
 	list-style: none;
@@ -100,17 +101,23 @@ banner
     left: 30%;
     top: 80%;
 }
+.bigdrop{
+  width: 62rem !important;
+  margin-top:.9rem;
+}
 .has-search .form-control {
     padding-left: 2.375rem;
 }
-
+#select2-optionList-container{
+  padding-left: 6%;
+}
 .has-search .form-control-feedback {
     position: absolute;
     z-index: 2;
     display: block;
     width: 2.375rem;
     height: 2.375rem;
-    line-height: 2.375rem;
+    line-height: 2rem;
     text-align: center;
     pointer-events: none;
     color: #aaa;
@@ -155,6 +162,19 @@ banner
     min-height: 6em;
     max-height: 50vh;
     width: 100%;
+  }
+  #modal-btn{
+    position: relative;
+    left: 40%;
+  }
+  @media (max-width:800px){
+    #modal-btn {
+      left: 30%;
+    }
+    .bigdrop{
+      width: 96vw !important;
+      margin-top: 0;
+    }
   }
 
 .alert{
@@ -710,7 +730,7 @@ font-family: helvetica, arial, sans serif;
 /* include the board in the center of the viewport */
 .board {
   max-width: 1200px;
-  width: 60vw;
+  width: 50vw;
   margin: 4rem auto;
   /* display grid without specifying any structure, at least beyond the media query
   this is mostly helpful for alignment purposes
@@ -819,14 +839,24 @@ a background is specified in the script */
 .news--item .brief {
   font-size: 0.9rem;
 }
+#right-slider {
+  left: -8%;
+}
 
 /* on smaller viewports */
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   /* change the grid layout to have the heading atop the navigation and section elements */
   .board {
     grid-template-areas: "heading heading" "nav section";
     grid-template-columns: 1fr 2fr;
     grid-template-rows: auto 1fr;
+    width:95vw;
+  }
+  #left-slider{
+    left: 5%;
+  }
+  #right-slider{
+    left: 5% ;
   }
   .board__heading {
     grid-area: heading;
