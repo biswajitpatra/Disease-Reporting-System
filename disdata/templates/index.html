@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DISEASE REPORTING SYSTEM</title>
+  <title> :: DRS | Home</title>
   <meta name="description" content="">
   <meta name="keywords" content="free website templates, free bootstrap themes, free template, free bootstrap, free website template">
   {% load static %}
@@ -26,12 +26,12 @@
   <section id="banner" class="banner">
     <div class="bg-color">
       <nav class="navbar navbar-expand-lg fixed-top">
-        <a class="navbar-brand text-light" href="#">Disease REPORTING</a>
+        <a class="navbar-brand text-light" href="#"><img src="{% static 'img/logo.png' %}" alt="Logo"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav" style="position: relative; left: 66%;">
+          <ul class="navbar-nav" style="position: relative;left: 66%;">
             <li class="nav-item active">
               <a class="nav-link text-light" href="#banner">Home <span class="sr-only">(current)</span></a>
             </li>
@@ -80,36 +80,72 @@
   </section>
   <section>
 
-    <div class="board">
-      <h1 class="board__heading">
-          News Board
-      </h1>
-    
-      <nav class="board__nav">
-          <!--  the buttons added in the script, to include a background color for the specific category  -->
-    
-          <button class="nav--item active" data-item="all">All</button>
-          <button class="nav--item" data-item="news">News</button>
-          <button class="nav--item" data-item="updates">Updates</button>
-          <button class="nav--item" data-item="maintenance">Maintenance</button>
-          <button class="nav--item" data-item="events">Events</button>
-          <button class="nav--item" data-item="important">Important</button>
-      </nav>
-    
-      <section class="board__news">
-          <!--  news items added through the script according to 1. the latest date and 1. the selected category -->
-    
-          
-          <a class="news--item" href="#">
-              <p class="date">
-                  Apr 26, 2019
-              </p>
-              <p class="title">
-                  Lorem inpsum
-              </p>
-          </a>
-      </section>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="box blur">
+        <ul class="slider">
+          <li><p class="text-danger"> This was a triumph.</p></li>
+          <li><p class="text-success"> I'm making a note here:</p></li>
+          <li><p class="text-info">HUGE SUCCESS.</p></li>
+          <li><p class="text-warning"> It's hard to overstate</p></li>
+          <li><p class="text-primary"> my satisfaction</p></li>
+          <li><p class="text-light">Aperture Science</p></li>
+          <li><p class="text-dark">We do what we must</p></li>
+          <li><p class="text-secondary">because we can.</p></li>
+          <li><p class="text-warning">For the good of all of us.</p></li>
+          <li><p class="text-danger">Except for the ones who are dead.</p></li>
+        </ul>
     </div>
+    </div>
+  <div class="col-md-8 px-0">
+        <div class="board">
+          <h1 class="board__heading">
+              News Board
+          </h1>
+        
+          <nav class="board__nav">
+              <!--  the buttons added in the script, to include a background color for the specific category  -->
+        
+              <button class="nav--item active" data-item="all">All</button>
+              <button class="nav--item" data-item="news">News</button>
+              <button class="nav--item" data-item="updates">Updates</button>
+              <button class="nav--item" data-item="maintenance">Maintenance</button>
+              <button class="nav--item" data-item="events">Events</button>
+              <button class="nav--item" data-item="important">Important</button>
+          </nav>
+        
+          <section class="board__news">
+              <!--  news items added through the script according to 1. the latest date and 1. the selected category -->
+        
+              
+              <a class="news--item" href="#">
+                  <p class="date">
+                      Apr 26, 2019
+                  </p>
+                  <p class="title">
+                      Lorem inpsum
+                  </p>
+              </a>
+          </section>
+        </div>
+  </div>
+  <div class="col-md-2" style="left:-3%">
+    <div class="box blur">
+      <ul class="slider">
+        <li><p class="text-danger"> This was a triumph.</p></li>
+        <li><p class="text-success"> I'm making a note here:</p></li>
+        <li><p class="text-info">HUGE SUCCESS.</p></li>
+        <li><p class="text-warning"> It's hard to overstate</p></li>
+        <li><p class="text-primary"> my satisfaction</p></li>
+        <li><p class="text-light">Aperture Science</p></li>
+        <li><p class="text-dark">We do what we must</p></li>
+        <li><p class="text-secondary">because we can.</p></li>
+        <li><p class="text-warning">For the good of all of us.</p></li>
+        <li><p class="text-danger">Except for the ones who are dead.</p></li>
+      </ul>
+  </div>
+  </div>
+  </div>
      </section>
   <section id="service" class="section-padding">
     <div class="container">

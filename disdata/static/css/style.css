@@ -63,6 +63,7 @@ banner
 .navbar {
     margin-bottom: 0px;
     border: 0px;
+    height:5rem;
 }
 .navbar {
     border-radius: 0px;
@@ -645,12 +646,71 @@ padding-top: 10px;
         font-size: 24px;
     }
 }
+.box {
+  width: 20em;
+  height: 30em;
+  margin: 5em 1em;
+  overflow: hidden;
+  background: #ffffff;
+  position: relative;
+  box-shadow: 7px 5px 4px rgba(0,0,0,0.5);
+  border: thick double hsl(207, 79%, 21%);
+}
+
+.slider {
+  top: 1em;
+  position: relative;
+  box-sizing: border-box;
+  animation: slider 15s linear infinite;
+  list-style-type: none;
+  text-align: center;
+  
+}
+
+.slider:hover {
+  animation-play-state: paused;
+}
+
+@keyframes slider {
+  0%   { top:   10em }
+  100% { top: -16em }
+}
+
+.blur .slider {
+  margin: 0;
+  padding: 0 1em;
+  line-height: 1.5em;
+}
+
+.blur:before, .blur::before,
+.blur:after,  .blur::after {
+  left: 0;
+  z-index: 1;
+  content: '';
+  position: absolute;
+  width: 100%; 
+  height: 2em;
+  background-image: linear-gradient(180deg, #FFF, rgba(255,255,255,0));
+}
+
+.blur:after, .blur::after {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+.blur:before, .blur::before {
+  top: 0;
+}
+
+p {
+font-family: helvetica, arial, sans serif;
+}
 /* News Board */
 
 /* include the board in the center of the viewport */
 .board {
   max-width: 1200px;
-  width: 90vw;
+  width: 60vw;
   margin: 4rem auto;
   /* display grid without specifying any structure, at least beyond the media query
   this is mostly helpful for alignment purposes
