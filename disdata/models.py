@@ -5,12 +5,15 @@ from django.core.validators import MinLengthValidator
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.contrib.gis.measure import Distance  
 
 import datetime
 import requests
 import json
 import re
 import math
+
+victim_ids_for_animal={'pt':"Poultry",'gt':'Goat','pg':'Pig','bf':"Buffalo",'sp':'Sheep'}
 
 '''
 s => susceptible (population)
@@ -184,12 +187,13 @@ class Hospital(models.Model):
 class Disease(models.Model):
     disease_name = models.CharField(max_length=1024)
     zoonotic = models.BooleanField(default=False)
-    category= models.CharField(choices = (("1","Water borne"),("Food","Food borne"),("2","Vector borne"),("3","Air borne"),("Animal","Animal transmitted")),max_length=6)
+    category= models.CharField(choices = (("1","Water borne"),("2","Vector borne"),("3","Air borne"),("4","Animal transmitted")),max_length=6)
     incubation_period = models.IntegerField()
     mortality = models.FloatField()
     morbidity = models.FloatField()
     threshold_alert = models.IntegerField(default=0)
     vaccination_available=models.BooleanField(default=False)
+    vaccination_regiment = models.CharField(max_length=255,blank=True)
     victim_id=models.CharField(max_length=2,choices=(('pt',"Poultry"),('gt','Goat'),('pg','Pig'),('bf',"Buffalo"),('sp','Sheep')))
     info_spread=models.TextField()
     info_symptoms = models.TextField()
@@ -233,8 +237,8 @@ class Report(models.Model):
                         tmp_new.save()
                         ppls = Person.objects.filter(pincode__district=self.pincode.district)
                         for p in ppls:
-                            p.notify()
-                        new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
+                            p.notify(f"{self.disease.disease_name} detected in {self.pincode.area},{self.pincode.province2}. {self.vaccination_regiment} ")
+                        new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head=f"{self.disease.disease_name} detected in {self.pincode.area},{self.pincode.province2}",msg_body=f'Expecting a ground reality report at {self.pincode.area},{self.pincode.province2}.')
                         new_not.save()
                     else:
                         lst=lst[0]
@@ -251,35 +255,39 @@ class Report(models.Model):
                                 print(res)
                                 if res["spread"]==True:
                                     if(lst.first_alert==False):    
-                                        new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area should we notify?"+str(res["infected"]),action='notify_all_people',action_msg="Notify all people msg")
-                                        new_not.save()
-                                        
-                                    res_pre = demographic_model(int(self.disease.category),district.rainfall,self.disease.disease_name,district.altitude,district.population,district.age_frequency_vector,district.water_source,district.slums_count,district.temprature,district.wind,district.density)                   
-                                    print(res_pre)
-                                    # TODO: goverment notice
-                                    # TODO: distance based on district 
+                                        res_pre = demographic_model(int(self.disease.category),district.rainfall,self.disease.disease_name,district.altitude,district.population,district.age_frequency_vector,district.water_source,district.slums_count,district.temprature,district.wind,district.density)                   
+                                        if res_pre == 1:
+                                            uniq_pincodes=Pincode.objects.filter(located_at__distance_lt=(p.located_at,Distance(km=50))).distinct('district')
+                                            for p in uniq_pincodes:
+                                                new_not = Notice.objects.create(
+                                                    user=district.district_official,
+                                                    attn='danger',
+                                                    msg_notice=False,
+                                                    msg_head=f"Outbreak at {self.pincode.area},{self.pincode.province2} detected",
+                                                    msg_body=f"{self.disease.disease_name} outbreak has been detected at {self.pincode.area},{self.pincode.province2}. This outbreak can possibly have a maximum infected number of "+ str(res["infected"]) + f".\n Verify this message to notify common people.",
+                                                    action='notify_all_people',action_msg=f"{self.disease.disease_name} outbreak has been detected at {self.pincode.area},{self.pincode.province2}. This outbreak can possibly have a maximum infected number of " + str(res["infected"]) + f".{self.disease.info_precautions}.{self.disease.info_symptoms}"
+                                                )
+                                                new_not.save()
+                                            
+                                    # TODO: goverment notice 
                                     
-                                # ppls = Person.objects.filter(pincode__pincode__startswith=self.pincode[:3])
-                                # lst.first_alert =True
-                                # for people in ppls:
-                                #     people.notify()
-
+                                    
                                 # TODO: notify disease officials
                             except:
                                 print("Error occured at predictive models")
                         lst.save()
-                else:
+                elif self.category=="animal":
                     lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
                     if(lst.count()==0):
                         tmp_new = Outbreak(disease=self.disease,infected=1,death=0,start_report=self,category='animal')
                         tmp_new.save()
                         ppls = Person.objects.filter(animal_owner=True)
                         for people in ppls:
-                            people.notify()
+                            people.notify(f'{self.disease.disease_name} detected in {self.pincode.area},{self.pincode.province2} \n {self.disease.vaccination_regiment} ')
                         # district = District.objects.filter(area_id = self.pincode.pincode[:3]).filter(victim_ids__contains=[self.disease.victim_id])[0]
                         tmp_new.save()
                         if self.disease.victim_id in self.pincode.district.victim_ids:
-                            new_not = Notice.objects.create(user=self.pincode.district.district_official,attn='warning',msg_notice=True,msg_head='New case detected',msg_body='A new case has been deteced')
+                            new_not = Notice.objects.create(user=self.pincode.district.district_official,attn='warning',msg_notice=True,msg_head=f'{self.disease.disease_name} detected in {self.pincode.area},{self.pincode.province2}',msg_body=f'Expecting a ground reality report at {self.pincode.area},{self.pincode.province2}.')
                             new_not.save()
                     else:
                         lst=lst[0]
@@ -290,14 +298,14 @@ class Report(models.Model):
                         if(lst.first_alert==False):    
                             if(lst.infected + lst.death > self.disease.threshold_alert):
                                 lst.first_alert =True
+                                ppls = Person.objects.filter(animal_owner=True)
+                                for people in ppls:
+                                    people.notify(f'{self.disease.disease_name} outbreak in {self.pincode.area},{self.pincode.province2}.We expect you to stop trading with that area temporarily . We will notify you when conditions will be normal .Things you should know, {self.disease.info_symptoms} ')
                                 district= self.pincode.district
-                                if self.disease.victim_id in self.pincode.district.victim_ids:
-                                    new_not = Notice.objects.create(user=district.district_official,attn='danger',msg_notice=False,msg_head="Outbreak at your location",msg_body="A outbreak has been detected in your area should we notify?",action='notify_all_people',action_msg=district.area_id)
-                                    new_not.save()
-                                    # ppls = Person.abjects.filter(pincode__pincode__startswith=district.area_id)
-                                    # for p in ppls:
-                                    #     p.notify()                                          # notification of  2nd level
-
+                                for dis in District.objects.all():
+                                    if self.disease.victim_id in dist.victim_ids:
+                                        new_not = Notice.objects.create(user=dis.district_official,attn='danger',msg_notice=False,msg_head=f"Outbreak at {self.pincode.area},{self.pincode.province2} has been reported.",msg_body="Verify this message to notify common people.",action='notify_all_people',action_msg= f"We hope you to maintain a safe proximity from the {victim_ids_for_animal[self.disease.victim_id]}")
+                                        new_not.save()
                         lst.save()
         # if not self.pk:
         
@@ -362,9 +370,9 @@ class Notice(models.Model):
     def __str__(self):
         return "{} level notice reported at {}".format(self.attn, self.time)
     def notify_all_people(self):
-        ppls = Person.objects.filter(pincode__pincode__startswith=self.action_msg)
+        ppls = Person.objects.filter(pincode__pincode__district=District.objects.get(district__district_official=user))
         for p in ppls:
-            p.notify()
+            p.notify(self.action_msg)
 
     def sample():
         pass
