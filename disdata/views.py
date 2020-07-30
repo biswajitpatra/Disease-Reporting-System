@@ -3,7 +3,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import JsonResponse,HttpResponse, HttpResponseRedirect
-from disdata.models import Pincode, Report, Disease,Hospital,Notice,District
+from disdata.models import Pincode, Report, Disease,Hospital,Notice,District,Outbreak
 from django.core import serializers
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count   
@@ -55,7 +55,9 @@ def sir_model(s,i,r,morbidity,incubation,t):
 
 # Create your views here.
 def animalOutbreakInfo(request):
-    return render(request, 'animalReport.html')
+    list_of_diseases = list(Disease.objects.filter(category='4'))
+    list_of_pincodes = list(Pincode.objects.all())
+    return render(request, 'animalReport.html', { "diseases": list_of_diseases, "pincodes":list_of_pincodes })
 
 
 def diseases(request):
@@ -353,6 +355,7 @@ def areaReport(request,pincode):
     cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
     ret_json=[]
     max_warn=0
+    disease_max_warn = None
     for c in cnt:
         disease = Disease.objects.get(disease_name = c["disease__disease_name"])
         try:
@@ -366,14 +369,17 @@ def areaReport(request,pincode):
             ret_part={"warning":"danger"}  #? Danger == red zone
         else:
             ret_part={"warning":"warning"} #? Warning == yellow zone
-        
+        print(disease.disease_name,total_infected_per)
+        if(total_infected_per>=max_warn):
+            disease_max_warn=disease
         max_warn=max(total_infected_per,max_warn)
-
+        
         ret_part["report_count"]=c["disease__count"]
+        ret_part["death_count"]=q.filter(disease=disease).filter(death=True).count()
         ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
         ret_part["disease_level"]=disease.morbidity
         ret_json.append(ret_part)
-    print(ret_json)
+    # print(ret_json)
     # print(ret_json[0]['warning'])
     if(max_warn < 0.012):
         max_warn="success" #? Success == green zone
@@ -384,7 +390,10 @@ def areaReport(request,pincode):
 
     pincodes = list(Pincode.objects.all())
     pincode_details = Pincode.objects.get(pincode=pincode)
-    return render(request, 'areaReport.html',{"pincodes":pincodes,"diseases_json":json.dumps({"disease_list":ret_json,"max_warn":max_warn}),"diseases":ret_json, "pincode_details":pincode_details,"max_warn":max_warn})    
+    outbreaks = Outbreak.objects.filter(start_report__pincode__district=district).filter(start_report__category='human').filter(outbreak_over=True).order_by('-disease__morbidity')
+    outbreaks_json = list(outbreaks.values('infected', 'death', 'disease__disease_name','disease__morbidity'))
+    print(disease_max_warn)
+    return render(request, 'areaReport.html',{"disease_max":disease_max_warn,"pincodes":pincodes,"diseases_json":json.dumps({"disease_list":ret_json,"max_warn":max_warn}),"diseases":ret_json, "pincode_details":pincode_details,"max_warn":max_warn,"outbreaks":outbreaks,"outbreak_json":json.dumps(outbreaks_json)})    
 
 
 @csrf_exempt
