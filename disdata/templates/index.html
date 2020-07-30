@@ -357,10 +357,12 @@
        </div>
     <p class="footer-text">
     <marquee direction = "left">
-     <span>• Coronavirus pandemic is going to get worse and worse and worse: WHO chieft</span>
-     <span> &nbsp;• ‘Everyone is lying’: Trump undercuts public health officials in fresh attacks</span>
+      {% for notice in notices %}
+     <span>&nbsp;• {{ notice.msg_head }}</span>
+     <!-- <span> &nbsp;• ‘Everyone is lying’: Trump undercuts public health officials in fresh attacks</span>
      <span> &nbsp;• Tesla’s Elon Musk Nears $2.4 Billion Haul as Stock Keeps Soaring</span>
-     <span> &nbsp;•  SpaceX test-fires rocket for South Korean military satellite launch this week</span>
+     <span> &nbsp;•  SpaceX test-fires rocket for South Korean military satellite launch this week</span> -->
+     {% endfor %}
       </marquee>
     </p>
   </div>

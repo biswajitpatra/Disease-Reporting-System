@@ -54,17 +54,27 @@ def sir_model(s,i,r,morbidity,incubation,t):
 
 
 # Create your views here.
+def animalOutbreakInfo(request):
+    return render(request, 'animalReport.html')
+
+
 def diseases(request):
     list_of_diseases = list(Disease.objects.all())
     return render(request, 'diseases.html', { "diseases": list_of_diseases})
 
 def index(request):
+    # list_of_news = list(Notice.objects.all().values())
+    nt = Notice.objects.all()
+    notice_json = serializers.serialize('json',nt)
+
+        # return HttpResponse(ret_json, content_type='application/json')
     list_of_diseases = list(Disease.objects.all())
     list_of_districts = list(District.objects.all())
     list_of_pincodes = list(Pincode.objects.all())
-    print(list_of_pincodes[0].pincode)
-    
-    return render(request, 'index.html', { "diseases": list_of_diseases, "districts": list_of_districts, "pincodes": list_of_pincodes})
+    # print(list_of_pincodes[0].pincode)
+    # print(type(notice_json))
+    # print(nt.fields.msg_head)
+    return render(request, 'index.html', { "diseases": list_of_diseases, "districts": list_of_districts, "pincodes": list_of_pincodes,"notice_json":notice_json, "notices":nt})
 
 def govtReport(request):
     list_of_diseases = list(Disease.objects.all())
