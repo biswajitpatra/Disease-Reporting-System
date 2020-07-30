@@ -17,9 +17,13 @@
   --text-clr-light: #d3cedf;
   --text-clr: #fff;
 }
+.bigdrop{
+    width: 36rem !important;
+    margin-top:0.1rem;
+  }
 .dashboard-container{
     position: absolute;
-    top: 25%;
+    top: 32%;
     left: 12%;
 }
 .card-1, .card-2, .card-3 {
@@ -53,6 +57,7 @@
     }
     .dashboard-container {
         display: grid;
+        height: 33rem;
         grid-template: 17% 17% 17% 17% 17% 17% / repeat(1, 1fr);
         grid-gap: 20px;
         padding: 5% 0 25% 0;
@@ -157,6 +162,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;;
+    left: -10%;
   }
   
   .disease-card{

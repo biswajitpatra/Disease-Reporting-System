@@ -11,11 +11,16 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" rel="stylesheet" type="text/css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/areaReport.css'%}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 </head>
 <body id="myPage">
   <script>
     // pincode_final={{pincode}};
     diseases_final={{diseases_json|safe}};
+    outbreak_json={{outbreak_json|safe}};
+    console.log(diseases_final)
   </script>
     <main class="d-block">
         <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgba(28,74,90, 0.9) ;">
@@ -36,26 +41,24 @@
           </nav>
           <!-- TODO: {pincode:'751004'} is the parameter type for calling the area API -->
           <section class="report-area">
-            <div class="container mb-5">
+            <div class="container mb-5 text-center">
                 <h2 class="ser-title">Search Any Other Location</h2> 
-                  <hr class="botm-line w-25">
+                  <hr class="botm-line w-25" style="position: relative;left: 31%;">
               <div class="row">
-                <div class="col-md-12 ">
-                  <select class="custom-select form-control rounded w-75 my-auto" id="inputGroupSelect">
+                <div class="col-md-12">
+                  <select class="js-example-basic-single form-control rounded w-50" name="state" id="optionList">
                     <option selected disabled></option>
                     {% for pincode in pincodes %}
-                    <option value="{{ pincode.pincode }}">{{ pincode.district.name|capfirst }}, {{ pincode.pincode }}</option>
+                    <option value="{{ pincode.pincode }}" data-token="{{ pincode.pincode }}" >{{ pincode.district.name|capfirst }}, {{ pincode.pincode }}</option>
                     {% endfor %}
-                    <!-- <option value="2">Two</option>
-                      <option value="3">Three</option> -->
-                    </select>
+                  </select>
                     <button class="btn btn-outline-success rounded-pill px-5 ml-2" onclick="searchLocation()">Search</button>
                   </div>
               </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 text-center">
               <h2 class="ser-title">{{ pincode_details.district.name }} </h2> <!--? Loaction to be dynamic-->
-              <hr class="botm-line">
+              <hr class="botm-line" style="position: relative;left: 44%;">
             </div>
             <div class="alert alert-{{ max_warn }} ml-5 " role="alert">
                 {% if max_warn == 'danger' %}
@@ -80,8 +83,12 @@
         </section>
         <!-- ? Graph section -->
         {% if diseases %}
-        <div class="container">
+        <div class="container" style="position: relative;top: 55%;left: -8%;">
           <main>
+            <div class="col-md-12 text-center" style="position: relative; top:-25%;">
+              <h2 class="ser-title">Current Disease Infograph at {{pincode_details.district.name}}</h2> 
+                  <hr class="botm-line w-25" style="left: 24%;">
+            </div>
               <div class="dashboard-container">
                   <div class="card-1">
                       <h4 class="chart-lbl">
@@ -90,78 +97,146 @@
                       <div class="divider">
                       </div>
                       <div class="doughnut-chart-container">
-                          <canvas class="doughnut-chart" id="doughnut">
+                          <canvas class="doughnut-chart" id="doughnut-disease">
                           </canvas>
                       </div>
                   </div>
                   <div class="card-2">
                       <h4 class="chart-lbl">
-                          How many people dropped plan to visit {{pincode_details.district.name}}
+                          Number of deaths at {{pincode_details.district.name}}
                       </h4>
                       <div class="divider">
                       </div>
                       <div class="pie-chart-container">
-                          <canvas class="pie-chart" id="pie">
+                          <canvas class="pie-chart" id="pie-disease">
                           </canvas>
                       </div>
                   </div>
                   <div class="card-3">
                       <h4 class="chart-lbl">
-                          Diseaases
+                          Number of infections per disease at {{pincode_details.district.name}}
                       </h4>
                       <div class="divider">
                       </div>
                       <div class="bar-chart-container">
-                          <canvas class="bar-chart" id="bar">
+                          <canvas class="bar-chart" id="bar-disease">
                           </canvas>
                       </div>
                   </div>
               </div>
           </main>
       </div>
-          <section class='mb-5' style="position:absolute;top: 60%;left: 20%;"> 
+      <section class="position-relative" style="top: 70%;left: 2%;">
+        <div class="container py-3">
+          <div class="card py-3" style="border-radius: 10px;">
+            <div class="row text-center">
+                <div class="col-md-12 px-3">
+                  <div class="card-block px-3">
+                    <h4 class="card-title text-danger">{{ disease_max.disease_name }}</h4>
+                    <p class="card-text">{{ disease_max.info_symptoms }}</p>
+                    <p class="card-text">{{ disease_max.info_precautions }}</p>
+                    {% if disease_max.vaccination_available %}
+                      <p class="card-text text-success">{{ disease_max.vaccination_regiment }}</p>
+                    {% else %}
+                    <p class="card-text text-danger text-uppercase">Vaccination not available</p>
+                    {% endif %}  
+                    <a href="/diseases#{{ disease_max.disease_name }}"><button class="btn btn-outline-success rounded-pill px-5 ml-2">Read More</button></a>
+                  </div>
+                </div>
+      
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% endif %}
+        {% if outbreaks %}
+        <div class="container" style="position: relative;top: 60%;left: -10%;">
+          <main>
+            <div class="col-md-12 text-center" style="position: relative; top:-25%; left: -3%;">
+              <h2 class="ser-title">Outbreak History at {{pincode_details.district.name}}</h2> 
+                  <hr class="botm-line w-25" style="left: 30%;">
+            </div>
+              <div class="dashboard-container">
+                  <div class="card-1">
+                      <h4 class="chart-lbl">
+                          Vulnerability of diseases in {{pincode_details.district.name}}
+                      </h4>
+                      <div class="divider">
+                      </div>
+                      <div class="doughnut-chart-container">
+                          <canvas class="doughnut-chart" id="doughnut-outbreak">
+                          </canvas>
+                      </div>
+                  </div>
+                  <div class="card-2">
+                      <h4 class="chart-lbl">
+                          Number of deaths at {{pincode_details.district.name}}
+                      </h4>
+                      <div class="divider">
+                      </div>
+                      <div class="pie-chart-container">
+                          <canvas class="pie-chart" id="pie-outbreak">
+                          </canvas>
+                      </div>
+                  </div>
+                  <div class="card-3">
+                      <h4 class="chart-lbl">
+                          Number of infections per disease at {{pincode_details.district.name}}
+                      </h4>
+                      <div class="divider">
+                      </div>
+                      <div class="bar-chart-container">
+                          <canvas class="bar-chart" id="bar-outbreak">
+                          </canvas>
+                      </div>
+                  </div>
+              </div>
+          </main>
+      </div>
+          <section class='mb-5' style="position:absolute;top: 110%;left: 20%;"> 
             <div class="row">
-              {% for disease in diseases%}
+              {% for outbreak in outbreaks %}
               <div class="disease-container my-5">
                     <div class="disease-card">
                     <div class="type w-25">
-                      <h1 class="text-light">{{disease.disease.disease_name }}</h1>
-                      <p><strong class="text-uppercase">symptoms: </strong>{{disease.disease.info_symptoms|truncatewords:20}}</p>
-                      <p><strong class="text-uppercase">How it spreads: </strong>{{disease.disease.info_spread|truncatewords:20}}</p>
-                      <p><strong class="text-uppercase">Precautional measures: </strong>{{disease.disease.info_precautions|truncatewords:20}}</p>
-                      <p><strong class="text-uppercase">Managerial Information: </strong>{{disease.disease.info_managerial|truncatewords:20 }}</p>
-                      <p><strong class="text-uppercase">Diagnostic Information: </strong>{{disease.disease.info_diagnostic|truncatewords:20}}</p>   
-                        {% if disease.disease.vacination_available %}
-                        <p class="text-success">Vaccine is available</p>
+                      <h1 class="text-light">{{outbreak.disease.disease_name }}</h1>
+                      <p><strong class="text-uppercase">symptoms: </strong>{{outbreak.disease.info_symptoms|truncatewords:20}}</p>
+                      <p><strong class="text-uppercase">How it spreads: </strong>{{outbreak.disease.info_spread|truncatewords:20}}</p>
+                      <p><strong class="text-uppercase">Precautional measures: </strong>{{outbreak.disease.info_precautions|truncatewords:20}}</p>
+                      <p><strong class="text-uppercase">Managerial Information: </strong>{{outbreak.disease.info_managerial|truncatewords:20 }}</p>
+                      <p><strong class="text-uppercase">Diagnostic Information: </strong>{{outbreak.disease.info_diagnostic|truncatewords:20}}</p>   
+                        {% if outbreak.disease.vacination_available %}
+                        <p class="text-success">Vaccine is available<br>{{outbreak.disease.vaccination_regiment}}</p>
                         {% else %}
                         <p class="text-warning">Vaccine is not available</p>
                         {% endif %}
-                        {% if disease.disease.zoonotic %}
+                        {% if outbreak.disease.zoonotic %}
                         <p class="text-warning">Its a zoonotic disease</p>
                         {% else %}
                         <p class="text-success">Its not a zoonotic disease</p>
                         {% endif %}
                       <a href="/diseases#{{disease.disease.disease_name}}" target="_blank"><button>Know More About {{disease.disease.disease_name}}</button></a>
                     </div>
-                    <div class="stats">
+                    <div class="stats" style="width: 35em;">
                       <div class="clientrev text-center">
-                        <span>{{disease.disease.mortality}}</span>
+                        <span>{{outbreak.disease.mortality}}</span>
                         <p>mortality rate</p>
                       </div>
                       <div class="adspend text-center">
-                        <span>{{disease.disease.morbidity}}</span>
+                        <span>{{outbreak.disease.morbidity}}</span>
                         <p>morbidity rate</p>
                       </div>
                       <div class="maus text-center">
-                        <span>{{disease.disease.category}}</span>
-                        <p>susceptible age-group</p>
+                        <span>{{outbreak.disease.incubation_period}} days</span>
+                        <p>Incubation period</p>
                       </div>
                       <div class="roi text-center">
-                        {% if disease.disease.category == '1' %}
+                        {% if outbreak.disease.category == '1' %}
                         <span>Water borne</span>
-                        {% elif disease.disease.category == '2' %}
+                        {% elif outbreak.disease.category == '2' %}
                         <span>Vector borne</span>
-                        {% elif disease.disease.category == '3' %}
+                        {% elif outbreak.disease.category == '3' %}
                         <span>Air borne</span>
                         {% else %}
                         <span>Animal transmitted</span>
@@ -174,9 +249,9 @@
                   </div>
                   {% endfor %}
             </div>
+            <a href="/diseases"><button class="btn btn-outline-danger rounded-pill">Want to know more about diseases?</button></a>
           </section>
           {% endif %}
-
 </main>
 <div id="google_translate_element" style="display: none"></div>
 <script type="text/javascript">
@@ -195,10 +270,16 @@
     }
 
 </script>
-<script src="{% static 'js/jquery.min.js' %}"></script>
+
 <script src="{% static 'js/jquery.easing.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/chart.js' %}"></script>
 <script src="{% static 'js/areaReport.js' %}"></script>
+<script>
+  $(document).ready(function() {
+  $('.js-example-basic-single').select2();
+  $("#optionList").select2({dropdownCssClass : 'bigdrop'}); 
+});
+</script>
 </body>
 </html>
