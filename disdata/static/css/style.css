@@ -595,17 +595,15 @@ padding-top: 10px;
     margin-right: 5px;
 }
 .bglight-blue {
-    background-color: #3498DB;
+    background-color: #4267B2;
 }
-.bgred {
-    background-color: #E74C3C;
+.bg-twitter {
+    background-color: #1DA1F2;
 }
-.bgdark-blue {
-    background-color: #2C3E50;
+.bg-green {
+    background-color: #25D366;
 }
-.bglight-blue {
-    background-color: #3498DB;
-}
+
 .top-footer {
     padding: 40px 0px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
