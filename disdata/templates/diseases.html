@@ -56,7 +56,7 @@
                     <p><strong class="text-uppercase">Mortality</strong>: {{disease.mortality}}</p>
                     <p><strong class="text-uppercase">Morbidity</strong>: {{disease.morbidity}}</p>
                     {% if disease.vaccination_available %}
-                    <p class="text-success">Vaccine is available</p>
+                    <p class="text-success">Vaccine is available<br>{{ disease.vaccination_regiment }}</p>
                     {% else %}
                     <p class="text-danger">Vaccine is not available</p>
                     {% endif %}
