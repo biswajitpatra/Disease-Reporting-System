@@ -36,6 +36,7 @@ urlpatterns = [
     path('govt/disease_report/<str:diseaseName>',views.mapping),
     path('govt/disease_heatmap/<str:diseaseName>',views.heatMap),
     path('diseases/' , views.diseases),
+    path('animal_outbreak_info/', views.animalOutbreakInfo),
     # path('govt/hospitalMap', views.hospitalMapping),
     # path('maps/', FoliumView.as_view(), name='choropleth'),
     path('login/',LoginView.as_view(template_name='admin/login.html',extra_context={'site_header':'Login form', 'site_title':'Staff Login Form'})),
