@@ -674,7 +674,7 @@ padding-top: 10px;
   background: #ffffff;
   position: relative;
   box-shadow: 7px 5px 4px rgba(0,0,0,0.5);
-  border: thick double hsl(207, 79%, 21%);
+  border: 2px solid  hsl(207, 79%, 21%);
 }
 
 .slider {
@@ -684,7 +684,6 @@ padding-top: 10px;
   animation: slider 15s linear infinite;
   list-style-type: none;
   text-align: center;
-  
 }
 
 .slider:hover {

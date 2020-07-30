@@ -90,11 +90,11 @@ $('document').ready(function () {
       });
   });
   });
-
+  console.log(list_of_news)
    // array describing the news' categories
-   const categories = ['all', 'news', 'updates', 'maintenance', 'events', 'important'];
+   const categories = ['all', 'danger', 'warning'];
    // array describing the colors matching the categories
-   const colors = ['#66d7ee', '#66a1ee', '#7166ee', '#a866ee', '#ee66aa', '#ee6d66'];
+   const colors = ['#66d7ee', '#ee66aa', '#ee6d66'];
    
    // array describing the navigation's items through the category and color
    const navItems = categories.map((category, index) => ({
@@ -104,30 +104,51 @@ $('document').ready(function () {
    
    
    // date used to establish the age of the news items
-   const latestDate = new Date();
+  //  const latestDate = new Date();
    // filler text used fo the news
-   const fillerTitle = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, saepe';
+  //  const fillerTitle = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, saepe';
    
    // number of items for each news' category, sans the first one
-   const limit = 5;
+  //  const limit = 5;
    // array describing every piece of news
    // the idea is to have _limit_ number of news for each category, sans the first one
    const data = [];
    
    // for every navigation item sans the first one include _limit_ number of news in the data array
-   navItems.slice(1).forEach(({ category, color }) => {
-     for (let i = 0; i < limit; i += 1) {
-       // specify the category, color according to the navigation item
-       // use the latest date to find an earlier date instance
-       // use the filler text for the title
-       const date = new Date(latestDate - (1000 * 60 * 60 * 24) * (Math.ceil(Math.random() * 100)));
+  //  navItems.slice(1).forEach(({ category, color }) => {
+  //    for (let i = 0; i < limit; i += 1) {
+  //      // specify the category, color according to the navigation item
+  //      // use the latest date to find an earlier date instance
+  //      // use the filler text for the title
+  //      const date = new Date(latestDate - (1000 * 60 * 60 * 24) * (Math.ceil(Math.random() * 100)));
+  //      data.push({
+  //        category,
+  //        color,
+  //        date,
+  //        title: fillerTitle,
+  //      });
+  //    }
+  //  });
+
+   list_of_news.forEach((news) =>{
+     if(news.fields.attn=='warning')
+    { formattedDate = new Date(Date.parse(news.fields.time)).toString()
+      data.push({
+      category:'warning',
+      color:'#ee6d66',
+      date:formattedDate,
+      title: news.fields.msg_head,
+     });
+    }
+     else
+     {
        data.push({
-         category,
-         color,
-         date,
-         title: fillerTitle,
-       });
-     }
+      category:'danger',
+      color:'#ee66aa',
+      date:news.fields.time,
+      title: news.fields.msg_head,
+     });
+    }
    });
    // console.log(data);
    // function called when clicking the button elements, with the selected category
@@ -159,10 +180,10 @@ $('document').ready(function () {
    
      // include the first five items of the input array
      //  include the theme color as a solid border
-     boardNews.innerHTML = news.slice(0, 5).map(({ color, date, title }) => `
+     boardNews.innerHTML = news.slice().map(({ color, date, title }) => `
      <a class="news--item" href="#" style="border-left: 4px solid ${color}">
          <p class="date">
-             ${date.toDateString()}
+             ${date}
          </p>
          <p class="title">
              ${title}

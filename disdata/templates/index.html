@@ -22,7 +22,9 @@
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
   
 </head>
-
+<script>
+  list_of_news = {{notice_json|safe}}
+</script>
 <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60" >
   
   <!--banner-->
@@ -83,21 +85,21 @@
     </div>
   </section>
   <section>
-
+    
   <div class="row">
     <div class="col-md-2" id="left-slider">
-      <div class="box blur">
+      <div class="box blur ">
         <ul class="slider">
-          <li><p class="text-danger"> This was a triumph.</p></li>
-          <li><p class="text-success"> I'm making a note here:</p></li>
-          <li><p class="text-info">HUGE SUCCESS.</p></li>
-          <li><p class="text-warning"> It's hard to overstate</p></li>
-          <li><p class="text-primary"> my satisfaction</p></li>
-          <li><p class="text-light">Aperture Science</p></li>
-          <li><p class="text-dark">We do what we must</p></li>
-          <li><p class="text-secondary">because we can.</p></li>
-          <li><p class="text-warning">For the good of all of us.</p></li>
-          <li><p class="text-danger">Except for the ones who are dead.</p></li>
+          <li><p class="text-danger"> Anthrax - 18, with Accuracy of 99.53% </p></li>
+          <li><p class="text-success">  Babesiosis - 57, with Accuracy of 100%  </p></li>
+          <li><p class="text-info">  Black quarter - 77, with Accuracy of 97.53%  </p></li>
+          <li><p class="text-warning"> Enterotoxaemia-  24, with Accuracy of 99.84% </p></li>
+          <li><p class="text-primary">Bluetoungue-  3, with Accuracy of 98.14%  </p></li>
+          <li><p class="text-light"> Fasciolosis -49, with Accuracy of 99.07%  </p></li>
+          <li><p class="text-dark">FMD - 64, with Accuracy of 95.52% </p></li>
+          <li><p class="text-secondary">HS - 75, with Accuracy of 95.21% </p></li>
+          <li><p class="text-warning"> PPR - 67, with Accuracy of 98.14% </p></li>
+          <li><p class="text-danger"> Swine Fever - 38, with Accuracy of 99.53%  </p></li>
         </ul>
     </div>
     </div>
@@ -120,8 +122,6 @@
         
           <section class="board__news">
               <!--  news items added through the script according to 1. the latest date and 1. the selected category -->
-        
-              
               <a class="news--item" href="#">
                   <p class="date">
                       Apr 26, 2019
@@ -136,16 +136,49 @@
   <div class="col-md-2" id="right-slider" >
     <div class="box blur">
       <ul class="slider">
-        <li><p class="text-danger"> This was a triumph.</p></li>
-        <li><p class="text-success"> I'm making a note here:</p></li>
-        <li><p class="text-info">HUGE SUCCESS.</p></li>
-        <li><p class="text-warning"> It's hard to overstate</p></li>
-        <li><p class="text-primary"> my satisfaction</p></li>
-        <li><p class="text-light">Aperture Science</p></li>
-        <li><p class="text-dark">We do what we must</p></li>
-        <li><p class="text-secondary">because we can.</p></li>
-        <li><p class="text-warning">For the good of all of us.</p></li>
-        <li><p class="text-danger">Except for the ones who are dead.</p></li>
+        <li><p class="text-danger ">ANDHRA PRADESH, GUJARAT, JHARKHAND, KARNATAKA, MAHARASHTRA, ODISHA, TAMIL NADU, WEST BENGAL
+          are predicted
+          for likely occurrence of 
+          PPR in  September-2020</p></li>
+        <li><p class="text-success"> JHARKHAND, MANIPUR, TRIPURA, WEST BENGAL, PUDUCHERRY  
+          are predicted
+          for likely occurrence of 
+          Babesiosis in  September-2020</p></li>
+        <li><p class="text-info">ASSAM, GUJARAT, JHARKHAND, KARNATAKA, MADHYA PRADESH, MAHARASHTRA, ODISHA, WEST BENGAL
+          are predicted
+          for likely occurrence of 
+          Black quarter in September-2020
+          </p></li>
+        <li><p class="text-warning"> ANDHRA PRADESH, TAMIL NADU
+          are predicted
+          for likely occurrence of 
+          Bluetongue in September-2020</p></li>
+        <li><p class="text-primary">  ANDHRA PRADESH, TAMIL NADU
+          are predicted
+          for likely occurrence of 
+          Bluetongue in September-2020</p></li>
+        <li><p class="text-light"> ANDHRA PRADESH, JHARKHAND, KARNATAKA, MAHARASHTRA
+          are predicted
+          for likely occurrence of 
+          Enterotoxaemia in September-2020</p></li>
+        <li><p class="text-dark">ARUNACHAL PRADESH, ASSAM, GUJARAT, JHARKHAND, MANIPUR, MEGHALAYA, TRIPURA, UTTAR PRADESH, PUDUCHERRY
+          are predicted
+          for likely occurrence of 
+          Fascioliasis in  September-2020 </p></li>
+        <li><p class="text-secondary">
+          HARYANA, JHARKHAND, KARNATAKA, KERALA, MADHYA PRADESH, MANIPUR, MEGHALAYA, NAGALAND, ODISHA, WEST BENGAL, ANDAMAN &amp; NICOBAR ISLANDS
+              are predicted
+              for likely occurrence of 
+              Foot and mouth disease in September-2020
+               </p></li>
+        <li><p class="text-warning">
+          ASSAM,GUJARAT,HARYANA,JHARKHAND,KARNATAKA,KERALA,MADHYA PRADESH,MAHARASHTRA,MEGHALAYA,PUNJAB,RAJASTHAN,TAMIL NADU,TRIPURA,WEST BENGAL,ANDAMAN &amp; NICOBAR ISLANDS
+              are predicted
+              for likely occurrence of 
+              Haemorrhagic septicaemia in  September-2020
+               </p></li>
+        <li><p class="text-danger">ANDHRA PRADESH,JHARKHAND,KARNATAKA,TAMIL NADU,WEST BENGAL for likely occurrence of Anthrax in September-2020</p></li>
+          
       </ul>
   </div>
   </div>
@@ -295,7 +328,7 @@
               
                    <form action="">
                     <div class="d-flex">
-                      <label class="text-dark">Enter the 6 digit OTP sent to your number:</label>
+                      <label class="text-dark mx-3 text-justify">Enter the 6 digit OTP sent to your number:</label>
                       <input id="otp">
                     </div>
                    </form>
