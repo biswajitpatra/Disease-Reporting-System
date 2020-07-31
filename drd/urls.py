@@ -49,6 +49,7 @@ urlpatterns = [
     path('device_report_api',views.device_report_api,name="Report api for devices"),
     path('location_warn_states/<int:pincode>',views.location_warn_state,name='Warn state for location'),
     path('get_notices_api/<int:days>',views.get_notices_api,name='Get notices'),
+    path('scrap_ndres_data/<int:disease_code>/<int:month>/',views.scrap_ndres_data,name="Scraper"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
