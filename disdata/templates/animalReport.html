@@ -19,11 +19,24 @@
      <div class="container">
         <form class="form-inline">
           <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Disease Name</label>
-          <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+          <select class="custom-select my-1 mr-sm-2" name="disease" id="inlineFormCustomSelectPref">
             <option selected>Choose...</option>
-            {% for disease in diseases%}
-            <option value="{{ disease.disease_name }}">{{ disease.disease_name }}</option>
-            {% endfor %}
+            <option value="">Select disease name</option>
+                <option value="8">Anthrax</option>
+                <option value="10">Babesiosis</option>
+                <option value="11">Black quarter</option>
+                <option value="12">Bluetongue</option>
+              <!--  <option value="24" >Contagious caprine pleuro pneumonia</option> -->
+                <option value="31">Enterotoxaemia</option>
+                <option value="35">Fascioliasis</option>
+                <option value="37">Foot and mouth disease </option>
+                <option value="48">Haemorrhagic septicaemia</option>
+                <option value="60">Peste des petits ruminants</option>
+                <!-- <option value="62" >Rabies</option> -->
+                <option value="65">Sheep and Goat pox</option>
+                <option value="70">Swine fever</option>
+                <option value="72">Theileriosis</option>
+                <option value="79">Trypanosomiasis</option>
           </select>
           <label class="my-1 mr-2" for="inlineFormCustomSelectPref">District Name</label>
           <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
@@ -33,23 +46,23 @@
             {% endfor %}
           </select>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="5">
             <label class="form-check-label" for="inlineRadio1">May</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="6">
             <label class="form-check-label" for="inlineRadio2">June</label>
           </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="7">
               <label class="form-check-label" for="inlineRadio1">July</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="8">
               <label class="form-check-label" for="inlineRadio2">August</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+              <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="9">
               <label class="form-check-label" for="inlineRadio1">September</label>
             </div>
           <button type="submit" class="btn btn-outline-success px-5 rounded-pill my-4 mx-auto">Submit</button>
