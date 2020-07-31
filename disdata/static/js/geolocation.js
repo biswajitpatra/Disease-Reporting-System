@@ -38,7 +38,7 @@
    }
 
    function searchLocation() {
-       pincode = $('#inputGroupSelect').val();
-       window.location = `/area/${pincode.trim()}`
+       pincode = $('#optionList').val();
+       window.location = `/area/${pincode}`
    }
   
