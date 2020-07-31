@@ -56,14 +56,14 @@
                     <p><strong class="text-uppercase">Mortality</strong>: {{disease.mortality}}</p>
                     <p><strong class="text-uppercase">Morbidity</strong>: {{disease.morbidity}}</p>
                     {% if disease.vaccination_available %}
-                    <p class="text-success">Vaccine is available<br>{{ disease.vaccination_regiment }}</p>
+                    <p class="text-success">{{ disease.vaccination_regiment }}</p>
                     {% else %}
                     <p class="text-danger">Vaccine is not available</p>
                     {% endif %}
                     {% if disease.zoonotic %}
                     <p class="text-danger">It is a zoonotic disease</p>
                     {% else %}
-                    <p class="text-warning">It is not a zoonotic disease</p>
+                    <p class="text-secondary">It is not a zoonotic disease</p>
                     {% endif %}
                 </div>
               </div>
