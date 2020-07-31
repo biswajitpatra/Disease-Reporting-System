@@ -96,10 +96,10 @@
        tableContent = `<tr><th scope="row">${value[0]}</th><td>${value[1]}</td><td>${value[2]}</td><td>${value[3]}</td><td>${value[4]}</td><td>${value[5]}</td><td>${value[6]}</td></tr>`
        $('#tbody').append(tableContent)
       })
-      $('#table').append(`<p class="text-center text-secondary mt-5"><span class="text-info">Precaution</span>: ${data.precaution}</p>`)
+      $('#table').append(`<div class="container"><div class="card p-3 border-danger "><div class="card-block"><p class="text-center text-secondary"><span class="text-info">Precaution</span>: ${data.precaution}</p></div></div></div>`)
       }
       else{
-        $('#table').html(`<h3 class="text-center text-success mt-5">No disctricts of Odisha in risk of <span class="text-danger">${$('#disease_name option:selected').text()}</span></h3>`)
+        $('#table').html(`<h4 class="card-text text-center text-success mt-5">No disctricts of Odisha in risk of <span class="text-danger">${$('#disease_name option:selected').text()}</span> for <span class="text-danger">${$('input[type=radio]:checked').siblings('.form-check-label').text()}</span></h4>`)
       }
        
      })
