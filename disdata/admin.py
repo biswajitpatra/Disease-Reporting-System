@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from mapwidgets.widgets import GooglePointFieldWidget
+from django.contrib.admin.models import LogEntry
 
 # Register your models here.
 
@@ -15,6 +16,8 @@ admin.site.register(Disease)
 admin.site.register(District)
 admin.site.register(Notice)
 admin.site.register(Outbreak)
+
+admin.site.register(LogEntry)
 
 class PincodeAdmin(OSMGeoAdmin):
     model=Pincode
