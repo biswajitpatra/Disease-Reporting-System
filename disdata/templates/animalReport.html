@@ -9,19 +9,20 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <title>:: DRS | Animal Portal</title>
+   
   </head>
   <body>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item active" aria-current="page">Animal Disease Information</li>
+          <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Animal Disease Information</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Odisha</li>
         </ol>
       </nav>
-     <div class="container">
-        <form class="form-inline">
+     <div class="container d-flex">
+        <form class="form-inline ml-5">
           <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Disease Name</label>
-          <select class="custom-select my-1 mr-sm-2" name="disease" id="inlineFormCustomSelectPref">
-            <option selected>Choose...</option>
-            <option value="">Select disease name</option>
+          <select class="custom-select my-1 mr-sm-2" name="disease" id="disease_name">
+            <option value="" selected>Select disease name</option>
                 <option value="8">Anthrax</option>
                 <option value="10">Babesiosis</option>
                 <option value="11">Black quarter</option>
@@ -38,13 +39,13 @@
                 <option value="72">Theileriosis</option>
                 <option value="79">Trypanosomiasis</option>
           </select>
-          <label class="my-1 mr-2" for="inlineFormCustomSelectPref">District Name</label>
+          <!-- <label class="my-1 mr-2" for="inlineFormCustomSelectPref">District Name</label>
           <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
             <option selected>Choose...</option>
             {% for pincode in pincodes%}
             <option value="{{ pincode.pincode }}">{{ pincode.district.name|capfirst }}</option>
             {% endfor %}
-          </select>
+          </select> -->
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="5">
             <label class="form-check-label" for="inlineRadio1">May</label>
@@ -65,20 +66,44 @@
               <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="9">
               <label class="form-check-label" for="inlineRadio1">September</label>
             </div>
-          <button type="submit" class="btn btn-outline-success px-5 rounded-pill my-4 mx-auto">Submit</button>
-        </form>
+          </form>
+          <button class="btn btn-outline-success px-5 rounded-pill" onclick="searchDisease()">Submit</button>
      </div>
+     <section id="table"></section>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>   
-     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script>
-      $.ajax({
-        url: ''
-      }).done(function(data) {
-        console.log(data);
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+   <script>   
+   function searchDisease(){
+    //  console.log($('input[type=radio]:checked').val())
+     disease_name = $('#disease_name').val()
+     month = $('input[type=radio]:checked').val() 
+     console.log('Search Started')
+     let table, tableContent
+     $.ajax({
+       type:"GET",
+       url:`scrap_ndres_data/${disease_name}/${month}`
+     }).done(function(data) {
+       console.log(data);
+      if(data.status){
+
+        table = `<table class="table table-bordered table-hover mx-auto w-75 mt-5 text-center"><thead class="thead-dark"><tr><th scope="col">${data.headers[0]}</th><th scope="col">${data.headers[1]}</th><th scope="col">${data.headers[2]}</th><th scope="col">${data.headers[3]}</th><th scope="col">${data.headers[4]}</th><th scope="col">${data.headers[5]}</th><th scope="col">${data.headers[6]}</th></tr></thead><tbody id="tbody"></tbody></table>`
+        $('#table').html(table)
+        data.values.map(function(value) {
+       // console.log(value[0])
+       tableContent = `<tr><th scope="row">${value[0]}</th><td>${value[1]}</td><td>${value[2]}</td><td>${value[3]}</td><td>${value[4]}</td><td>${value[5]}</td><td>${value[6]}</td></tr>`
+       $('#tbody').append(tableContent)
       })
-    </script>
+      $('#table').append(`<p class="text-center text-secondary mt-5"><span class="text-info">Precaution</span>: ${data.precaution}</p>`)
+      }
+      else{
+        $('#table').html(`<h3 class="text-center text-success mt-5">No disctricts of Odisha in risk of <span class="text-danger">${$('#disease_name option:selected').text()}</span></h3>`)
+      }
+       
+     })
+   }  
+     </script>
   </body>
 </html>
