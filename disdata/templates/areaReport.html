@@ -194,7 +194,7 @@
               </div>
           </main>
       </div>
-          <section class='mb-5' style="position:absolute;top: 110%;left: 20%;"> 
+          <section class='mb-5' style="position:absolute;top: 115%;left: 20%;"> 
             <div class="row">
               {% for outbreak in outbreaks %}
               <div class="disease-container my-5">
@@ -233,13 +233,13 @@
                       </div>
                       <div class="roi text-center">
                         {% if outbreak.disease.category == '1' %}
-                        <span>Water borne</span>
+                        <span>Water</span>
                         {% elif outbreak.disease.category == '2' %}
-                        <span>Vector borne</span>
+                        <span>Vector</span>
                         {% elif outbreak.disease.category == '3' %}
-                        <span>Air borne</span>
+                        <span>Air</span>
                         {% else %}
-                        <span>Animal transmitted</span>
+                        <span>Animal</span>
                         {% endif %}
                         <p>Mode of transmission
                         </p>
@@ -249,7 +249,7 @@
                   </div>
                   {% endfor %}
             </div>
-            <a href="/diseases"><button class="btn btn-outline-danger rounded-pill">Want to know more about diseases?</button></a>
+            <a href="/diseases"><button class="btn btn-outline-danger rounded-pill px-5" style="margin-left:18rem">Want to know more about diseases?</button></a>
           </section>
           {% endif %}
 </main>
