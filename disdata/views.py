@@ -19,10 +19,15 @@ from django.views.generic import TemplateView
 import folium
 import folium.plugins as plugins
 import os
+import math
+from bs4 import BeautifulSoup
+import requests
+import re
 
 def sir_model(s,i,r,morbidity,incubation,t):
     
     total_population = s
+    immune = (total_population*8)/100
 
     # his intimacy factor increases in places where trading is more, because trading means more people at work, hence more spread
     intimacy_factor = 4   
@@ -46,11 +51,36 @@ def sir_model(s,i,r,morbidity,incubation,t):
     else:
         ret_value["spread"] = False
 
-    ret_value["infected"] = int(i+s -((gamma/beta)*(1+math.log(rep_factor))))
+    ret_value["infected"] = int(i+s -((gamma/beta)*(1+math.log(rep_factor))))-immune
 
     return ret_value
 
 
+def scrap_ndres_data(disease_code,month,state_code=20):
+    url= 'https://nivedi.res.in/Nadres_v2/submit_1.php'
+    r = requests.post(url,data = {
+            'disease': str(disease_code),
+            'state': str(month),
+            'month': ' '+str(state_code)
+    })
+
+    soup=BeautifulSoup(r.text,"html5lib")
+    ret_dict={}
+    table=soup.find('table')
+    if table:
+        rows = table.findAll('tr')
+        column_heads = [i.text for i in rows[0].findAll('th')]
+        r = []
+        for i in rows[1:]:
+                r.append([k.text for k in i.findAll('td') ])
+        precaution = soup.select('#templatemo_middle_column > p')[1].text
+        ret_dict["status"]=True
+        ret_dict["values"]=r
+        ret_dict["headers"]=column_heads
+        ret_dict["precaution"]=precaution
+    else:
+        ret_dict["status"]=False
+        return ret_dict
 
 
 # Create your views here.
@@ -359,7 +389,7 @@ def areaReport(request,pincode):
     for c in cnt:
         disease = Disease.objects.get(disease_name = c["disease__disease_name"])
         try:
-            total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)/district.population) 
+            total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)["infected"]/district.population) 
         except:
             total_infected_per = 0 
                 
@@ -427,29 +457,72 @@ def area_summary_api(req):
 @csrf_exempt
 def telephony_bot(req):
     req = json.loads(req.body)
-    report_pincode = req.POST.get('pincode')
-    if report_pincode is not None:
-            report_pincode=Pincode.objects.filter(pincode=report_pincode).first()
-            report_location = Point(x=report_pincode.located_at.x, y=report_pincode.located_at.y, srid=4326)
+    # report_pincode = req.POST.get('pincode')
+    # if report_pincode is not None:
+    #         report_pincode=Pincode.objects.filter(pincode=report_pincode).first()
+    #         report_location = Point(x=report_pincode.located_at.x, y=report_pincode.located_at.y, srid=4326)
 
-            suspected_disease = Disease.objects.get(disease_name=req.POST.get("disease_name"))
+    #         suspected_disease = Disease.objects.get(disease_name=req.POST.get("disease_name"))
 
-            closest_hospital = Hospital.objects.annotate(distance=Distance('located_at', report_location)).order_by('distance').first()
-            report_source = closest_hospital.user
-            public_report = Report(
-                source=report_source,
-                disease=suspected_disease,
-                death=False,
-                pincode=report_pincode,
-                report_info=req.POST.get('report_info'),
-                reported_at=report_location,
-                verified=False
-            )
-            public_report.save()
+    #         closest_hospital = Hospital.objects.annotate(distance=Distance('located_at', report_location)).order_by('distance').first()
+    #         report_source = closest_hospital.user
+    #         public_report = Report(
+    #             source=report_source,
+    #             disease=suspected_disease,
+    #             death=False,
+    #             pincode=report_pincode,
+    #             report_info=req.POST.get('report_info'),
+    #             reported_at=report_location,
+    #             verified=False
+    #         )
+    #         public_report.save()
     print(json.dumps(req, indent=4, sort_keys=True))
     ret_json = {}
+    ret_text = "Can u say it again please"
     if (req["queryResult"]["intent"]["displayName"] == "info_place"):
-        ret_text = "testing intent"
+        if(req["queryResult"]["allRequiredParamsPresent"]==True):
+            pincode = req["queryResult"]["parameters"]["pincode"]
+            if(len(pincode)!=6):
+                ret_text = "Please tell me a valid Pincode"
+            else:
+                pincode = int(pincode)
+                thres_time_gap= 30       # Time gap for reports
+                district = Pincode.objects.get(pincode=int(pincode)).district
+                q = Report.objects.filter(pincode__district=district).filter(reported_on__gte=datetime.now()-timedelta(days=thres_time_gap)).filter(verified=True)
+                cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
+                ret_json=[]
+                max_warn=0
+                for c in cnt:
+                    disease = Disease.objects.get(disease_name = c["disease__disease_name"])
+                    try:
+                        total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)/district.population) 
+                    except:
+                        total_infected_per = 0 
+                            
+                    if(total_infected_per < 0.012):
+                        ret_part={"warning":"success"} #? Success == green zone
+                    elif(total_infected_per >= 0.12): 
+                        ret_part={"warning":"danger"}  #? Danger == red zone
+                    else:
+                        ret_part={"warning":"warning"} #? Warning == yellow zone
+                    
+                    max_warn=max(total_infected_per,max_warn)
+
+                    ret_part["report_count"]=c["disease__count"]
+                    ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
+                    ret_part["disease_level"]=disease.morbidity
+                    ret_json.append(ret_part)
+                print(ret_json)
+                # print(ret_json[0]['warning'])
+                if(max_warn < 0.012):
+                    ret_text = "Your area is safe" #? Success == green zone
+                elif(max_warn >= 0.12): 
+                    ret_text="Take precautionary measures as your area is at red alert zone"  #? Danger == red zone
+                else:
+                    ret_text="This area is recorded as yellow zone. Take neccessary precautions and vacinations"
+
+    
+            
     ret_json = {"fulfillmentMessages": [{
         "platform": "TELEPHONY",
         "telephonySynthesizeSpeech": {

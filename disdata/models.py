@@ -237,7 +237,7 @@ class Report(models.Model):
                         tmp_new.save()
                         ppls = Person.objects.filter(pincode__district=self.pincode.district)
                         for p in ppls:
-                            p.notify(f"{self.disease.disease_name} detected in {self.pincode.area},{self.pincode.province2}. {self.vaccination_regiment} ")
+                            p.notify(f"{self.disease.disease_name} detected in {self.pincode.area},{self.pincode.province2}. {self.disease.vaccination_regiment} ")
                         new_not = Notice.objects.create(user=district.district_official,attn='warning',msg_notice=True,msg_head=f"{self.disease.disease_name} detected in {self.pincode.area},{self.pincode.province2}",msg_body=f'Expecting a ground reality report at {self.pincode.area},{self.pincode.province2}.')
                         new_not.save()
                     else:
@@ -331,8 +331,20 @@ class Person(models.Model):
     def __str__(self):
         return "{} from {}".format(self.full_name, self.city)
     def notify(self,msg=None):
-        #TODO: do it
+        # url = "https://www.fast2sms.com/dev/bulk"
+        # headers = {
+        #     'cache-control': "no-cache"
+        # }
+        # if(msg==None):
+        #     querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":"This is test message","language":"english","route":"p","numbers":str(self.phone_number),"flash":1}
+        #     response = requests.request("GET", url, headers=headers, params=querystring)
+        #     print(response.text)
+        # else:
+        #     querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":msg,"language":"english","route":"p","numbers":str(self.phone_number),"flash":1}
+        #     response = requests.request("GET", url, headers=headers, params=querystring)
+        #     print(response.text)
         pass
+            # RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo
         # URL = 'https://www.sms4india.com/api/v1/sendCampaign'
         # response = sendPostRequest(URL, "PT5VPWDIY5UHKR5W9Z7LJA723XAJ4O9L", 'VOT5R4ICAHKB80QP', 'stage', '+919439832766', 'sai.nayak1503@gmail.com', 'Swine flu detected in your vicinity' )
         # print(response.text)
