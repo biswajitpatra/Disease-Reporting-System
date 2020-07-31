@@ -55,18 +55,19 @@ def sir_model(s,i,r,morbidity,incubation,t):
 
     return ret_value
 
-
-def scrap_ndres_data(disease_code,month,state_code=20):
+@csrf_exempt
+def scrap_ndres_data(req,disease_code,month,state_code=20):
     url= 'https://nivedi.res.in/Nadres_v2/submit_1.php'
     r = requests.post(url,data = {
             'disease': str(disease_code),
-            'state': str(month),
-            'month': ' '+str(state_code)
+            'state': str(state_code),
+            'month': ' '+str(month)
     })
 
     soup=BeautifulSoup(r.text,"html5lib")
     ret_dict={}
     table=soup.find('table')
+    # print(soup)
     if table:
         rows = table.findAll('tr')
         column_heads = [i.text for i in rows[0].findAll('th')]
@@ -80,7 +81,7 @@ def scrap_ndres_data(disease_code,month,state_code=20):
         ret_dict["precaution"]=precaution
     else:
         ret_dict["status"]=False
-        return ret_dict
+    return JsonResponse(ret_dict)
 
 
 # Create your views here.
