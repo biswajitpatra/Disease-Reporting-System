@@ -331,18 +331,18 @@ class Person(models.Model):
     def __str__(self):
         return "{} from {}".format(self.full_name, self.city)
     def notify(self,msg=None):
-        # url = "https://www.fast2sms.com/dev/bulk"
-        # headers = {
-        #     'cache-control': "no-cache"
-        # }
-        # if(msg==None):
-        #     querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":"This is test message","language":"english","route":"p","numbers":str(self.phone_number),"flash":1}
-        #     response = requests.request("GET", url, headers=headers, params=querystring)
-        #     print(response.text)
-        # else:
-        #     querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":msg,"language":"english","route":"p","numbers":str(self.phone_number),"flash":1}
-        #     response = requests.request("GET", url, headers=headers, params=querystring)
-        #     print(response.text)
+        url = "https://www.fast2sms.com/dev/bulk"
+        headers = {
+            'cache-control': "no-cache"
+        }
+        if(msg==None):
+            querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":"This is test message","language":"english","route":"p","numbers":str(self.phone_number),"flash":1}
+            response = requests.request("GET", url, headers=headers, params=querystring)
+            print(response.text)
+        else:
+            querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":msg,"language":"english","route":"p","numbers":str(self.phone_number),"flash":1}
+            response = requests.request("GET", url, headers=headers, params=querystring)
+            print(response.text)
         pass
             # RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo
         # URL = 'https://www.sms4india.com/api/v1/sendCampaign'
