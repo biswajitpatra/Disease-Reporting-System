@@ -314,7 +314,7 @@ def location_warn_state(req,pincode):
     for c in cnt:
         disease = Disease.objects.get(disease_name = c["disease__disease_name"])
         try:
-            total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)/district.population) 
+            total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)["infected"]/district.population) 
         except:
             total_infected_per = 0 
                 
