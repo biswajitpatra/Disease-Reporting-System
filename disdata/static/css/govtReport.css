@@ -94,6 +94,8 @@
     padding-top: 20px;
     overflow-y: auto;
     overflow-x: hidden;
+    position: relative;
+    left: 5rem;
   }
   #content::-webkit-scrollbar {
     width: 6px;
@@ -113,7 +115,7 @@
   }
   #content .object .date {
     float: left;
-    width: 40px;
+    /* width: 40px; */
     height: 40px;
     margin: 20px;
     background-color: #f1c40f;

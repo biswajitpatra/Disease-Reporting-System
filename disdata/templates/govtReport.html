@@ -43,7 +43,7 @@
       <div id="content">
         {% for notice in notices %}
         <div class="object">
-          <div class="date"> 27 </div>
+          <div class="date w-25"> {{ notice.time }} </div>
           <div class="circle"></div>
           <div class="context">
             {{ notice.msg_body }}
