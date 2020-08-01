@@ -143,6 +143,14 @@ def sendPostRequest(reqUrl, apiKey, secretKey, useType, phoneNo, senderId, textM
   }
   return requests.post(reqUrl, req_params)
 
+
+def cloneReport(pk, n: int):
+    report = Report.objects.get(pk=pk)
+    for _ in range(n):
+        report.pk = None
+        report.save()
+
+
 class District(models.Model):
     name= models.CharField(max_length=30)
     district_official = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
