@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{% static 'css/govtReport.css'%}">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <title>Govt Insights</title>
+    <title>:: DRS | Govt Insights</title>
     <!-- {{map.header.render|safe}} -->
   </head>
   <body>
@@ -24,100 +24,32 @@
       </nav>
      <section>
       <ul id="newsticker">
-        <li class="closed">
+                {% for notice in notices %}
+                <li class="closed">
                   <div>
                     <i class="fa fa-bullhorn" aria-hidden="true"></i>
-                    <strong>MOSTRA MORTAL REMAIN</strong><span>: Pink Floyd Exhibition al Macro di Roma</span>
-                  </div>
-                </li><li class="closed">
-                  <div>
-                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
-                    <strong>CONCERTO</strong><span>: Roger Waters a Bologna, PalaForum</span>
+                    <strong>{{ notice.msg_head }}</strong><span>: {{ notice.msg_body }}</span>
                   </div>
                 </li>
-              <li class="closed">
-                  <div>
-                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
-                    <strong>NUOVO ALBUM</strong><span>: In uscita nuovo album di Gilmoure</span>
-                  </div>
-                </li>
-              <li class="closed">
-                  <div>
-                    <i class="fa fa-bullhorn" aria-hidden="true"></i>
-                    <strong>HIGH HOPES</strong><span>: Best Pink Floyd song!</span>
-                  </div>
-                </li>
+                {% endfor %}
     </ul>
     </section>
     <section id="govtNews">
       <div class="header">    
         <div class="circle"></div>
-        <h1> News </h1>
+        <h1> Outbreak Notices </h1>
       </div>
       <div class="line"></div>
       <div id="content">
+        {% for notice in notices %}
         <div class="object">
           <div class="date"> 27 </div>
           <div class="circle"></div>
           <div class="context">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Labore illo eius ratione sint, officia facere deleniti delectus eaque ex temporibus et cumque quas sapiente atque odit alias commodi, aut assumenda ut ipsa quasi soluta. Placeat unde perferendis, quis iusto harum illum molestiae aspernatur voluptatum? Repudiandae totam consequuntur voluptatibus enim! Consequatur libero illum eligendi quidem repellendus, tenetur officia eveniet harum voluptatum. Explicabo laudantium mollitia ipsa laboriosam cumque nisi delectus quam, quibusdam obcaecati? Reiciendis accusamus alias, ea ex sunt iusto sapiente perferendis veritatis esse, sed nisi? Incidunt deserunt, quas asperiores repellat consequatur est cum facilis delectus velit unde dignissimos illum assumenda, voluptate tempora id, commodi obcaecati explicabo esse! Possimus cupiditate quia aspernatur laborum nemo in temporibus dolore perferendis, iste ipsum voluptatem iure error ea vero fuga nihil vel veniam. Beatae quas animi, officia nemo quo inventore debitis quis nesciunt incidunt fugit. Ad magnam vel laudantium aliquam dolor, necessitatibus temporibus nemo tenetur explicabo saepe debitis laboriosam impedit eius cum consequuntur, tempora corrupti fuga. Exercitationem, animi. Dolore natus quaerat excepturi quisquam velit culpa labore qui doloremque nulla adipisci quas recusandae temporibus maxime laborum minus sed dignissimos laboriosam asperiores, porro placeat. Iure nostrum unde, a porro voluptates, dolore ipsum, earum nihil dicta sint officia ad.
+            {{ notice.msg_body }}
           </div>
         </div>
-        
-        <div class="object">
-          <div class="date">  
-            25
-          </div>
-          <div class="circle">
-          </div>  
-          <div class="context">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus dolores error, non consequuntur molestias quis sunt saepe reprehenderit exercitationem sapiente architecto in quos suscipit accusantium libero fugiat numquam quidem tempore ducimus veritatis laudantium sint quae inventore. Recusandae sit alias doloribus unde vero? Iure illo quaerat vel qui ad cum quod. Cumque repudiandae, dignissimos ad veniam perspiciatis culpa cupiditate dolores suscipit. Distinctio corporis nam debitis a, voluptatum at hic sapiente beatae quam impedit inventore magnam fugit culpa ipsum ea, sint, labore blanditiis doloribus expedita provident. Deleniti tempore quis amet! Nostrum corporis error eaque doloremque voluptate tempore totam officiis laudantium fugiat porro.
-          </div>
-        </div>
-        
-        <div class="object">
-          <div class="date">  
-            24
-          </div>
-          <div class="circle">
-          </div>  
-          <div class="context">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores velit modi similique! Eum esse dignissimos, non sed soluta dolorem quaerat repellat fugit ratione voluptates quod blanditiis quae expedita error eveniet iste nostrum quos facere, voluptatem laboriosam. Hic, commodi aperiam neque unde itaque magnam temporibus quibusdam omnis ut ducimus libero quisquam, exercitationem quidem deleniti! Autem molestiae iure, consequatur laudantium odit impedit quam atque non cumque officia eaque fugit magnam pariatur aut nesciunt amet. Magni qui id amet repudiandae dolore repellat deserunt. Aut voluptatibus natus facere iste? Quaerat nam fugiat aliquam repudiandae quasi eum, facilis expedita incidunt! Repellendus facere accusamus excepturi voluptate reprehenderit ratione magnam repellat nostrum! Inventore, maxime necessitatibus quasi amet quod asperiores maiores fuga tenetur saepe esse, adipisci voluptates commodi. Accusamus eum repudiandae eos, quaerat placeat officiis amet similique alias ad cupiditate quia obcaecati nemo iure repellendus eaque, temporibus animi unde. Facere ad laboriosam vel provident velit nesciunt aut odio?
-          </div>
-        </div>
-        
-        <div class="object">
-          <div class="date">       
-            21
-          </div>
-          <div class="circle">
-          </div>  
-          <div class="context">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Officiis, dolorum explicabo nam eaque nulla minima nihil illum facilis ut nisi, nesciunt repudiandae sunt voluptas eligendi dolor earum vel vero rem alias aspernatur. Obcaecati dolorum ducimus similique alias delectus necessitatibus molestias ipsa dignissimos iure. Nisi expedita soluta esse saepe minus, hic modi impedit recusandae. Voluptate, quod voluptatum. Doloremque laudantium similique culpa est optio aperiam aliquam hic iste ex laboriosam, odio itaque quibusdam neque sit alias, natus excepturi quisquam? Officiis nesciunt enim esse recusandae dolorum veniam, non modi, distinctio assumenda ad, asperiores veritatis vel odio! In quam reprehenderit sequi voluptatibus quibusdam corrupti. Recusandae similique aut excepturi praesentium culpa exercitationem animi, in neque possimus tenetur iure ratione quos et commodi voluptates corporis numquam!
-          </div>
-        </div>
-        
-        <div class="object">
-          <div class="date">   
-            19
-          </div>
-          <div class="circle">
-          </div>  
-          <div class="context">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias quae nihil in. Nostrum quis cumque iure dolorem ipsa repellendus deserunt iste fuga. Quidem voluptatum tempora eum architecto odit reprehenderit, laudantium enim impedit consequuntur fuga voluptate aspernatur itaque rerum modi ea earum. Quod adipisci accusantium ipsum enim officiis ratione, aperiam culpa consequatur minima reprehenderit sapiente, eveniet voluptatibus repellat tenetur mollitia aspernatur obcaecati cum! Nemo quas veritatis perferendis itaque deserunt eaque aliquid provident. Reiciendis voluptates magnam dolorem voluptas illo quos architecto, iste hic. Odio vero minus aperiam obcaecati repellat, eligendi, aliquid ex consequatur quam nemo suscipit debitis, delectus minima ipsam magnam soluta.
-          </div>
-        </div>
-        
-        <div class="object">
-          <div class="date">  
-            18
-          </div>
-          <div class="circle">
-          </div> 
-          <div class="context">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima iusto nihil reiciendis dicta sunt necessitatibus quisquam deserunt dolor fugit ipsam. Illum obcaecati commodi magni harum ut? Architecto voluptate eius pariatur, nostrum maiores perspiciatis quod? Nesciunt error et sequi voluptatibus cumque aut fuga, in, consequuntur tempore atque dicta. Vitae cum quisquam, voluptatum numquam dolore reiciendis quidem nostrum pariatur esse cumque praesentium error beatae fugit dolorem quos ipsa nisi iusto magni eveniet! Vero tempore, tempora et odio, laborum hic architecto impedit blanditiis, maxime nostrum corporis praesentium perferendis ut molestias voluptatum! Quos pariatur sed officiis excepturi consequatur expedita nulla, rem sapiente ratione voluptates?
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </section>
   <div class="container district-choropleth">
@@ -149,7 +81,7 @@
        </div>
       </div>
       <div class="row mt-5">
-        <div class="col-md-12">
+        <div class="col-md-12 mt-5">
           <h2 class="ser-title">Infection Heat Map</h2>
           <hr class="botm-line">
         </div>
