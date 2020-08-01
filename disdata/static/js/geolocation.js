@@ -28,10 +28,14 @@
                 const district = data.results[0].address_components.filter(d => d.types.includes('administrative_area_level_2'))[0].long_name
                 console.log(pincode);
                 console.log(district);
-                $("#pincode-field").val(pincode)
+                // $("#pincode-field").val(pincode)
                 // $('#location-search').html(`${data.plus_code.compound_code.slice(7)}`)
-                $('#inputGroupSelect').val(pincode)
-                // $('#location-search').html(`${district}, ${pincode}`)
+                let userLocation = {
+                    id:pincode,
+                    text:`${district}, ${pincode}`
+                }
+                $("#optionList").append(new Option(userLocation.text, userLocation.id, false, true))
+                // $('#optionList').html(`${district}, ${pincode}`)
             }
         })
     }
