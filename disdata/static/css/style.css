@@ -98,8 +98,8 @@ banner
 .banner-insights{
     position: relative;
     transform: scale(1.5);
-    left: 30%;
-    top: 80%;
+    left: 35%;
+    top: 30%;
 }
 .bigdrop{
   width: 62rem !important;
