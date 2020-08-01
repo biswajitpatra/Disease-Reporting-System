@@ -112,10 +112,11 @@ def index(request):
 def govtReport(request):
     list_of_diseases = list(Disease.objects.all())
     reports = list(Report.objects.filter(verified=True))
-    print(list_of_diseases)
-    print(reports)
+    notices = list(Notice.objects.filter(msg_notice=True))
+    # print(list_of_diseases)
+    print(notices)
 
-    m = folium.Map(location = [20.9517, 85.0985], zoom_start=5)
+    m = folium.Map(location = [20.9517, 85.0985], zoom_start=7)
     for h in Hospital.objects.all():
         latt = h.located_at.y
         long = h.located_at.x
@@ -123,10 +124,10 @@ def govtReport(request):
 
     m.save(os.path.join('disdata','static','hospitalMap.html'))
 
-    return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports}) 
+    return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports,"notices":notices}) 
 
 def heatMap(request,diseaseName):
-    m = folium.Map(location = [20.9517, 85.0985], tiles='CartoDB Positron', zoom_start=5)
+    m = folium.Map(location = [20.9517, 85.0985], tiles='CartoDB Positron', zoom_start=7)
     hospital_data = []
     for h in Hospital.objects.all():
         cnt = Report.objects.filter(verified=True).filter(source=h.user).filter(disease__disease_name=diseaseName).count()
