@@ -12,6 +12,9 @@ import requests
 import json
 import re
 import math
+from random import randint
+
+from disdata.projections.SIR import getSIRPlotAsBase64
 
 victim_ids_for_animal={'pt':"Poultry",'gt':'Goat','pg':'Pig','bf':"Buffalo",'sp':'Sheep'}
 
@@ -52,6 +55,41 @@ def sir_model(s,i,r,morbidity,incubation,t):
     ret_value["infected"] = int(i+s -((gamma/beta)*(1+math.log(rep_factor))))-immune
 
     return ret_value
+
+def sir_model_plot(district_name: str, disease_name: str):
+
+    district_data = District.objects.get(name=district_name)
+    total_population = district_data.population
+
+    disease_data = Disease.objects.get(disease_name=disease_name)
+
+    initial_infected_population = Report.objects.filter(disease__disease_name=disease_name, pincode__district__name=district_name, death=False).count()
+
+    initial_susceptible_population = total_population - initial_infected_population
+
+    initial_recovered_population = 0
+    
+    beta = lambda t: 0.0005
+
+    incubation = disease_data.incubation_period
+    
+    # more value means more infectious is the disease
+    gamma = (1/incubation)
+
+    print(initial_susceptible_population, initial_infected_population, initial_recovered_population, gamma, beta)
+
+    plot = getSIRPlotAsBase64(
+        s0=initial_susceptible_population//1000,
+        i0=initial_infected_population/1000,
+        r0=0,
+        gamma=gamma,
+        beta=beta
+    )
+
+    return plot
+
+
+
 
 '''
 category (borne):
@@ -311,7 +349,7 @@ class Report(models.Model):
                                     people.notify(f'{self.disease.disease_name} outbreak in {self.pincode.area},{self.pincode.province2}.We expect you to stop trading with that area temporarily . We will notify you when conditions will be normal .Things you should know, {self.disease.info_symptoms} ')
                                 district= self.pincode.district
                                 for dis in District.objects.all():
-                                    if self.disease.victim_id in dist.victim_ids:
+                                    if self.disease.victim_id in dis.victim_ids:
                                         new_not = Notice.objects.create(user=dis.district_official,attn='danger',msg_notice=False,msg_head=f"Outbreak at {self.pincode.area},{self.pincode.province2} has been reported.",msg_body="Verify this message to notify common people.",action='notify_all_people',action_msg= f"We hope you to maintain a safe proximity from the {victim_ids_for_animal[self.disease.victim_id]}")
                                         new_not.save()
                         lst.save()

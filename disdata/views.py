@@ -3,7 +3,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import user_passes_test,login_required
 from django.http import JsonResponse,HttpResponse, HttpResponseRedirect
-from disdata.models import Pincode, Report, Disease,Hospital,Notice,District,Outbreak
+from disdata.models import Pincode, Report, Disease,Hospital,Notice,District,Outbreak, sir_model_plot
 from django.core import serializers
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import Count   
@@ -110,6 +110,7 @@ def index(request):
     return render(request, 'index.html', { "diseases": list_of_diseases, "districts": list_of_districts, "pincodes": list_of_pincodes,"notice_json":notice_json, "notices":nt})
 
 def govtReport(request):
+    list_of_districts = list(District.objects.filter(population__gt=1000))
     list_of_diseases = list(Disease.objects.all())
     reports = list(Report.objects.filter(verified=True))
     notices = list(Notice.objects.filter(msg_notice=True))
@@ -124,7 +125,7 @@ def govtReport(request):
 
     m.save(os.path.join('disdata','static','hospitalMap.html'))
 
-    return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports,"notices":notices}) 
+    return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports,"notices":notices,"districts":list_of_districts}) 
 
 def heatMap(request,diseaseName):
     m = folium.Map(location = [20.9517, 85.0985], tiles='CartoDB Positron', zoom_start=7)
@@ -187,6 +188,17 @@ def mapping(request,diseaseName):
     # return render(request, 'govtReport.html', { "diseases": list_of_diseases, "reports": reports,"map":figure}) 
     m.save(os.path.join('disdata','static','choropleth.html'))
     return HttpResponse(status=200)
+
+def sir_plot(request, district_name: str, disease_name: str):
+    plot_as_bytes = sir_model_plot(district_name, disease_name)
+    response =  HttpResponse(
+        f"<html><body><img style='margin-left:26%' src='data:image/png;base64,{plot_as_bytes.decode('utf8')}'/></body></html>",
+        content_type="text/html"
+    )
+
+    response["X-Frame-Options"] = "SAMEORIGIN"
+    return response
+
 
 # def hospitalMapping(request):
 #     m = folium.Map(location = [20.9517, 85.0985], zoom_start=7)

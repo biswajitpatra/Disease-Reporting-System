@@ -86,7 +86,7 @@
           <hr class="botm-line">
         </div>
          <div class="col-md-12">
-          <div class="form-group d-flex mb-5" style="margin-left: 22rem;">
+          <div class="form-group d-flex mb-5 " style="margin-left: 22rem;">
             <select id="inputState" class="form-control">
               <option selected>Select a disease</option>
              {% for disease in diseases%}
@@ -96,6 +96,30 @@
             <button class="btn btn-outline-success rounded-pill ml-3 px-4" onclick="getRequestHeat(this.parentNode.children[0].value)">Search</button>
           </div>
             <iframe  id="heatMap" src="/static/heatMap.html" frameborder="0" style="width:80vw; height: 60vh;"></iframe>
+       </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-md-12 mt-5">
+          <h2 class="ser-title">SIR Graph</h2>
+          <hr class="botm-line">
+        </div>
+         <div class="col-md-12">
+          <div class="form-group d-flex mb-5 justify-content-between" style="margin-left: 22rem;">
+            <select id="inputDisease" class="form-control">
+              <option selected>Select a disease</option>
+             {% for disease in diseases%}
+             <option value="{{ disease.disease_name }}">{{ disease.disease_name }}</option>
+             {% endfor %}
+            </select>
+            <select id="inputDistrict" class="form-control ml-5">
+              <option selected>Select a district</option>
+             {% for district in districts %}
+             <option value="{{ district.name }}">{{ district.name }}</option>
+             {% endfor %}
+            </select>
+            <button class="btn btn-outline-success rounded-pill ml-3 px-4" onclick="getSIR()">Search</button>
+          </div>
+            <center><iframe  id="sirPlot" src="" frameborder="0" style="width:80vw; height: 60vh;"></iframe></center>
        </div>
       </div>
   </div>
@@ -141,6 +165,12 @@
       }
       ).then(()=>{
       document.getElementById("heatMap").contentDocument.location.reload(true);});
+    }
+    function getSIR(){
+     let disease = $('#inputDisease').val()
+     let district = $('#inputDistrict').val()
+      $('#sirPlot').attr('src', `/sirplot/${district}/${disease}`)
+      $('#sirPlot').contentDocument.location.reload(true)
     }
   </script>
 </html>
