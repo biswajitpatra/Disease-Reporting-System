@@ -26,7 +26,7 @@ t => time passed  in days
 def sir_model(s,i,r,morbidity,incubation,t):
 
     total_population = s
-
+    immune = (total_population*8)/100
     # his intimacy factor increases in places where trading is more, because trading means more people at work, hence more spread
     intimacy_factor = 4   
 
@@ -49,7 +49,7 @@ def sir_model(s,i,r,morbidity,incubation,t):
     else:
         ret_value["spread"] = False
 
-    ret_value["infected"] = int(i+s -((gamma/beta)*(1+math.log(rep_factor))))
+    ret_value["infected"] = int(i+s -((gamma/beta)*(1+math.log(rep_factor))))-immune
 
     return ret_value
 
@@ -255,7 +255,7 @@ class Report(models.Model):
                         else:
                             lst.infected+=1
                         if( lst.infected + lst.death > self.disease.threshold_alert):
-                            try:
+                            # try:
                                 s = district.population
                                 i = lst.infected + lst.death
                                 days=timezone.now()-lst.start_report.reported_on
@@ -265,15 +265,15 @@ class Report(models.Model):
                                     if(lst.first_alert==False):    
                                         res_pre = demographic_model(int(self.disease.category),district.rainfall,self.disease.disease_name,district.altitude,district.population,district.age_frequency_vector,district.water_source,district.slums_count,district.temprature,district.wind,district.density)                   
                                         if res_pre == 1:
-                                            uniq_pincodes=Pincode.objects.filter(located_at__distance_lt=(p.located_at,Distance(km=50))).distinct('district')
+                                            uniq_pincodes=Pincode.objects.filter(located_at__distance_lt=(lst.start_report.reported_at,Distance(km=50))).distinct('district')
                                             for p in uniq_pincodes:
                                                 new_not = Notice.objects.create(
                                                     user=district.district_official,
                                                     attn='danger',
                                                     msg_notice=False,
                                                     msg_head=f"Outbreak at {self.pincode.area},{self.pincode.province2} detected",
-                                                    msg_body=f"{self.disease.disease_name} outbreak has been detected at {self.pincode.area},{self.pincode.province2}. This outbreak can possibly have a maximum infected number of "+ str(res["infected"]) + f".\n Verify this message to notify common people.",
-                                                    action='notify_all_people',action_msg=f"{self.disease.disease_name} outbreak has been detected at {self.pincode.area},{self.pincode.province2}. This outbreak can possibly have a maximum infected number of " + str(res["infected"]) + f".{self.disease.info_precautions}.{self.disease.info_symptoms}"
+                                                    msg_body=f"{self.disease.disease_name} outbreak has been detected at {self.pincode.area},{self.pincode.province2}. This outbreak can possibly have a maximum infected number of "+ str(int(res["infected"])) + f".\n Verify this message to notify common people.",
+                                                    action='notify_all_people',action_msg=f"This outbreak can possibly have a maximum infected number of " + str(int(res["infected"])) + f".{self.disease.info_precautions}.{self.disease.info_symptoms}"
                                                 )
                                                 new_not.save()
                                             
@@ -281,8 +281,8 @@ class Report(models.Model):
                                     
                                     
                                 # TODO: notify disease officials
-                            except:
-                                print("Error occured at predictive models")
+                            # except:
+                            #     print("Error occured at predictive models")
                         lst.save()
                 elif self.category=="animal":
                     lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
@@ -339,19 +339,21 @@ class Person(models.Model):
     def __str__(self):
         return "{} from {}".format(self.full_name, self.city)
     def notify(self,msg=None):
+        print(self.full_name+" notified "+str(self.phone_number))
+        print(msg)
         url = "https://www.fast2sms.com/dev/bulk"
         headers = {
             'cache-control': "no-cache"
         }
         if(msg==None):
-            querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":"This is test message","language":"english","route":"p","numbers":str(self.phone_number),"flash":1}
+            querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"SMSIND","message":"This is test message","language":"english","route":"p","numbers":str(self.phone_number),"language":"unicode"}
             response = requests.request("GET", url, headers=headers, params=querystring)
             print(response.text)
         else:
-            querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":msg,"language":"english","route":"p","numbers":str(self.phone_number),"flash":1}
+            querystring = {"authorization":"RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo","sender_id":"FSTSMS","message":msg,"language":"english","route":"p","numbers":str(self.phone_number),"language":"unicode"}
             response = requests.request("GET", url, headers=headers, params=querystring)
             print(response.text)
-        pass
+        # pass
             # RuzSLcCDS9R9fbF0dFiW9MVPUj5Ur4CHu8ATnldUn59qhTfNJW7LHQ3l2fDo
         # URL = 'https://www.sms4india.com/api/v1/sendCampaign'
         # response = sendPostRequest(URL, "PT5VPWDIY5UHKR5W9Z7LJA723XAJ4O9L", 'VOT5R4ICAHKB80QP', 'stage', '+919439832766', 'sai.nayak1503@gmail.com', 'Swine flu detected in your vicinity' )
@@ -366,7 +368,7 @@ class Outbreak(models.Model):
     first_alert=models.BooleanField(default=False)
     category = models.CharField(max_length=10, choices=(("human", "Human"),("animal","Animal")))
     def __str__(self):
-        return f'Outbreak at {self.start_report.pincode.district.name}'
+        return f'Outbreak at {self.start_report.pincode.district.name} of {self.disease.disease_name} at {self.start_report.reported_on}'
     def sir_model(self):
         if(self.category=='human'):
             pass
@@ -380,17 +382,17 @@ class Notice(models.Model):
     attn = models.CharField(max_length=7,choices=(('danger','danger'),('warning','warning')))
     msg_notice = models.BooleanField(default=True)
     time = models.DateTimeField(default=timezone.now)
-    msg_head = models.CharField(max_length=100)
+    msg_head = models.CharField(max_length=255)
     msg_body = models.CharField(max_length=255)
     approved = models.BooleanField(default=False)
-    action = models.CharField(max_length=100,blank=True)
-    action_msg = models.CharField(max_length=100,blank=True)
+    action = models.CharField(max_length=255,blank=True)
+    action_msg = models.CharField(max_length=1000,blank=True)
     read=models.BooleanField(default=False)
 
     def __str__(self):
         return "{} level notice reported at {}".format(self.attn, self.time)
     def notify_all_people(self):
-        ppls = Person.objects.filter(pincode__pincode__district=District.objects.get(district__district_official=user))
+        ppls = Person.objects.filter(pincode__district=District.objects.get(district_official=self.user))
         for p in ppls:
             p.notify(self.action_msg)
 
