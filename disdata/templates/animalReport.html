@@ -39,6 +39,44 @@
                 <option value="72">Theileriosis</option>
                 <option value="79">Trypanosomiasis</option>
           </select>
+          <select class="custom-select my-1 mr-sm-2" name="state" id="state_code">
+            <option value="" selected>Select state</option>
+            <option value="1">Andhra Pradesh</option>
+            <option value="2">Arunanchal Pradesh</option>
+            <option value="3">Assam</option>
+            <option value="4">Bihar</option>
+            <option value="5">Chhattisgarh</option>
+            <option value="6">Goa</option>
+            <option value="7">Gujarat</option>
+            <option value="8">Haryana</option>
+            <option value="9">Himachal Pradesh</option>
+            <option value="10">Jammu &amp; Kashmir</option>
+            <option value="11">Jharkhand</option>
+            <option value="12">Karnataka</option>
+            <option value="13">Kerala</option>
+            <option value="14">Madhya Pradesh</option>
+            <option value="15">Maharashtra</option>
+            <option value="16">Manipur</option>
+            <option value="17">Meghalaya</option>
+            <option value="18">Mizoram</option>
+            <option value="19">Nagaland</option>
+            <option value="20">Odisha</option>
+            <option value="21">Punjab</option>
+            <option value="22">Rajasthan</option>
+            <option value="23">Sikkim</option>
+            <option value="24">Tamil Nadu</option>
+            <option value="25">Tripura</option>
+            <option value="26">Uttar Pradesh</option>
+            <option value="27">Uttarakhand</option>
+            <option value="28">West Bengal</option>
+            <option value="29">Andaman &amp; Nicobar Island</option>
+            <option value="30">Chandigarh</option>
+            <option value="31">Dadra and Nagar Haveli</option>
+            <option value="32">Daman and Diu</option>
+            <option value="33">Delhi</option>
+            <option value="34">Lakshadweep</option>
+            <option value="35">Puducherry</option>
+          </select>
           <!-- <label class="my-1 mr-2" for="inlineFormCustomSelectPref">District Name</label>
           <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
             <option selected>Choose...</option>
@@ -77,29 +115,39 @@
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
    <script>   
    function searchDisease(){
-    //  console.log($('input[type=radio]:checked').val())
-     disease_name = $('#disease_name').val()
-     month = $('input[type=radio]:checked').val() 
+
+
+     let disease_name = $('#disease_name').val()
+     let state_code = $("#state_code").val()
+     let month = $('input[type=radio]:checked').val() 
      console.log('Search Started')
      let table, tableContent
      $.ajax({
        type:"GET",
-       url:`scrap_ndres_data/${disease_name}/${month}`
+       url:`scrap_ndres_data/${disease_name}/${month}/${state_code}`
      }).done(function(data) {
        console.log(data);
       if(data.status){
 
-        table = `<table class="table table-bordered table-hover mx-auto w-75 mt-5 text-center"><thead class="thead-dark"><tr><th scope="col">${data.headers[0]}</th><th scope="col">${data.headers[1]}</th><th scope="col">${data.headers[2]}</th><th scope="col">${data.headers[3]}</th><th scope="col">${data.headers[4]}</th><th scope="col">${data.headers[5]}</th><th scope="col">${data.headers[6]}</th></tr></thead><tbody id="tbody"></tbody></table>`
+        let table = `<table class="table table-bordered table-hover mx-auto w-75 mt-5 text-center"><thead class="thead-dark"><tr>
+          ${data.headers.map((tableHeader) => {
+            return `<th scope="col">${tableHeader}</th>`
+          }).join("")}
+        </tr></thead><tbody id="tbody"></tbody></table>`
         $('#table').html(table)
         data.values.map(function(value) {
-       // console.log(value[0])
-       tableContent = `<tr><th scope="row">${value[0]}</th><td>${value[1]}</td><td>${value[2]}</td><td>${value[3]}</td><td>${value[4]}</td><td>${value[5]}</td><td>${value[6]}</td></tr>`
+
+       let tableContent = `<tr>
+        ${value.map((tableData) => {
+            return `<td>${tableData}</td>`
+          }).join("")}
+       </tr>`
        $('#tbody').append(tableContent)
       })
       $('#table').append(`<div class="container"><div class="card p-3 border-danger "><div class="card-block"><p class="text-center text-secondary"><span class="text-info">Precaution</span>: ${data.precaution}</p></div></div></div>`)
       }
       else{
-        $('#table').html(`<h4 class="card-text text-center text-success mt-5">No disctricts of Odisha in risk of <span class="text-danger">${$('#disease_name option:selected').text()}</span> for <span class="text-danger">${$('input[type=radio]:checked').siblings('.form-check-label').text()}</span></h4>`)
+        $('#table').html(`<h4 class="card-text text-center text-success mt-5">No districts of ${$('#state_code option:selected').text()} in risk of <span class="text-danger">${$('#disease_name option:selected').text()}</span> for <span class="text-danger">${$('input[type=radio]:checked').siblings('.form-check-label').text()}</span></h4>`)
       }
        
      })
