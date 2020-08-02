@@ -34,7 +34,7 @@
           </nav>
           <section id="reportRequest">
               <div class="container">
-                <h2 class="ser-title">Requests submitted for Verification to {{hospitalName}} </h2> <!--? Name of hospital to be dynamic-->
+                <h2 class="ser-title" style='line-height:2rem'>Requests submitted for Verification to {{ hospitalName }} </h2> <!--? Name of hospital to be dynamic-->
                 <hr class="botm-line w-25">
                 {% for report in reports%}
                 <div class="jumbotron">
@@ -46,12 +46,12 @@
                       {% csrf_token %}
                       <input type="text" name="report_id" value="{{report.0.id}}" style="display: none;">
                       <label for="report_category_select_{{ report.0.id }}">Type of Infection:</label>
-                      <select name="report_category" id="report_category_select_{{ report.0.id }}">
+                      <select class="custom-select w-25" name="report_category" id="report_category_select_{{ report.0.id }}">
                         <option disabled selected value>Select a category</option>
                         <option value="human">Human Infection</option>
                         <option value="animal">Animal Infection</option>
                       </select>
-                      <select name="disease_name">
+                      <select class="custom-select w-25" name="disease_name">
                         <option disabled selected value>Select a disease</option>
                         {% for disease in diseases %}
                           <option
@@ -60,9 +60,9 @@
                         {% endfor %}
                       </select>
                       <div class="mt-3">
-                        <input type="submit" class="btn btn-outline-success rounded-pill px-4" value="Verify">
+                        <input type="submit" class="btn btn-outline-success rounded-pill px-5" value="Verify">
     
-                        <input type="submit" class="btn btn-outline-danger rounded-pill px-4" value="Dismiss" formaction="/report_reject">
+                        <input type="submit" class="btn btn-outline-danger rounded-pill px-5" value="Dismiss" formaction="/report_reject">
                       </div>
                     </form>
                   </div>
