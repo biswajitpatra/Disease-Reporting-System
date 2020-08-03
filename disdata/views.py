@@ -493,8 +493,8 @@ def telephony_bot(req):
     print(json.dumps(req, indent=4, sort_keys=True))
     ret_json = {}
     ret_text = "Can u say it again please"
-    if (req["queryResult"]["intent"]["displayName"] == "info_place"):
-        if(req["queryResult"]["allRequiredParamsPresent"]==True):
+    if(req["queryResult"]["allRequiredParamsPresent"]==True):
+        if (req["queryResult"]["intent"]["displayName"] == "info_place"):
             pincode = req["queryResult"]["parameters"]["pincode"]
             if(len(pincode)!=6):
                 ret_text = "Please tell me a valid Pincode"
@@ -506,10 +506,11 @@ def telephony_bot(req):
                 cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
                 ret_json=[]
                 max_warn=0
+                disease_max_warn = None
                 for c in cnt:
                     disease = Disease.objects.get(disease_name = c["disease__disease_name"])
                     try:
-                        total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)/district.population) 
+                        total_infected_per =(sir_model(district.population,c["disease__count"],0,0,disease.incubation_period,8)["infected"]/district.population) 
                     except:
                         total_infected_per = 0 
                             
@@ -519,21 +520,34 @@ def telephony_bot(req):
                         ret_part={"warning":"danger"}  #? Danger == red zone
                     else:
                         ret_part={"warning":"warning"} #? Warning == yellow zone
-                    
+                    print(disease.disease_name,total_infected_per)
+                    if(total_infected_per>=max_warn):
+                        disease_max_warn=disease
                     max_warn=max(total_infected_per,max_warn)
-
+                    
                     ret_part["report_count"]=c["disease__count"]
+                    ret_part["death_count"]=q.filter(disease=disease).filter(death=True).count()
                     ret_part["disease"]=Disease.objects.filter(disease_name=c['disease__disease_name']).values()[0]
                     ret_part["disease_level"]=disease.morbidity
                     ret_json.append(ret_part)
-                print(ret_json)
+                # print(ret_json)
                 # print(ret_json[0]['warning'])
                 if(max_warn < 0.012):
                     ret_text = "Your area is safe" #? Success == green zone
                 elif(max_warn >= 0.12): 
-                    ret_text="Take precautionary measures as your area is at red alert zone"  #? Danger == red zone
+                    ret_text=f"Take precautionary measures as your area is at red alert zone {disease_max_warn.info_precautions}"  #? Danger == red zone
                 else:
-                    ret_text="This area is recorded as yellow zone. Take neccessary precautions and vacinations"
+                    ret_text=f"This area is recorded as yellow zone. Take neccessary precautions and vacinations {disease_max_warn.info_symptoms}"
+        elif(req["queryResult"]["intent"]["displayName"] == "info_animal"):
+            di_animal= Report.objects.filter(category="animal").filter(verified=True)
+            cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
+            if(cnt.count() == 0):
+                ret_text = "No disease is prevailing in your area. All your livestocks are safe. "
+            else:
+                dis= Disease.objects.get(disease_name = cnt[0]['disease__disease_name'])
+                ret_text = f"{dis.info_symptoms}.{dis.info_precautions}"
+        # elif (req["queryResult"]["intent"]["displayName"] == "info_report"):
+            
 
     
             

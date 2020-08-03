@@ -293,7 +293,7 @@ class Report(models.Model):
                         else:
                             lst.infected+=1
                         if( lst.infected + lst.death > self.disease.threshold_alert):
-                            # try:
+                            try:
                                 s = district.population
                                 i = lst.infected + lst.death
                                 days=timezone.now()-lst.start_report.reported_on
@@ -319,8 +319,8 @@ class Report(models.Model):
                                     
                                     
                                 # TODO: notify disease officials
-                            # except:
-                            #     print("Error occured at predictive models")
+                            except:
+                                print("Error occured at predictive models")
                         lst.save()
                 elif self.category=="animal":
                     lst = Outbreak.objects.filter(outbreak_over=False).filter(disease=self.disease)
