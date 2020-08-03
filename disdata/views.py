@@ -539,7 +539,7 @@ def telephony_bot(req):
                 else:
                     ret_text=f"This area is recorded as yellow zone. Take neccessary precautions and vacinations {disease_max_warn.info_symptoms}"
         elif(req["queryResult"]["intent"]["displayName"] == "info_animal"):
-            di_animal= Report.objects.filter(category="animal").filter(verified=True)
+            q= Report.objects.filter(category="animal").filter(verified=True)
             cnt = q.values('disease__disease_name').annotate(Count('disease')).order_by('-disease__count')
             if(cnt.count() == 0):
                 ret_text = "No disease is prevailing in your area. All your livestocks are safe. "
