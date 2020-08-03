@@ -300,7 +300,8 @@ class Report(models.Model):
                                 res = sir_model(s,i,0,self.disease.morbidity,self.disease.incubation_period,days.days)
                                 print(res)
                                 if res["spread"]==True:
-                                    if(lst.first_alert==False):    
+                                    if(lst.first_alert==False):
+                                        lst.first_alert = True    
                                         res_pre = demographic_model(int(self.disease.category),district.rainfall,self.disease.disease_name,district.altitude,district.population,district.age_frequency_vector,district.water_source,district.slums_count,district.temprature,district.wind,district.density)                   
                                         if res_pre == 1:
                                             uniq_pincodes=Pincode.objects.filter(located_at__distance_lt=(lst.start_report.reported_at,Distance(km=50))).distinct('district')
