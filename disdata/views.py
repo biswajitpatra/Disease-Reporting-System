@@ -27,7 +27,7 @@ import re
 def sir_model(s,i,r,morbidity,incubation,t):
     
     total_population = s
-    immune = (total_population*8)/100
+    immune = (total_population*10)/100
 
     # his intimacy factor increases in places where trading is more, because trading means more people at work, hence more spread
     intimacy_factor = 4   
@@ -545,7 +545,7 @@ def telephony_bot(req):
                 ret_text = "No disease is prevailing in your area. All your livestocks are safe. "
             else:
                 dis= Disease.objects.get(disease_name = cnt[0]['disease__disease_name'])
-                ret_text = f"{dis.info_symptoms}.{dis.info_precautions}"
+                ret_text = f"{dis.info_symptoms}.{dis.info_precautions}{dis.info_managerial}"
         # elif (req["queryResult"]["intent"]["displayName"] == "info_report"):
             
 

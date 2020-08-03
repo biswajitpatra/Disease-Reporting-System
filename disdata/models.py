@@ -29,7 +29,7 @@ t => time passed  in days
 def sir_model(s,i,r,morbidity,incubation,t):
 
     total_population = s
-    immune = (total_population*8)/100
+    immune = (total_population*10)/100
     # his intimacy factor increases in places where trading is more, because trading means more people at work, hence more spread
     intimacy_factor = 4   
 
