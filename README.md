@@ -4,7 +4,7 @@
 ### Our Website is hosted at:
 [disease-reporting-system.herokuapp.com](https://disease-reporting-system.herokuapp.com)
 
-# Tech Stalk used-
+# Tech Stack used-
 * Django Web Framework
 * PostgreSQL Database
 * Firebase and Google Maps APIs
