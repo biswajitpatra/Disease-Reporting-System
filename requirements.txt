@@ -1,6 +1,6 @@
 asgiref==3.2.3
 astroid==2.3.3
-certifi==2020.4.5.2
+certifi==2022.12.7
 chardet==3.0.4
 dj-database-url==0.5.0
 django-map-widgets==0.3.0
